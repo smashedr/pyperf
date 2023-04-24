@@ -1,0 +1,184 @@
+{% load static %}
+{% load home_tags %}
+
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% get_config 'DEBUG' as debug_enabled %}{% if debug_enabled %}
+        <meta name="robots" content="noindex, nofollow">{% endif %}
+
+    <title>PyPerf3 - {% block title %}{% endblock %}</title>
+
+    {% block meta %}
+        <meta name="author" content="Shane"/>
+        <meta name="title" content="Django Iperf3"/>
+        <meta name="description" content="Django Iperf3 - A Django Iperf3 Site."/>
+
+        <meta property="og:author" content="Shane">
+        <meta property="og:title" content="Django Iperf3">
+        <meta property="og:description" content="Django Iperf3 - A Django Iperf3 Site.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ request.build_absolute_uri }}">
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}">
+    {% endblock %}
+
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" sizes="any">
+    <link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/svg+xml">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'font-awesome/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/main.css' %}">
+
+    {% block head %}{% endblock %}
+
+</head>
+<body class="d-flex flex-column h-100">
+
+{% block navbar %}
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home:index' %}">
+                <img src="{% static 'images/logo.png' %}" width="30" height="30" alt="Carl"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                    <li class="nav-item"><a class="nav-link {% block home_active %}{% endblock %}" href="{% url 'home:index' %}">
+                        Home</a></li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if not request.user.is_authenticated %}
+                        <a href="{% url 'oauth:login' %}?next={{ request.path }}" class="btn btn-outline-info" role="button">
+                            Log in with Discord <i class="fas fa-sign-in-alt"></i></a>
+                    {% else %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}
+                                <i class="fas fa-angle-down mx-1"></i>
+                                <img src="{{ user.avatar_hash|avatar_url:user.username }}"
+                                     class="rounded-circle mx-2 d-none d-sm-inline d-md-inline d-lg-inline d-xl-inline" height="26" width="26" alt="P"></a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown2">
+                                {% if request.user.guild_member %}
+                                    <li><a class="dropdown-item" href="{% url 'home:profile' %}">
+                                        <i class="fas fa-tools mr-2"></i> Profile</a></li>
+                                {% else %}
+                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#user-info-modal">
+                                        <i class="fas fa-user-circle mr-2"></i> Profile</a></li>
+                                {% endif %}
+                                {% if request.user.is_staff %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-warning" href="{% url 'admin:index' %}">
+                                        <i class="fas fa-tools mr-2"></i> Admin</a></li>
+                                {% endif %}
+                                {% if request.user.is_superuser %}
+                                    <li><a class="dropdown-item text-warning" href="{% url 'flower' %}" target="_blank">
+                                        <i class="fas fa-seedling mr-2"></i> Flower <i class="fas fa-external-link-alt me-1"></i></a></li>
+                                {% endif %}
+                                <div class="dropdown-divider"></div>
+                                <li><a class="dropdown-item log-out text-danger" href="#">
+                                    <i class="fas fa-sign-out-alt mr-2"></i> Log Out</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+{% endblock %}
+
+<main class="flex-shrink-0">
+    {% block messages %}{% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags|tag_to_class }} alert-dismissible fade show mt-2" role="alert">
+                    {{ message }} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}{% endblock %}
+
+    {% block body %}{% endblock %}
+</main>
+
+{% block footer %}
+<footer class="footer mt-auto pt-3 pb-2 ">
+    <div class="container-fluid">
+        <div class="row px-3">
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6">
+                <p>Join our <i class="fab fa-discord"></i>
+                    <a class="text-info" href="{% get_config 'DISCORD_INVITE' %}" target="_blank">
+                        Discord</a></p>
+            </div>
+            <div class="col-12 col-lg-6 col-md-6 col-sm-6 text-lg-end text-md-end text-sm-end">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a href="{% url 'home:index' %}" class="text-info">Home</a></li>
+{#                    <li class="list-inline-item">|</li>#}
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+
+{% if request.user.is_authenticated %}
+    <form id="log-out" action="{% url 'oauth:logout' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+    </form>
+    <div class="modal fade" id="user-info-modal" tabindex="-1" aria-labelledby="user-info-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="user-info-modal-label">
+                        <i class="fas fa-user-circle mr-2"></i> Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="{{ user.avatar_hash|avatar_url:user.username }}" alt="Profile Picture"
+                         class="rounded float-end m-2" style="max-height:128px;max-width:128px;">
+                    <h4 class="modal-title">{% if user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</h4>
+                    <p>Information provided by Discord.</p>
+                    <p></p>
+                    <div class="clearfix"></div>
+                    <table class="table mt-2">
+                        <tbody>
+                        <tr>
+                            <th>Discord ID</th>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        <tr>
+                            <th>Discord Username</th>
+                            <td>{{ user.first_name }}#{{ user.last_name }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <a href="https://discord.com/login" class="btn btn-primary me-auto" role="button" target="_blank">
+                        Open in Discord <i class="fas fa-external-link-alt me-1"></i></a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% block js %}
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'font-awesome/js/all.min.js' %}"></script>
+    <script src="{% static 'clipboardjs/clipboard.min.js' %}"></script>
+    <script src="{% static 'main/js/main.js' %}"></script>
+{% endblock %}
+
+{% block tail %}{% endblock %}
+
+</body>
+</html>

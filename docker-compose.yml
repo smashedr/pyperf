@@ -1,0 +1,89 @@
+version: '3.9'
+
+services:
+  nginx:
+    build: ./nginx
+    image: pyperf-nginx:latest
+    deploy:
+      mode: global
+    volumes:
+      - app_data:/data
+    secrets:
+      - source: cssnr_basic_http_auth
+        target: /etc/nginx/auth.users
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+
+  pyperf3:
+    build: ./pyperf3
+    image: pyperf3:latest
+    env_file: settings.env
+    command: "python3 pyperf3.py"
+    deploy:
+      mode: replicated
+      replicas: 1
+    ports:
+      - "5201:5201/udp"
+      - "5201:5201/tcp"
+
+  app:
+    build: ./app
+    image: pyperf-app:latest
+    env_file: settings.env
+    command: "gunicorn pyperf.asgi:application -w 2 -b 0.0.0.0:9000 -k uvicorn.workers.UvicornWorker"
+    deploy:
+      mode: global
+    volumes:
+      - app_data:/data
+    depends_on:
+      - redis
+
+  worker:
+    image: pyperf-app:latest
+    env_file: settings.env
+    command: "celery -A pyperf worker -l INFO -c 2"
+    deploy:
+      replicas: 1
+    depends_on:
+      - app
+      - redis
+
+  beat:
+    image: pyperf-app:latest
+    env_file: settings.env
+    command: "celery -A pyperf beat -l INFO -S django"
+    deploy:
+      replicas: 1
+    depends_on:
+      - app
+      - redis
+
+  flower:
+    image: mher/flower
+    env_file: settings.env
+    deploy:
+      replicas: 1
+    volumes:
+      - flower_data:/data
+    depends_on:
+      - app
+      - redis
+
+  redis:
+    image: redis:6-alpine
+    command: "redis-server --appendonly yes"
+    deploy:
+      replicas: 1
+    volumes:
+      - redis_data:/data
+
+secrets:
+  cssnr_basic_http_auth:
+    file: ~/basic_http_auth
+
+volumes:
+  app_data:
+  flower_data:
+  redis_data:

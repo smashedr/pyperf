@@ -1,0 +1,40 @@
+{% load home_tags %}
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Type</th>
+        <th scope="col">IP Address</th>
+        <th scope="col">Hostname</th>
+        <th scope="col">Speed</th>
+        <th scope="col">Protocol</th>
+        <th scope="col">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% with data as st %}
+    <tr>
+        <th scope="row"><a href="#" class="clip text-white text-decoration-none"
+               data-clipboard-text="{{ st.id }},{{ st.name }},{{ st.bps_human }},{{ st.protocol }},{{ st.created_at }}">
+            {{ st.id }}</a></th>
+        <td>
+            {% if st.reverse %}
+                <i class="fa-solid fa-cloud-arrow-down text-success" title="Download"></i>
+            {% else %}
+                <i class="fa-solid fa-cloud-arrow-up text-warning" title="Upload"></i>
+            {% endif %}
+        </td>
+        <td><a href="#" class="clip text-white text-decoration-none"
+               data-clipboard-text="{{ st.ip }}">{{ st.ip }}</a></td>
+        <td><a href="#" class="clip text-white text-decoration-none"
+               data-clipboard-text="{{ st.name }}">{{ st.name }}</a></td>
+        <td><a href="#" class="clip text-white text-decoration-none"
+               data-clipboard-text="{{ st.bps_human }}">{{ st.bps_human }}</a></td>
+        <td>{{ st.protocol }}</td>
+        <td><a href="#" class="clip text-white text-decoration-none"
+               data-clipboard-text="{{ st.created_at }}">{{ st.created_at }}</a></td>
+    </tr>
+    {% endwith %}
+    </tbody>
+</table>

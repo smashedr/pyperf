@@ -1,0 +1,9 @@
+{{ data.test_type }} Results for: **{{ data.name }} ({{ data.ip }})**
+```plaintext
+{{ data.test_type }} Speed: {{ data.bps_human }}
+IP: {{ data.ip }}{% if data.name %}
+Host: {{ data.name }}{% endif %}
+Protocol: {{ data.protocol }}{% if data.duration %}
+Duration: {{ data.duration }}{% endif %}{% if data.bytes %}
+Bytes: {{ data.bytes_human }}{% endif %}
+```

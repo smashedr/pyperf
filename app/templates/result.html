@@ -1,0 +1,32 @@
+{% extends "main.html" %}
+{% block home_active %}active{% endblock %}
+{% block title %}Result - {{ data.bps_human }} - {{ data.name }}{% endblock %}
+{% load home_tags %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+    <div class="container mt-2">
+        <h1>Result - {{ data.id }}</h1>
+
+        <a class="btn btn-primary" href="{% url 'home:index' %}" role="button">
+            Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
+        <a class="btn btn-outline-light clip" href="#" role="button"
+           data-clipboard-text="{{ request.build_absolute_uri }}">
+            Copy URL <i class="fa-solid fa-link ms-2"></i></a>
+
+        <h4 class="mt-2">{{ data.name }} ({{ data.ip }}) - {{ data.test_type }} Test</h4>
+
+        {% include 'include/speedview.html' with data=data  %}
+
+        <h3>Raw Data <a href="#" class="clip text-primary" data-clipboard-target="#raw">
+            <i class="fa-regular fa-file-lines ms-3"></i></a></h3>
+
+<pre><code id="raw">
+{{ raw | pprint }}
+</code></pre>
+    </div>
+
+{% endblock %}
+
+{% block tail %}{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "main.html" %}
+{% block home_active %}active{% endblock %}
+{% block title %}Home{% endblock %}
+{% load home_tags %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+    <div class="container mt-2">
+        <h1>PyPerf3</h1>
+        <p class="lead">Iperf3 Server, with Discord Auth and Alerts, behind the Django ORM; all running in Docker.</p>
+        <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6 mb-2">
+        <table class="table">
+            <tr>
+                <td>Download</td>
+                <td><kbd>iperf3 -c {{ request.get_host }}{# -u -b 0#} -R</kbd>
+                    <a href="#" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }}{#-u -b 0 #} -R">
+                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
+            </tr>
+            <tr class="ms-3">
+                <td>Upload</td>
+                <td><kbd>iperf3 -c {{ request.get_host }}{# -u -b 0#}</kbd>
+                    <a href="#" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }}{# -u -b 0 #}">
+                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
+            </tr>
+        </table>
+        </div>
+        <p>
+            Download Iperf3: <a href="https://iperf.fr/iperf-download.php" target="_blank" class="text-primary">
+            https://iperf.fr/iperf-download.php/ <i class="fa-solid fa-up-right-from-square ms-2"></i></a>
+            <br>
+            <i class="fa-brands fa-windows"></i>
+            <i class="fa-brands fa-apple"></i>
+            <i class="fa-brands fa-linux"></i>
+            <i class="fa-brands fa-app-store-ios"></i>
+            <i class="fa-brands fa-android"></i>
+        </p>
+
+        <h1>Results</h1>
+        {% include 'include/speedtable.html' with data=data %}
+    </div>
+{% endblock %}
+
+{% block tail %}{% endblock %}

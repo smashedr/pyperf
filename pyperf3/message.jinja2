@@ -1,0 +1,20 @@
+{{ data['type'] }} Results for: **{{ data['host']['name'] or data['host']['ip'] }}**
+```plaintext
+{{ data['type'] }} Speed: {{ data['human_bw'] }}
+{%- if data['bytes'] %}
+Test Bytes: {{ data['human_bytes'] }}
+{%- else %}
+Test Duration: {{ data['duration'] }} sec
+{%- endif %}
+IP: {{ data['host']['ip'] }}
+Host: {{ data['host']['name'] }}
+Protocol: {{ data['protocol'] }}
+{%- if data['protocol'] == 'UDP' %}
+Lost/Packets: {{ data['lost_packets'] }}/{{ data['packets'] }}
+Jitter: {{ '%0.2f' % data['jitter_ms'] }} ms
+{%- endif %}
+{%- if not data['host']['private'] and data['host']['raw']['asn_country_code'] %}
+ISP: {{ data['host']['raw']['asn_country_code'] }} - {# #}
+    {{- data['host']['raw']['asn_description'] }}
+{%- endif %}
+```
