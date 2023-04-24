@@ -6,6 +6,20 @@
 {% block head %}{% endblock %}
 
 {% block body %}
+    <div class="container">
+        <p id="one"></p>
+    </div>
+
+    <script>
+        const socket = new WebSocket('wss://' + window.location.host + '/ws/home_group/');
+        socket.onmessage = function (event) {
+            let data = JSON.parse(event.data);
+            console.log(data);
+            console.log(data.message);
+            document.querySelector("#one").innerText = data.message;
+        };
+    </script>
+
     <div class="container mt-2">
         <h1>PyPerf3</h1>
         <p class="lead">Iperf3 Server, with Discord Auth and Alerts, behind the Django ORM; all running in Docker.</p>

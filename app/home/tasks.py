@@ -4,11 +4,15 @@ import json
 import logging
 import socket
 from celery import shared_task
+from channels.layers import get_channel_layer
 from django.conf import settings
 from django.core import management
 from django.template.loader import render_to_string
 from ipwhois import IPWhois
 from .models import SpeedTest
+
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 logger = logging.getLogger('celery')
 
@@ -56,8 +60,57 @@ def process_data(pk):
     q.bytes_human = format_bytes(data['start']['test_start']['bytes'])
     q.duration = data['start']['test_start']['duration']
     q.protocol = data['start']['test_start']['protocol']
+    if data['start']['test_start']['protocol'] == 'UDP':
+        q.jitter = data['end']['sum']['jitter_ms']
+        q.packets = data['end']['sum']['packets']
+        q.lost = data['end']['sum']['lost_packets']
     q.version = data['start']['version']
     q.save()
+    logger.info('--------------------')
+
+    # channel_layer = get_channel_layer()
+    # async_to_sync(channel_layer.group_send)("chat", {"type": "chat.force_disconnect"})
+
+    # channel_layer = get_channel_layer()
+    # async_to_sync(channel_layer.send)(self.channel_name, {
+    #     "type": "websocket.send",
+    #     "text": "Hello from my_function!",
+    # })
+
+    # channel_layer = get_channel_layer()
+    # channel_name = "home"
+    # async_to_sync(channel_layer.send)(channel_name, {
+    #     "type": "websocket.send",
+    #     "text": json.dumps({"message": "Hello, World!"}),
+    # })
+
+    # logger.info('--------------------')
+    # socket_message = 'Hello Earth!'
+    # channel_layer = get_channel_layer()
+    # group_name = "home_group"
+    # async_to_sync(channel_layer.group_send)(
+    #     group_name,
+    #     {
+    #         "type": "websocket.send",
+    #         "text": json.dumps({"message": socket_message}),
+    #     },
+    # )
+    # logger.info('--------------------')
+
+    logger.info('--------------------')
+
+    socket_dict = {'message': f'New Result for {q.ip}. Refresh now to see...'}
+
+    channel_layer = get_channel_layer()
+    group_name = "home_group"
+    event = {
+        "type": "websocket.send",
+        "text": json.dumps(socket_dict),
+    }
+    async_to_sync(channel_layer.group_send)(group_name, event)
+
+    logger.info('--------------------')
+    logger.info('--------------------')
     send_discord_message.delay(pk)
     return True
 

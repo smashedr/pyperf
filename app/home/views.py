@@ -1,5 +1,7 @@
 import json
 import logging
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
@@ -13,6 +15,16 @@ logger = logging.getLogger('app')
 def home_view(request):
     # View: /
     logger.debug('home_view')
+
+    # channel_layer = get_channel_layer()
+    # async_to_sync(channel_layer.group_send)(
+    #     'test',
+    #     {
+    #         'type': 'chat_message',
+    #         'message': "event_trigered_from_views"
+    #     }
+    # )
+
     q = reversed(SpeedTest.objects.all())
     logger.debug(q)
     return render(request, 'home.html', {'data': q})

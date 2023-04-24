@@ -21,6 +21,9 @@ class SpeedTest(models.Model):
         choices=PROTOCOL_CHOICES,
         verbose_name='Protocol',
     )
+    jitter = models.FloatField(null=True, verbose_name='Jitter')
+    packets = models.IntegerField(null=True, verbose_name='Packets Total')
+    lost = models.IntegerField(null=True, verbose_name='Packets Lost')
     json = models.JSONField()
     version = models.CharField(blank=True, max_length=32, verbose_name='Iperf3 Version')
     created_at = models.DateTimeField(auto_now_add=True)

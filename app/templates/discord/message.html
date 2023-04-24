@@ -5,5 +5,7 @@ IP: {{ data.ip }}{% if data.name %}
 Host: {{ data.name }}{% endif %}
 Protocol: {{ data.protocol }}{% if data.duration %}
 Duration: {{ data.duration }}{% endif %}{% if data.bytes %}
-Bytes: {{ data.bytes_human }}{% endif %}
+Bytes: {{ data.bytes_human }}{% endif %}{% if data.jitter %}
+Jitter: {{ data.jitter }} ms{% endif %}{% if data.packets %}
+Lost/Packets: {{ data.lost }}/{{ data.packets }}{% endif %}
 ```
