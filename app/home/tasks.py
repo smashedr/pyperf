@@ -59,12 +59,14 @@ def process_data(pk):
     q.bytes_human = format_bytes(data['start']['test_start']['bytes'])
     q.duration = data['start']['test_start']['duration']
     q.protocol = data['start']['test_start']['protocol']
+    if 'asn_country_code' in ip_data['data']:
+        q.asn_cc = ip_data['data']['asn_country_code']
+    if 'asn_description' in ip_data['data']:
+        q.asn_desc = ip_data['data']['asn_description']
     if data['start']['test_start']['protocol'] == 'UDP':
         q.jitter = data['end']['sum']['jitter_ms']
         q.packets = data['end']['sum']['packets']
         q.lost = data['end']['sum']['lost_packets']
-    q.asn_cc = ip_data['data']['asn_country_code']
-    q.asn_desc = ip_data['data']['asn_description']
     q.version = data['start']['version']
     q.save()
     send_discord_message.delay(pk)
@@ -80,7 +82,6 @@ def process_data(pk):
     #     'created_at': q.created_at,
     # }
     socket_dict = {'pk': q.pk}
-
     channel_layer = get_channel_layer()
     group_name = "home_group"
     event = {

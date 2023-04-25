@@ -10,7 +10,9 @@ emoji-country-flag
 gunicorn
 httpx
 ipwhois
+kaleido
 mysqlclient
+plotly
 python-decouple
 sentry-sdk
 uvicorn[standard]

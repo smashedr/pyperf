@@ -6,6 +6,7 @@ app_name = 'home'
 urlpatterns = [
     path('', views.home_view, name='index'),
     path('save/', views.save_iperf, name='iperf'),
-    path('data/<int:pk>/', views.result_view, name='result'),
+    path('<int:pk>/', views.result_view, name='result'),
+    path('<int:pk>.png', views.image_view, name='image'),
     path('ajax/tdata/', views.tdata_view, name='tdata'),
 ]

@@ -13,6 +13,11 @@ def get_config(value):
     return getattr(settings, value, None)
 
 
+@register.filter(name='absolute_url')
+def absolute_url(value):
+    return '{0}//{2}/'.format(*value.split('/'))
+
+
 @register.filter(name='cc_to_flag')
 def cc_to_flag(value):
     return flag.flag(value) if value else value

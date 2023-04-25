@@ -7,11 +7,11 @@ from sentry_sdk.integrations.django import DjangoIntegration
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', 'False', bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*').split()
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*').split(',')
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', '*').split()
+# CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', 'https://*').split(',')
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
 SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
@@ -43,7 +43,7 @@ OAUTH_REDIRECT_URI = config('OAUTH_REDIRECT_URI')
 OAUTH_GRANT_TYPE = config('OAUTH_GRANT_TYPE')
 OAUTH_SCOPE = config('OAUTH_SCOPE')
 
-SUPER_USER_IDS = config('SUPER_USER_IDS').split()
+SUPER_USER_IDS = config('SUPER_USER_IDS').split(',')
 DISCORD_INVITE = config('DISCORD_INVITE')
 DISCORD_WEBHOOK = config('DISCORD_WEBHOOK')
 

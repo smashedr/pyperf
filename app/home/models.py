@@ -37,5 +37,5 @@ class SpeedTest(models.Model):
         verbose_name = 'SpeedTest'
         verbose_name_plural = 'SpeedTests'
 
-    def test_type(self):
+    def get_type(self):
         return 'Download' if self.reverse else 'Upload'

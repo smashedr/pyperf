@@ -1,6 +1,8 @@
 import json
 import logging
-from django.http import HttpResponse, JsonResponse
+import plotly.graph_objects as go
+import plotly.io as pio
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
@@ -20,13 +22,32 @@ def home_view(request):
 
 
 def result_view(request, pk):
-    # View: /result/{pk}/
+    # View: /{pk}/
     logger.debug('result_view')
     q = SpeedTest.objects.get(pk=pk)
     logger.debug(q)
     d = json.loads(q.json)
     context = {'data': q, 'raw': d}
     return render(request, 'result.html', context)
+
+
+def image_view(request, pk):
+    # View: /{pk}.png
+    logger.debug('image_view')
+    q = SpeedTest.objects.get(pk=pk)
+    logger.debug(q)
+    if not q:
+        raise Http404
+
+    pio.templates.default = 'plotly_dark'
+    fig = go.Figure(go.Indicator(
+        mode='gauge+number',
+        value=q.bps,
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': f'{q.get_type()} Speed'},
+    ))
+
+    return HttpResponse(fig.to_image(), content_type='image/x-png')
 
 
 @csrf_exempt

@@ -1,6 +1,6 @@
-{{ data.test_type }} Results for: **{{ data.name }} ({{ data.ip }})**
+{{ data.get_type }} Results for: **{{ data.name }} ({{ data.ip }})**
 ```plaintext
-{{ data.test_type }} Speed: {{ data.bps_human }}
+{{ data.test_get_typetype }} Speed: {{ data.bps_human }}
 IP: {{ data.ip }}{% if data.name %}
 Host: {{ data.name }}{% endif %}{% if data.asn_desc %}
 ISP: {{ data.asn_desc }}{% endif %}{% if data.asn_cc %}
