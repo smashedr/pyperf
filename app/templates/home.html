@@ -1,25 +1,12 @@
 {% extends "main.html" %}
 {% block home_active %}active{% endblock %}
 {% block title %}Home{% endblock %}
+{% load static %}
 {% load home_tags %}
 
 {% block head %}{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <p id="one"></p>
-    </div>
-
-    <script>
-        const socket = new WebSocket('wss://' + window.location.host + '/ws/home_group/');
-        socket.onmessage = function (event) {
-            let data = JSON.parse(event.data);
-            console.log(data);
-            console.log(data.message);
-            document.querySelector("#one").innerText = data.message;
-        };
-    </script>
-
     <div class="container mt-2">
         <h1>PyPerf3</h1>
         <p class="lead">Iperf3 Server, with Discord Auth and Alerts, behind the Django ORM; all running in Docker.</p>
@@ -27,14 +14,14 @@
         <table class="table">
             <tr>
                 <td>Download</td>
-                <td><kbd>iperf3 -c {{ request.get_host }}{# -u -b 0#} -R</kbd>
-                    <a href="#" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }}{#-u -b 0 #} -R">
+                <td><kbd>iperf3 -c {{ request.get_host }} -R</kbd>
+                    <a href="javascript:void(0);" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }} -R">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
             </tr>
             <tr class="ms-3">
                 <td>Upload</td>
-                <td><kbd>iperf3 -c {{ request.get_host }}{# -u -b 0#}</kbd>
-                    <a href="#" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }}{# -u -b 0 #}">
+                <td><kbd>iperf3 -c {{ request.get_host }}</kbd>
+                    <a href="javascript:void(0);" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }}">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
             </tr>
         </table>
@@ -51,8 +38,27 @@
         </p>
 
         <h1>Results</h1>
-        {% include 'include/speedtable.html' with data=data %}
+        <table class="table table-hover" id="results">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Type</th>
+                <th scope="col">IP Address</th>
+                <th scope="col">Hostname</th>
+                <th scope="col">Speed</th>
+                <th scope="col">Protocol</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for st in data %}
+                {% include 'include/table-tr.html' with data=st %}
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 {% endblock %}
 
-{% block tail %}{% endblock %}
+{% block tail %}
+    <script type="text/javascript" src="{% static 'main/js/home.js' %}"></script>
+{% endblock %}

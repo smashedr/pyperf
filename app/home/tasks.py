@@ -3,16 +3,15 @@ import httpx
 import json
 import logging
 import socket
-from celery import shared_task
+from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from celery import shared_task
 from django.conf import settings
 from django.core import management
 from django.template.loader import render_to_string
 from ipwhois import IPWhois
 from .models import SpeedTest
 
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 
 logger = logging.getLogger('celery')
 
@@ -66,40 +65,19 @@ def process_data(pk):
         q.lost = data['end']['sum']['lost_packets']
     q.version = data['start']['version']
     q.save()
-    logger.info('--------------------')
-
-    # channel_layer = get_channel_layer()
-    # async_to_sync(channel_layer.group_send)("chat", {"type": "chat.force_disconnect"})
-
-    # channel_layer = get_channel_layer()
-    # async_to_sync(channel_layer.send)(self.channel_name, {
-    #     "type": "websocket.send",
-    #     "text": "Hello from my_function!",
-    # })
-
-    # channel_layer = get_channel_layer()
-    # channel_name = "home"
-    # async_to_sync(channel_layer.send)(channel_name, {
-    #     "type": "websocket.send",
-    #     "text": json.dumps({"message": "Hello, World!"}),
-    # })
-
-    # logger.info('--------------------')
-    # socket_message = 'Hello Earth!'
-    # channel_layer = get_channel_layer()
-    # group_name = "home_group"
-    # async_to_sync(channel_layer.group_send)(
-    #     group_name,
-    #     {
-    #         "type": "websocket.send",
-    #         "text": json.dumps({"message": socket_message}),
-    #     },
-    # )
-    # logger.info('--------------------')
+    send_discord_message.delay(pk)
 
     logger.info('--------------------')
-
-    socket_dict = {'message': f'New Result for {q.ip}. Refresh now to see...'}
+    # socket_dict = {
+    #     'id': q.id,
+    #     'reverse': q.reverse,
+    #     'ip': q.ip,
+    #     'name': q.name,
+    #     'bps_human': q.bps_human,
+    #     'protocol': q.protocol,
+    #     'created_at': q.created_at,
+    # }
+    socket_dict = {'pk': q.pk}
 
     channel_layer = get_channel_layer()
     group_name = "home_group"
@@ -108,10 +86,7 @@ def process_data(pk):
         "text": json.dumps(socket_dict),
     }
     async_to_sync(channel_layer.group_send)(group_name, event)
-
     logger.info('--------------------')
-    logger.info('--------------------')
-    send_discord_message.delay(pk)
     return True
 
 

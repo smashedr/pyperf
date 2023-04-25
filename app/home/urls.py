@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.home_view, name='index'),
     path('save/', views.save_iperf, name='iperf'),
     path('data/<int:pk>/', views.result_view, name='result'),
+    path('ajax/tdata/', views.tdata_view, name='tdata'),
 ]

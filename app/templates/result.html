@@ -17,7 +17,22 @@
 
         <h4 class="mt-2">{{ data.name }} ({{ data.ip }}) - {{ data.test_type }} Test</h4>
 
-        {% include 'include/speedview.html' with data=data  %}
+        <table class="table table-hover" id="results">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Type</th>
+                <th scope="col">IP Address</th>
+                <th scope="col">Hostname</th>
+                <th scope="col">Speed</th>
+                <th scope="col">Protocol</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% include 'include/table-tr.html' with data=data %}
+            </tbody>
+        </table>
 
         <h3>Raw Data <a href="#" class="clip text-primary" data-clipboard-target="#raw">
             <i class="fa-regular fa-file-lines ms-3"></i></a></h3>

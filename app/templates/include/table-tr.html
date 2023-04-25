@@ -1,0 +1,20 @@
+<tr>
+    <th scope="row"><a href="{% url 'home:result' data.id %}" class="text-white">
+        {{ data.id }}</a></th>
+    <td>
+        {% if data.reverse %}
+            <i class="fa-solid fa-cloud-arrow-down text-success" title="Download"></i>
+        {% else %}
+            <i class="fa-solid fa-cloud-arrow-up text-warning" title="Upload"></i>
+        {% endif %}
+    </td>
+    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+           data-clipboard-text="{{ data.ip }}">{{ data.ip }}</a></td>
+    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+           data-clipboard-text="{{ data.name }}">{{ data.name }}</a></td>
+    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+           data-clipboard-text="{{ data.bps_human }}">{{ data.bps_human }}</a></td>
+    <td>{{ data.protocol }}</td>
+    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+           data-clipboard-text="{{ data.created_at }}">{{ data.created_at }}</a></td>
+</tr>

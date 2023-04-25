@@ -1,9 +1,8 @@
 import json
 import logging
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from .models import SpeedTest
@@ -15,23 +14,13 @@ logger = logging.getLogger('app')
 def home_view(request):
     # View: /
     logger.debug('home_view')
-
-    # channel_layer = get_channel_layer()
-    # async_to_sync(channel_layer.group_send)(
-    #     'test',
-    #     {
-    #         'type': 'chat_message',
-    #         'message': "event_trigered_from_views"
-    #     }
-    # )
-
     q = reversed(SpeedTest.objects.all())
     logger.debug(q)
     return render(request, 'home.html', {'data': q})
 
 
 def result_view(request, pk):
-    # View: /result/{pk}
+    # View: /result/{pk}/
     logger.debug('result_view')
     q = SpeedTest.objects.get(pk=pk)
     logger.debug(q)
@@ -42,12 +31,26 @@ def result_view(request, pk):
 
 @csrf_exempt
 @require_http_methods(['POST'])
+def tdata_view(request):
+    # View: /ajax/tdata/
+    logger.debug('tr_view')
+    logger.debug(request.POST)
+    pk = int(request.POST['pk'])
+    logger.debug(pk)
+    speedtest = SpeedTest.objects.get(pk=pk)
+    logger.debug(speedtest)
+    table_str = render_to_string('include/table-tr.html', {'data': speedtest})
+    return HttpResponse(table_str, status=200)
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
 def save_iperf(request):
     # View: /save/
     logger.debug('save_iperf')
     body = request.body.decode('utf-8')
     data = json.loads(body)
-    test = SpeedTest.objects.create(json=data)
-    logger.debug(f'test.pk: {test.pk}')
-    process_data.delay(test.pk)
-    return JsonResponse({}, status=204)
+    speedtest = SpeedTest.objects.create(json=data)
+    logger.debug(f'test.pk: {speedtest.pk}')
+    process_data.delay(speedtest.pk)
+    return HttpResponse(status=204)
