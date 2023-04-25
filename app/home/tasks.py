@@ -63,6 +63,8 @@ def process_data(pk):
         q.jitter = data['end']['sum']['jitter_ms']
         q.packets = data['end']['sum']['packets']
         q.lost = data['end']['sum']['lost_packets']
+    q.asn_cc = ip_data['data']['asn_country_code']
+    q.asn_desc = ip_data['data']['asn_description']
     q.version = data['start']['version']
     q.save()
     send_discord_message.delay(pk)

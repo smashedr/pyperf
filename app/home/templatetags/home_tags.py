@@ -1,3 +1,4 @@
+import flag
 import logging
 from django import template
 from django.conf import settings
@@ -10,6 +11,11 @@ register = template.Library()
 @register.simple_tag(name='get_config')
 def get_config(value):
     return getattr(settings, value, None)
+
+
+@register.filter(name='cc_to_flag')
+def cc_to_flag(value):
+    return flag.flag(value) if value else value
 
 
 @register.filter(name='tag_to_class')
