@@ -10,13 +10,13 @@ DEBUG = config('DEBUG', 'False', bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*').split(',')
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', 'https://*').split(',')
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
-SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
 
 ASGI_APPLICATION = 'pyperf.asgi.application'
@@ -59,10 +59,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'home.tasks.clear_sessions',
         'schedule': crontab(minute=0, hour=0),
     },
-    # 'every-five-minutes': {
-    #     'task': 'check_twitch_live',
-    #     'schedule': crontab('*/2')
-    # },
+    'results_cleanup': {
+        'task': 'home.tasks.delete_empty_results',
+        'schedule': crontab('*/15')
+    },
 }
 
 if config('SENTRY_URL', False):

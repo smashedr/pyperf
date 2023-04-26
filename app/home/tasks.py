@@ -21,6 +21,16 @@ def clear_sessions():
 
 
 @shared_task()
+def delete_empty_results():
+    logger.info('delete_empty_results')
+    data = SpeedTest.objects.all()
+    for q in data:
+        if not q.ip:
+            logger.info('Deleted result #%s', q.id)
+            q.delete()
+
+
+@shared_task()
 def send_discord_message(pk):
     logger.info('send_discord_message')
     context = {'data': SpeedTest.objects.get(pk=pk)}
@@ -39,10 +49,16 @@ def send_discord_message(pk):
 def process_data(pk):
     logger.info('process_data')
     q = SpeedTest.objects.get(pk=pk)
-    data = json.loads(q.json)
-    ip = data['start']['accepted_connection']['host']
-    if not ip:
-        logger.warning('NO IP IN DATA, DELETING: %s', ip)
+    try:
+        data = json.loads(q.json)
+        ip = data['start']['accepted_connection']['host']
+        if not ip:
+            logger.warning('NO IP IN DATA, DELETING: %s', ip)
+            q.delete()
+            return False
+
+    except Exception as error:
+        logger.info(error)
         q.delete()
         return False
 
@@ -89,10 +105,10 @@ def process_data(pk):
     # }
     socket_dict = {'pk': q.pk}
     channel_layer = get_channel_layer()
-    group_name = "home_group"
+    group_name = 'home_group'
     event = {
-        "type": "websocket.send",
-        "text": json.dumps(socket_dict),
+        'type': 'websocket.send',
+        'text': json.dumps(socket_dict),
     }
     async_to_sync(channel_layer.group_send)(group_name, event)
     logger.info('--------------------')
@@ -101,21 +117,21 @@ def process_data(pk):
 
 
 def format_bytes(size):
-    units = ["B", "KB", "MB", "GB", "TB"]
+    units = ['B', 'KB', 'MB', 'GB', 'TB']
     for unit in units:
         if size < 1024:
-            return f"{size:.2f} {unit}"
+            return f'{size:.2f} {unit}'
         size /= 1024
-    return f"{size:.2f} {units[-1]}"
+    return f'{size:.2f} {units[-1]}'
 
 
 def format_bps(bps):
-    units = ["bps", "Kbps", "Mbps", "Gbps", "Tbps"]
+    units = ['bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps']
     for unit in units:
         if bps < 1000:
-            return f"{bps:.2f} {unit}"
+            return f'{bps:.2f} {unit}'
         bps /= 1000
-    return f"{bps:.2f} {units[-1]}"
+    return f'{bps:.2f} {units[-1]}'
 
 
 def ip_addr_geo(ip):
