@@ -69,6 +69,9 @@ def process_data(pk):
     if ip_info['geo']:
         q.ip_cc = ip_info['geo']['country_code']
         q.ip_country = ip_info['geo']['country_name']
+        q.ip_rc = ip_info['geo']['region_code']
+        q.ip_region = ip_info['geo']['region']
+        q.ip_city = ip_info['geo']['city']
         q.ip_org = ip_info['geo']['org']
         q.ip_lat = ip_info['geo']['latitude']
         q.ip_lon = ip_info['geo']['longitude']

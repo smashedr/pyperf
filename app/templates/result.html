@@ -40,6 +40,17 @@
                    data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
             </li>
+            {% if data.ip_lat and data.ip_lon %}
+            <li>
+                {% url 'home:map' data.id as map_url %}
+                <a class="text-info" target="_blank"
+                   href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:map' data.id %}">
+                    {{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}</a>
+                <a class="clip" href="javascript:void(0);"
+                   data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}">
+                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
+            </li>
+            {% endif %}
         </ul>
 
         <table class="table table-hover" id="results">
@@ -60,6 +71,12 @@
                    href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
                     Click here to view the Graph</a>.</p>
         </div>
+
+        {% if data.ip_lat and data.ip_lon %}
+        <div class="p-2">
+            {{  data|render_map|safe }}
+        </div>
+        {% endif %}
 
         <h3>Raw Data <a href="javascript:void(0);" class="clip" data-clipboard-target="#raw">
             <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>

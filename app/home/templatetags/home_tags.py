@@ -3,7 +3,7 @@ import logging
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
-from home.views import render_graph_fig
+from home.views import render_graph_fig, render_map_fig
 
 logger = logging.getLogger('app')
 register = template.Library()
@@ -50,7 +50,16 @@ def avatar_url(avatar_hash, username):
 @register.filter(name='render_graph')
 def render_graph(value):
     fig = render_graph_fig(value)
-    fig.update_layout(
-        margin=dict(t=10, l=16, b=10, r=10)
-    )
+    if not fig:
+        return str()
+    fig.update_layout(margin=dict(t=10, l=16, b=10, r=10))
+    return fig.to_html(full_html=False, config={'displaylogo': False})
+
+
+@register.filter(name='render_map')
+def render_map(value):
+    fig = render_map_fig(value)
+    if not fig:
+        return str()
+    fig.update_layout(margin=dict(t=10, l=10, b=10, r=10))
     return fig.to_html(full_html=False, config={'displaylogo': False})

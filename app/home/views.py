@@ -3,6 +3,7 @@ import logging
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
+from django.conf import settings
 from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -42,6 +43,18 @@ def graph_view(request, pk):
 
     fig = render_graph_fig(q)
     fig.layout.title.text = f'{q.get_type()} Speed'
+    return HttpResponse(fig.to_html(config={'displaylogo': False}))
+
+
+def map_view(request, pk):
+    # View: /{pk}/map/
+    logger.debug('map_view')
+    q = SpeedTest.objects.get(pk=pk)
+    logger.debug(q)
+    if not q:
+        raise Http404
+
+    fig = render_graph_fig(q)
     return HttpResponse(fig.to_html(config={'displaylogo': False}))
 
 
@@ -107,28 +120,34 @@ def render_graph_fig(query_or_pk):
     return fig
 
 
-def render_map_fig(query_or_ok):
-    mapbox_access_token = open(".mapbox_token").read()
+def render_map_fig(query_or_pk):
+    logger.debug('render_graph_html')
+    if not isinstance(query_or_pk, SpeedTest):
+        query_or_pk = SpeedTest.objects.get(pk=int(query_or_pk))
+    q = query_or_pk
+    logger.debug(q)
+    if not q.ip_lat or not q.ip_lon:
+        return None
+
+    pio.templates.default = 'plotly_dark'
     fig = go.Figure(go.Scattermapbox(
-        lat=['45.5017'],
-        lon=['-73.5673'],
+        lat=[str(q.ip_lat)],
+        lon=[str(q.ip_lon)],
         mode='markers',
-        marker=go.scattermapbox.Marker(
-            size=14
-        ),
-        text=['Montreal'],
+        marker=go.scattermapbox.Marker(size=14),
+        text=[q.ip_city or 'Unknown'],
     ))
     fig.update_layout(
         hovermode='closest',
         mapbox=dict(
-            accesstoken=mapbox_access_token,
+            accesstoken=settings.MAPBOX_TOKEN,
             bearing=0,
             center=go.layout.mapbox.Center(
-                lat=45,
-                lon=-73
+                lat=int(q.ip_lat),
+                lon=int(q.ip_lon),
             ),
             pitch=0,
-            zoom=5
+            zoom=5,
         )
     )
     return fig
