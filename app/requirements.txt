@@ -12,6 +12,7 @@ httpx
 ipwhois
 kaleido
 mysqlclient
+pandas
 plotly
 python-decouple
 sentry-sdk

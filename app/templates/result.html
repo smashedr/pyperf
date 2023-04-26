@@ -14,16 +14,31 @@
                  alt="{{ data.get_type }} Results" /></a>
         <h1>Result - {{ data.id }}</h1>
 
-        <a class="btn btn-outline-primary" href="{% url 'home:index' %}" role="button">
-            Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
-        <a class="btn btn-outline-light clip" href="javascript:void(0);" role="button"
-           data-clipboard-text="{{ request.build_absolute_uri }}">
-            Copy URL <i class="fa-solid fa-link ms-2"></i></a>
-        <a class="btn btn-outline-light clip" href="javascript:void(0);" role="button"
-           data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ data.id }}.png">
-            Copy Image URL <i class="fa-regular fa-image"></i></a>
-
-        <h4 class="mt-2">{{ data.name }} ({{ data.ip }}) - {{ data.get_type }} Test</h4>
+        <h4 class="mt-2">{{ data.get_type }} Test - {{ data.name }} ({{ data.ip }})</h4>
+        <div class="mt-2">
+            <a class="btn btn-outline-info" href="{% url 'home:index' %}" role="button">
+                Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
+            <a class="btn btn-outline-light clip" href="javascript:void(0);" role="button"
+               data-clipboard-text="{{ request.build_absolute_uri }}">
+                Copy URL <i class="fa-solid fa-link ms-2"></i></a>
+        </div>
+        <ul class="mt-2">
+            <li>
+                <a class="text-info" target="_blank" id="image_url"
+                   href="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
+                    {{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png</a>
+                <a class="clip" href="javascript:void(0);" data-clipboard-target="#image_url">
+                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
+            </li>
+            <li>
+                {% url 'home:graph' data.id as graph_url %}
+                <a class="text-info" target="_blank" id="graph_url"
+                   href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
+                    {{ request.build_absolute_uri|absolute_url }}{{ url|graph_url:"/" }}</a>
+                <a class="clip" href="javascript:void(0);" data-clipboard-target="#graph_url">
+                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
+            </li>
+        </ul>
 
         <table class="table table-hover" id="results">
             <thead>
@@ -34,11 +49,19 @@
             </tbody>
         </table>
 
-        <div>
+        <div class="p-2 d-none d-sm-block">
+            {{  data|render_graph|safe }}
+{#            <iframe src="{% url 'home:graph' data.id %}" class="w-100" style="height: 360px;"></iframe>#}
+        </div>
+        <div class="p-1 .d-block .d-sm-none">
+            <p>Graph Hidden because viewport is too narrow.<br>
+                <a class="text-info" target="_blank"
+                   href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
+                    Click here to view the Graph</a>.</p>
         </div>
 
-        <h3>Raw Data <a href="javascript:void(0);" class="clip text-primary" data-clipboard-target="#raw">
-            <i class="fa-regular fa-file-lines ms-3"></i></a></h3>
+        <h3>Raw Data <a href="javascript:void(0);" class="clip" data-clipboard-target="#raw">
+            <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>
 
 <pre><code id="raw">
 {{ raw | pprint }}

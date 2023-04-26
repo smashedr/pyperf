@@ -9,15 +9,15 @@
             <i class="fa-solid fa-cloud-arrow-up text-warning" title="Upload"></i>
         {% endif %}
     </td>
-    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"  title="{{ data.bps }}"
            data-clipboard-text="{{ data.bps_human }}">{{ data.bps_human }}</a></td>
-    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.ip }}"
            data-clipboard-text="{{ data.name }}">{{ data.name }}</a></td>
-    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.asn_cc }}"
+    <td class="d-none d-xs-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.asn_cc }}"
            data-clipboard-text="{{ data.asn_cc }}">{{ data.asn_cc|cc_to_flag }}</a></td>
-    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+    <td class="d-none d-md-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.name }}"
            data-clipboard-text="{{ data.ip }}">{{ data.ip }}</a></td>
-    <td>{{ data.protocol }}</td>
-    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"
+    <td class="d-none d-sm-table-cell" title="{{ data.protocol }}">{{ data.protocol }}</td>
+    <td class="d-none d-lg-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none"
            data-clipboard-text="{{ data.created_at }}">{{ data.created_at }}</a></td>
 </tr>

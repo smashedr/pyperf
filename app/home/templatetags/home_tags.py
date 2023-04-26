@@ -3,6 +3,7 @@ import logging
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
+from home.views import render_graph_fig
 
 logger = logging.getLogger('app')
 register = template.Library()
@@ -15,7 +16,12 @@ def get_config(value):
 
 @register.filter(name='absolute_url')
 def absolute_url(value):
-    return '{0}//{2}/'.format(*value.split('/'))
+    return '{0}//{2}'.format(*value.split('/'))
+
+
+@register.filter(name='crstrip')
+def crstrip(value, string):
+    return value.rstrip(string)
 
 
 @register.filter(name='cc_to_flag')
@@ -39,3 +45,9 @@ def avatar_url(avatar_hash, username):
         return f'https://cdn.discordapp.com/avatars/{ username }/{ avatar_hash }.png'
     else:
         return static('images/assets/default.png')
+
+
+@register.filter(name='render_graph')
+def render_graph(value):
+    fig = render_graph_fig(value)
+    return fig.to_html(full_html=False, config={'displaylogo': False})

@@ -16,6 +16,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
 SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'
