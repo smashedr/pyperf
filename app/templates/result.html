@@ -24,18 +24,20 @@
         </div>
         <ul class="mt-2">
             <li>
-                <a class="text-info" target="_blank" id="image_url"
+                <a class="text-info" target="_blank"
                    href="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
                     {{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png</a>
-                <a class="clip" href="javascript:void(0);" data-clipboard-target="#image_url">
+                <a class="clip" href="javascript:void(0);"
+                   data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
             </li>
             <li>
                 {% url 'home:graph' data.id as graph_url %}
-                <a class="text-info" target="_blank" id="graph_url"
+                <a class="text-info" target="_blank"
                    href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
                     {{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}</a>
-                <a class="clip" href="javascript:void(0);" data-clipboard-target="#graph_url">
+                <a class="clip" href="javascript:void(0);"
+                   data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
             </li>
         </ul>
@@ -51,9 +53,8 @@
 
         <div class="p-2 d-none d-sm-block">
             {{  data|render_graph|safe }}
-{#            <iframe src="{% url 'home:graph' data.id %}" class="w-100" style="height: 360px;"></iframe>#}
         </div>
-        <div class="p-1 .d-block .d-sm-none">
+        <div class="p-1 d-block d-sm-none">
             <p>Graph Hidden because viewport is too narrow.<br>
                 <a class="text-info" target="_blank"
                    href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">

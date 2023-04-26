@@ -14,7 +14,7 @@ class SpeedTest(models.Model):
     bps_human = models.CharField(blank=True, max_length=32, verbose_name='BPS Human')
     bytes = models.IntegerField(null=True, verbose_name='Bytes')
     bytes_human = models.CharField(blank=True, max_length=32, verbose_name='Bytes Human')
-    duration = models.FloatField(null=True, verbose_name='Duration')
+    duration = models.IntegerField(null=True, verbose_name='Duration')
     protocol = models.CharField(
         blank=True,
         max_length=3,
