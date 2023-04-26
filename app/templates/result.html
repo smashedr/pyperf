@@ -1,9 +1,12 @@
 {% extends "main.html" %}
 {% block home_active %}active{% endblock %}
 {% block title %}Result - {{ data.bps_human }} - {{ data.name }}{% endblock %}
+{% load static %}
 {% load home_tags %}
 
-{% block head %}{% endblock %}
+{% block head %}
+    {{ data.pk|json_script:"pk" }}
+{% endblock %}
 
 {% block body %}
     <div class="container-fluid mt-2">
@@ -62,9 +65,18 @@
             </tbody>
         </table>
 
-        <div class="p-2 d-none d-sm-block">
-            {{  data|render_graph|safe }}
+        <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
+            </div>
+            <div class="spinner-grow text-info graph-loading ms-2 me-2" role="status" style="display:none;">
+              <span class="visually-hidden">Loading Graph...</span>
+            </div>
+            <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
+            </div>
         </div>
+
+        <div class="p-2 d-none d-sm-block" id="graph-data"></div>
+
         <div class="p-1 d-block d-sm-none">
             <p>Graph Hidden because viewport is too narrow.<br>
                 <a class="text-info" target="_blank"
@@ -73,9 +85,17 @@
         </div>
 
         {% if data.ip_lat and data.ip_lon %}
-        <div class="p-2">
-            {{  data|render_map|safe }}
-        </div>
+            <div class="d-flex justify-content-center">
+                <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
+                </div>
+                <div class="spinner-grow text-info map-loading ms-2 me-2" role="status" style="display:none;">
+                  <span class="visually-hidden">Loading Map...</span>
+                </div>
+                <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
+                </div>
+            </div>
+
+            <div class="p-2" id="map-data"></div>
         {% endif %}
 
         <h3>Raw Data <a href="javascript:void(0);" class="clip" data-clipboard-target="#raw">
@@ -88,4 +108,6 @@
 
 {% endblock %}
 
-{% block tail %}{% endblock %}
+{% block tail %}
+    <script type="text/javascript" src="{% static 'main/js/result.js' %}"></script>
+{% endblock %}

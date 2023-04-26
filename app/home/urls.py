@@ -10,5 +10,7 @@ urlpatterns = [
     path('<int:pk>.png', views.image_view, name='image'),
     path('<int:pk>/graph/', views.graph_view, name='graph'),
     path('<int:pk>/map/', views.map_view, name='map'),
-    path('ajax/tdata/', views.tdata_view, name='tdata'),
+    path('ajax/tdata/', views.tdata_view_a, name='ajax_tdata'),
+    path('ajax/graph/', views.graph_view_a, name='ajax_graph'),
+    path('ajax/map/', views.map_view_a, name='ajax_map'),
 ]

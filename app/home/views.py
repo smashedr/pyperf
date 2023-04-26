@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 from django.conf import settings
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_http_methods
@@ -33,6 +33,24 @@ def result_view(request, pk):
     return render(request, 'result.html', context)
 
 
+def image_view(request, pk):
+    # View: /{pk}.png
+    logger.debug('image_view')
+    q = SpeedTest.objects.get(pk=pk)
+    logger.debug(q)
+    if not q:
+        raise Http404
+
+    pio.templates.default = 'plotly_dark'
+    fig = go.Figure(go.Indicator(
+        mode='gauge+number',
+        value=q.bps,
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': f'{q.get_type()} Speed'},
+    ))
+    return HttpResponse(fig.to_image(), content_type='image/x-png')
+
+
 def graph_view(request, pk):
     # View: /{pk}/graph/
     logger.debug('image_view')
@@ -58,38 +76,6 @@ def map_view(request, pk):
     return HttpResponse(fig.to_html(config={'displaylogo': False}))
 
 
-def image_view(request, pk):
-    # View: /{pk}.png
-    logger.debug('image_view')
-    q = SpeedTest.objects.get(pk=pk)
-    logger.debug(q)
-    if not q:
-        raise Http404
-
-    pio.templates.default = 'plotly_dark'
-    fig = go.Figure(go.Indicator(
-        mode='gauge+number',
-        value=q.bps,
-        domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': f'{q.get_type()} Speed'},
-    ))
-    return HttpResponse(fig.to_image(), content_type='image/x-png')
-
-
-@csrf_exempt
-@require_http_methods(['POST'])
-def tdata_view(request):
-    # View: /ajax/tdata/
-    logger.debug('tr_view')
-    logger.debug(request.POST)
-    pk = int(request.POST['pk'])
-    logger.debug(pk)
-    speedtest = SpeedTest.objects.get(pk=pk)
-    logger.debug(speedtest)
-    table_str = render_to_string('include/table-tr.html', {'data': speedtest})
-    return HttpResponse(table_str, status=200)
-
-
 @csrf_exempt
 @require_http_methods(['POST'])
 def save_iperf(request):
@@ -101,6 +87,57 @@ def save_iperf(request):
     logger.debug(f'test.pk: {speedtest.pk}')
     process_data.delay(speedtest.pk)
     return HttpResponse(status=204)
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def tdata_view_a(request):
+    # View: /ajax/tdata/
+    logger.debug('tr_view')
+    pk = int(request.POST['pk'])
+    logger.debug(pk)
+    speedtest = SpeedTest.objects.get(pk=pk)
+    logger.debug(speedtest)
+    response = render_to_string('include/table-tr.html', {'data': speedtest})
+    return HttpResponse(response, status=200)
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def graph_view_a(request):
+    # View: /ajax/graph/
+    logger.debug('graph_view_a')
+    logger.debug(request.META)
+    logger.debug(request.POST)
+    pk = int(request.POST['pk'])
+    logger.debug(pk)
+    q = SpeedTest.objects.get(pk=pk)
+    logger.debug(q)
+    fig = render_graph_fig(q)
+    if not fig:
+        return HttpResponse(status=204)
+
+    fig.update_layout(margin=dict(t=10, l=16, b=10, r=10))
+    return HttpResponse(fig.to_html(full_html=False, config={'displaylogo': False}))
+
+
+@csrf_exempt
+@require_http_methods(['POST'])
+def map_view_a(request):
+    # View: /ajax/map/
+    logger.debug('map_view_a')
+    logger.debug(request.META)
+    logger.debug(request.POST)
+    pk = int(request.POST['pk'])
+    logger.debug(pk)
+    q = SpeedTest.objects.get(pk=pk)
+    logger.debug(q)
+    fig = render_map_fig(q)
+    if not fig:
+        return HttpResponse(status=204)
+
+    fig.update_layout(margin=dict(t=10, l=10, b=10, r=10))
+    return HttpResponse(fig.to_html(full_html=False, config={'displaylogo': False}))
 
 
 def render_graph_fig(query_or_pk):
