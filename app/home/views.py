@@ -149,7 +149,7 @@ def render_graph_fig(query_or_pk):
     logger.debug(q)
 
     data = json.loads(query_or_pk.json)
-    if 'intervals' not in data['intervals'] or not data['intervals']:
+    if 'intervals' not in data or not data['intervals']:
         logger.debug('intervals NOT IN query')
         return None
 
