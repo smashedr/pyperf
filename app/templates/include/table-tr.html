@@ -11,13 +11,13 @@
     </td>
     <td><a href="javascript:void(0);" class="clip text-white text-decoration-none"  title="{{ data.bps }}"
            data-clipboard-text="{{ data.bps_human }}">{{ data.bps_human }}</a></td>
-    <td class="d-none d-sm-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none"  title="{{ data.duration }} seconds"
+    <td class="d-none d-sm-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.duration }} seconds"
            data-clipboard-text="{{ data.duration }}">{{ data.duration }} s</a></td>
-    <td class="d-none d-lg-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.ip }}"
+    <td class="d-none d-sm-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.ip_cc }}"
+           data-clipboard-text="{{ data.ip_country }}">{{ data.ip_cc|cc_to_flag }}</a></td>
+    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.ip }}"
            data-clipboard-text="{{ data.name }}">{{ data.name }}</a></td>
-    <td class="d-none d-sm-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.asn_cc }}"
-           data-clipboard-text="{{ data.asn_cc }}">{{ data.asn_cc|cc_to_flag }}</a></td>
-    <td><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.name }}"
+    <td class="d-none d-lg-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.name }}"
            data-clipboard-text="{{ data.ip }}">{{ data.ip }}</a></td>
     <td class="d-none d-md-table-cell" title="{{ data.protocol }}">{{ data.protocol }}</td>
     <td class="d-none d-xl-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none"

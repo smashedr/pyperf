@@ -9,7 +9,6 @@ django-redis
 emoji-country-flag
 gunicorn
 httpx
-ipwhois
 kaleido
 mysqlclient
 pandas

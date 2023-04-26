@@ -22,8 +22,11 @@ class SpeedTest(models.Model):
         verbose_name='Protocol',
     )
     jitter = models.FloatField(null=True, verbose_name='Jitter')
-    asn_cc = models.CharField(blank=True, max_length=32, verbose_name='ASN Country Code')
-    asn_desc = models.CharField(blank=True, max_length=32, verbose_name='ASN Description')
+    ip_cc = models.CharField(blank=True, max_length=2, verbose_name='IP Country Code')
+    ip_country = models.CharField(blank=True, max_length=32, verbose_name='IP Country Name')
+    ip_org = models.CharField(blank=True, max_length=32, verbose_name='IP Organization')
+    ip_lat = models.FloatField(null=True, max_length=32, verbose_name='IP Latitude')
+    ip_lon = models.FloatField(null=True, max_length=32, verbose_name='IP Longitude')
     packets = models.IntegerField(null=True, verbose_name='Packets Total')
     lost = models.IntegerField(null=True, verbose_name='Packets Lost')
     json = models.JSONField()

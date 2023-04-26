@@ -9,7 +9,6 @@ from celery import shared_task
 from django.conf import settings
 from django.core import management
 from django.template.loader import render_to_string
-from ipwhois import IPWhois
 from .models import SpeedTest
 
 
@@ -47,30 +46,34 @@ def process_data(pk):
         q.delete()
         return False
 
-    ip_data = get_ip_data(ip)
-    q.ip = ip_data['ip']
-    q.name = ip_data['name']
-    q.reverse = data['start']['test_start']['reverse']
+    ip_info = {
+        'ip': ip,
+        'name': socket.getfqdn(ip),
+        'geo': ip_addr_geo(ip),
+    }
     bps = data['end']['sum_received']['bits_per_second'] or \
           data['end']['sum_sent']['bits_per_second']
     q.bps = bps
+    q.ip = ip_info['ip']
+    q.name = ip_info['name']
+    q.reverse = data['start']['test_start']['reverse']
     q.bps_human = format_bps(bps)
     q.bytes = data['start']['test_start']['bytes']
     q.bytes_human = format_bytes(data['start']['test_start']['bytes'])
     q.duration = data['start']['test_start']['duration']
     q.protocol = data['start']['test_start']['protocol']
-    if 'asn_country_code' in ip_data['data']:
-        q.asn_cc = ip_data['data']['asn_country_code']
-    if 'asn_description' in ip_data['data']:
-        q.asn_desc = ip_data['data']['asn_description']
     if data['start']['test_start']['protocol'] == 'UDP':
         q.jitter = data['end']['sum']['jitter_ms']
         q.packets = data['end']['sum']['packets']
         q.lost = data['end']['sum']['lost_packets']
+    if ip_info['geo']:
+        q.ip_cc = ip_info['geo']['country_code']
+        q.ip_country = ip_info['geo']['country_name']
+        q.ip_org = ip_info['geo']['org']
+        q.ip_lat = ip_info['geo']['latitude']
+        q.ip_lon = ip_info['geo']['longitude']
     q.version = data['start']['version']
     q.save()
-    send_discord_message.delay(pk)
-
     logger.info('--------------------')
     # socket_dict = {
     #     'id': q.id,
@@ -90,6 +93,7 @@ def process_data(pk):
     }
     async_to_sync(channel_layer.group_send)(group_name, event)
     logger.info('--------------------')
+    send_discord_message.delay(pk)
     return True
 
 
@@ -111,23 +115,13 @@ def format_bps(bps):
     return f"{bps:.2f} {units[-1]}"
 
 
-def get_ip_data(ip_addr):
-    try:
-        host_name = socket.gethostbyaddr(ip_addr)[0]
-    except:
-        host_name = ''
-
-    private = ipaddress.ip_address(ip_addr).is_private
-    if not private:
-        try:
-            ip_whois = IPWhois(ip_addr)
-            ip_info = ip_whois.lookup_rdap(depth=1)
-        except:
-            ip_info = {}
-
-    return {
-        'ip': ip_addr,
-        'name': host_name,
-        'private': private,
-        'data': ip_info if 'ip_info' in vars() else {},
-    }
+def ip_addr_geo(ip):
+    if ipaddress.ip_address(ip).is_private:
+        logger.info('is_private: %s', ip)
+        return None
+    url = f'https://ipapi.co/{ip}/json/'
+    r = httpx.get(url)
+    if 'error' in r.json():
+        logger.info(r)
+        return None
+    return r.json()

@@ -2,9 +2,9 @@
 ```plaintext
 {{ data.test_get_typetype }} Speed: {{ data.bps_human }}
 IP: {{ data.ip }}{% if data.name %}
-Host: {{ data.name }}{% endif %}{% if data.asn_desc %}
-ISP: {{ data.asn_desc }}{% endif %}{% if data.asn_cc %}
-Country: {{ data.asn_cc }}{% endif %}
+Host: {{ data.name }}{% endif %}{% if data.ip_country %}
+Country: {{ data.ip_country }}{% endif %}{% if data.ip_org %}
+ISP: {{ data.ip_org }}{% endif %}
 Protocol: {{ data.protocol }}{% if data.duration %}
 Duration: {{ data.duration }}{% endif %}{% if data.bytes %}
 Bytes: {{ data.bytes_human }}{% endif %}{% if data.jitter %}

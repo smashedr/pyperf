@@ -19,7 +19,7 @@
             <a class="btn btn-outline-info" href="{% url 'home:index' %}" role="button">
                 Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
             <a class="btn btn-outline-light clip" href="javascript:void(0);" role="button"
-               data-clipboard-text="{{ request.build_absolute_uri }}">
+               data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
                 Copy URL <i class="fa-solid fa-link ms-2"></i></a>
         </div>
         <ul class="mt-2">
