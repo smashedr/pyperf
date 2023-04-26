@@ -34,7 +34,7 @@
                 {% url 'home:graph' data.id as graph_url %}
                 <a class="text-info" target="_blank" id="graph_url"
                    href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
-                    {{ request.build_absolute_uri|absolute_url }}{{ url|graph_url:"/" }}</a>
+                    {{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}</a>
                 <a class="clip" href="javascript:void(0);" data-clipboard-target="#graph_url">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
             </li>
