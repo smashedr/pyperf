@@ -3,12 +3,9 @@ $(document).ready(function() {
     const pk = JSON.parse(document.getElementById('pk').textContent);
 
     $.ajax({
-        url: '/ajax/graph/',
-        type: 'POST',
-        data: {pk: pk},
-        dataType: 'text',
+        url: '/ajax/' + pk + '/graph/',
+        type: 'GET',
         beforeSend: function( jqXHR ){
-            console.log('beforeSend');
             $('.graph-loading').toggle();
         },
         success: function(data, textStatus, jqXHR){
@@ -16,7 +13,7 @@ $(document).ready(function() {
             $('#graph-data').prepend(data);
         },
         complete: function(){
-            console.log('complete');
+            console.log('graph loaded');
             $('.graph-loading').toggle();
         },
         error: function(data, textStatus) {
@@ -25,12 +22,9 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: '/ajax/map/',
-        type: 'POST',
-        data: {pk: pk},
-        dataType: 'text',
+        url: '/ajax/' + pk + '/map/',
+        type: 'GET',
         beforeSend: function( jqXHR ){
-            console.log('beforeSend');
             $('.map-loading').toggle();
         },
         success: function(data, textStatus, jqXHR){
@@ -38,7 +32,7 @@ $(document).ready(function() {
             $('#map-data').prepend(data);
         },
         complete: function(){
-            console.log('complete');
+            console.log('map loaded');
             $('.map-loading').toggle();
         },
         error: function(data, textStatus) {

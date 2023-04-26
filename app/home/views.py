@@ -7,6 +7,7 @@ from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from .models import SpeedTest
@@ -33,6 +34,7 @@ def result_view(request, pk):
     return render(request, 'result.html', context)
 
 
+@cache_page(60 * 60 * 12)
 def image_view(request, pk):
     # View: /{pk}.png
     logger.debug('image_view')
@@ -90,11 +92,9 @@ def save_iperf(request):
 
 
 @csrf_exempt
-@require_http_methods(['POST'])
-def tdata_view_a(request):
-    # View: /ajax/tdata/
+def tdata_view_a(request, pk):
+    # View: /ajax/{pk}/tdata/
     logger.debug('tr_view')
-    pk = int(request.POST['pk'])
     logger.debug(pk)
     speedtest = SpeedTest.objects.get(pk=pk)
     logger.debug(speedtest)
@@ -103,13 +103,10 @@ def tdata_view_a(request):
 
 
 @csrf_exempt
-@require_http_methods(['POST'])
-def graph_view_a(request):
-    # View: /ajax/graph/
+@cache_page(60 * 60 * 24)
+def graph_view_a(request, pk):
+    # View: /ajax/{pk}/graph/
     logger.debug('graph_view_a')
-    logger.debug(request.META)
-    logger.debug(request.POST)
-    pk = int(request.POST['pk'])
     logger.debug(pk)
     q = SpeedTest.objects.get(pk=pk)
     logger.debug(q)
@@ -122,13 +119,10 @@ def graph_view_a(request):
 
 
 @csrf_exempt
-@require_http_methods(['POST'])
-def map_view_a(request):
-    # View: /ajax/map/
+@cache_page(60 * 60 * 24)
+def map_view_a(request, pk):
+    # View: /ajax/{pk}/map/
     logger.debug('map_view_a')
-    logger.debug(request.META)
-    logger.debug(request.POST)
-    pk = int(request.POST['pk'])
     logger.debug(pk)
     q = SpeedTest.objects.get(pk=pk)
     logger.debug(q)

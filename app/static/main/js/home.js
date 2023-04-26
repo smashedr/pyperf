@@ -1,10 +1,7 @@
 $(document).ready(function() {
 
     // Reload page on browser back/forward
-    //  $(window).on('popstate', function() {
-    //      location.reload(true);
-    //  });
-    var perfEntries = performance.getEntriesByType('navigation');
+    let perfEntries = performance.getEntriesByType('navigation');
     if (perfEntries[0].type === 'back_forward') {
         location.reload();
     }
@@ -14,7 +11,7 @@ $(document).ready(function() {
     console.log('Websockets Connected.');
     socket.onmessage = function(event) {
         let data = JSON.parse(event.data);
-        $.post('/ajax/tdata/', {'pk': data.pk}, function(response) {
+        $.get('/ajax/' + data.pk + '/tdata/', function(response) {
             $('#results tbody').prepend(response);
             console.log('Table Updated.');
         });

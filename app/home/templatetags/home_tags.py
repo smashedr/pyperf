@@ -3,7 +3,6 @@ import logging
 from django import template
 from django.conf import settings
 from django.templatetags.static import static
-from home.views import render_graph_fig, render_map_fig
 
 logger = logging.getLogger('app')
 register = template.Library()
