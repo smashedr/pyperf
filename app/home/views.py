@@ -41,7 +41,7 @@ def graph_view(request, pk):
         raise Http404
 
     fig = render_graph_fig(q)
-    # fig.update_layout(paper_bgcolor='Black')
+    fig.layout.title.text = f'{q.get_type()} Speed'
     return HttpResponse(fig.to_html(config={'displaylogo': False}))
 
 
@@ -103,6 +103,5 @@ def render_graph_fig(query_or_pk):
         y.append(d['sum']['bits_per_second'])
     df = {'Seconds': x, 'Speed': y}
     pio.templates.default = 'plotly_dark'
-    fig = px.line(df, x='Seconds', y='Speed', title=f'{q.get_type()} Speed',
-                  markers=True, line_shape='linear')
+    fig = px.line(df, x='Seconds', y='Speed', markers=True, line_shape='linear')
     return fig

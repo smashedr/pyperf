@@ -50,4 +50,7 @@ def avatar_url(avatar_hash, username):
 @register.filter(name='render_graph')
 def render_graph(value):
     fig = render_graph_fig(value)
+    fig.update_layout(
+        margin=dict(t=10, l=16, b=10, r=10)
+    )
     return fig.to_html(full_html=False, config={'displaylogo': False})
