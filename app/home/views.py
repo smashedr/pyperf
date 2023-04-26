@@ -30,8 +30,7 @@ def result_view(request, pk):
     q = SpeedTest.objects.get(pk=pk)
     logger.debug(q)
     d = json.loads(q.json)
-    context = {'data': q, 'raw': d}
-    return render(request, 'result.html', context)
+    return render(request, 'result.html', {'data': q, 'raw': d})
 
 
 @cache_page(60 * 60 * 12)
@@ -62,6 +61,10 @@ def graph_view(request, pk):
         raise Http404
 
     fig = render_graph_fig(q)
+    if not fig:
+        logger.debug('no fig')
+        return Http404
+
     fig.layout.title.text = f'{q.get_type()} Speed'
     return HttpResponse(fig.to_html(config={'displaylogo': False}))
 
@@ -75,6 +78,10 @@ def map_view(request, pk):
         raise Http404
 
     fig = render_map_fig(q)
+    if not fig:
+        logger.debug('no fig')
+        raise Http404
+
     return HttpResponse(fig.to_html(config={'displaylogo': False}))
 
 
@@ -140,9 +147,14 @@ def render_graph_fig(query_or_pk):
         query_or_pk = SpeedTest.objects.get(pk=int(query_or_pk))
     q = query_or_pk
     logger.debug(q)
-    d = json.loads(query_or_pk.json)
+
+    data = json.loads(query_or_pk.json)
+    if 'intervals' not in data['intervals'] or not data['intervals']:
+        logger.debug('intervals NOT IN query')
+        return None
+
     x, y = [], []
-    for i, d in enumerate(d['intervals']):
+    for i, d in enumerate(data['intervals']):
         x.append(i)
         y.append(d['sum']['bits_per_second'])
     df = {'Seconds': x, 'Speed': y}
@@ -157,6 +169,7 @@ def render_map_fig(query_or_pk):
         query_or_pk = SpeedTest.objects.get(pk=int(query_or_pk))
     q = query_or_pk
     logger.debug(q)
+
     if not q.ip_lat or not q.ip_lon:
         return None
 
@@ -182,3 +195,24 @@ def render_map_fig(query_or_pk):
         )
     )
     return fig
+
+
+# def add_pk_to_session(request, pk):
+#     recent = request.session.get('recent', '')
+#     logger.debug('recent: %s', recent)
+#     recent_list = list_to_str(recent)
+#     if int(pk) not in recent_list:
+#         recent_list.insert(0, int(pk))
+#         request.session['recent'] = list_to_str(recent_list[slice(5)])
+#         logger.debug('NEW recent: %s', request.session['recent'])
+#     logger.debug('%s already in recent_list', str(pk))
+#
+#
+# def list_to_str(list_or_str):
+#     if isinstance(list_or_str, str):
+#         if not list_or_str:
+#             return []
+#         return json.loads(list_or_str)
+#     if not list_or_str:
+#         return '[]'
+#     return json.dumps(list_or_str)
