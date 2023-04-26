@@ -54,7 +54,7 @@ def map_view(request, pk):
     if not q:
         raise Http404
 
-    fig = render_graph_fig(q)
+    fig = render_map_fig(q)
     return HttpResponse(fig.to_html(config={'displaylogo': False}))
 
 
