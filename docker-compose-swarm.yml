@@ -28,6 +28,8 @@ services:
       - net-internal
     depends_on:
       - app
+      - flower
+      - redis-commander
 
   app:
     build: ./app
@@ -67,19 +69,6 @@ services:
       - app
       - redis
 
-  flower:
-    image: mher/flower
-    env_file: ${ENV_FILE}
-    deploy:
-      replicas: 1
-    volumes:
-      - flower_data:/data
-    networks:
-      - net-internal
-    depends_on:
-      - app
-      - redis
-
   redis:
     image: redis:6-alpine
     command: "redis-server --appendonly yes"
@@ -89,6 +78,35 @@ services:
       - redis_data:/data
     networks:
       - net-internal
+
+  redis-commander:
+    image: ghcr.io/joeferner/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - URL_PREFIX=/redis
+    deploy:
+      replicas: 1
+    networks:
+      - net-internal
+    depends_on:
+      - redis
+
+  flower:
+    image: mher/flower
+    environment:
+      - FLOWER_PORT=5555
+      - FLOWER_URL_PREFIX=flower
+      - FLOWER_PURGE_OFFLINE_WORKERS=60
+      - FLOWER_AUTO_REFRESH=
+    deploy:
+      replicas: 1
+    volumes:
+      - flower_data:/data
+    networks:
+      - net-internal
+    depends_on:
+      - app
+      - redis
 
 secrets:
   cssnr_basic_http_auth:
