@@ -71,7 +71,7 @@ services:
 
   redis:
     image: redis:6-alpine
-    command: "redis-server --appendonly yes"
+    command: "redis-server --appendonly yes --maxmemory 536870912"
     deploy:
       replicas: 1
     volumes:
