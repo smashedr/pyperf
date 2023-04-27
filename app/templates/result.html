@@ -1,8 +1,11 @@
 {% extends "main.html" %}
-{% block home_active %}active{% endblock %}
-{% block title %}Result - {{ data.bps_human }} - {{ data.name }}{% endblock %}
+{% load cache %}
 {% load static %}
 {% load home_tags %}
+{% cache 86400 single_result %}
+
+{% block home_active %}active{% endblock %}
+{% block title %}Result - {{ data.bps_human }} - {{ data.name }}{% endblock %}
 
 {% block head %}
     {{ data.pk|json_script:"pk" }}
@@ -102,7 +105,7 @@
             <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>
 
 <pre><code id="raw">
-{{ raw | pprint }}
+{{ data.json | todict | pprint }}
 </code></pre>
     </div>
 
@@ -111,3 +114,5 @@
 {% block tail %}
     <script type="text/javascript" src="{% static 'main/js/result.js' %}"></script>
 {% endblock %}
+
+{% endcache %}

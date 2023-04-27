@@ -1,4 +1,5 @@
 import flag
+import json
 import logging
 from django import template
 from django.conf import settings
@@ -21,6 +22,11 @@ def absolute_url(value):
 @register.filter(name='crstrip')
 def crstrip(value, string):
     return value.rstrip(string)
+
+
+@register.filter(name='todict')
+def todict(value):
+    return json.loads(value)
 
 
 @register.filter(name='cc_to_flag')
