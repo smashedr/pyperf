@@ -5,7 +5,6 @@ logger = logging.getLogger('app')
 
 
 class HomeConsumer(AsyncWebsocketConsumer):
-
     async def websocket_connect(self, event):
         logger.debug('websocket_connect')
         logger.debug(event)

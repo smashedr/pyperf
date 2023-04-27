@@ -5,6 +5,8 @@
 {% load home_tags %}
 {% load cache %}
 
+{% cache 86400 home_results %}
+
 {% block head %}
     <script type="text/javascript" src="{% static 'main/js/functions.js' %}"></script>
 {% endblock %}
@@ -46,11 +48,9 @@
             {% include 'include/table-head.html' %}
             </thead>
             <tbody>
-                {% cache 86400 home_results %}
                 {% for st in data reversed %}
                     {% include 'include/table-tr.html' with data=st %}
                 {% endfor %}
-                {% endcache %}
             </tbody>
         </table>
     </div>
@@ -59,3 +59,5 @@
 {% block tail %}
     <script type="text/javascript" src="{% static 'main/js/home.js' %}"></script>
 {% endblock %}
+
+{% endcache %}

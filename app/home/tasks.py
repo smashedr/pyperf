@@ -19,17 +19,8 @@ logger = logging.getLogger('celery')
 
 @shared_task()
 def clear_sessions():
+    # Cleanup session data for supported backends
     return management.call_command('clearsessions')
-
-
-@shared_task()
-def delete_empty_results():
-    logger.info('delete_empty_results')
-    data = SpeedTest.objects.all()
-    for q in data:
-        if not q.ip:
-            logger.info('Deleted result #%s', q.id)
-            q.delete()
 
 
 @shared_task()
@@ -45,6 +36,16 @@ def send_discord_message(pk):
         logger.warning(r.content)
         r.raise_for_status()
     return r.status_code
+
+
+@shared_task()
+def delete_empty_results():
+    logger.info('delete_empty_results')
+    data = SpeedTest.objects.all()
+    for q in data:
+        if not q.ip:
+            logger.info('Deleted result #%s', q.id)
+            q.delete()
 
 
 @shared_task()
@@ -101,14 +102,14 @@ def process_data(pk):
     q.version = data['start']['version']
     q.save()
 
-    # Invalidate the cache
+    # Invalidate the results cache
     key = make_template_fragment_key('home_results')
     cache.delete(key)
 
     # Queue discord message task
     send_discord_message.delay(pk)
 
-    # Update websocket with data, just ID and ajax for ease of setup
+    # Update websocket with data
     #
     # socket_dict = {
     #     'id': q.id,
@@ -132,6 +133,7 @@ def process_data(pk):
 
 
 def format_bytes(size):
+    # Convert bytes to human-readable size
     units = ['B', 'KB', 'MB', 'GB', 'TB']
     for unit in units:
         if size < 1024:
@@ -141,6 +143,7 @@ def format_bytes(size):
 
 
 def format_bps(bps):
+    # Convert bits per second to human-readable size
     units = ['bps', 'Kbps', 'Mbps', 'Gbps', 'Tbps']
     for unit in units:
         if bps < 1000:
@@ -150,6 +153,7 @@ def format_bps(bps):
 
 
 def ip_addr_geo(ip):
+    # Get ipapi.co data for given IP Address
     if ipaddress.ip_address(ip).is_private:
         logger.info('is_private: %s', ip)
         return None

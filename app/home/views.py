@@ -26,7 +26,6 @@ def home_view(request):
 def result_view(request, pk):
     # View: /{pk}/
     logger.debug('result_view: %s', pk)
-    # q = SpeedTest.objects.get(pk=pk)
     q = get_object_or_404(SpeedTest, pk=pk)
     return render(request, 'result.html', {'data': q})
 
@@ -36,11 +35,6 @@ def image_view(request, pk):
     # View: /{pk}.png
     logger.debug('image_view: %s', pk)
     q = get_object_or_404(SpeedTest, pk=pk)
-    # q = SpeedTest.objects.get(pk=pk)
-    # logger.debug(q)
-    # if not q:
-    #     raise Http404
-
     pio.templates.default = 'plotly_dark'
     fig = go.Figure(go.Indicator(
         mode='gauge+number',
@@ -48,6 +42,10 @@ def image_view(request, pk):
         domain={'x': [0, 1], 'y': [0, 1]},
         title={'text': f'{q.get_type()} Speed'},
     ))
+    if not fig:
+        logger.debug('no fig')
+        return Http404
+
     return HttpResponse(fig.to_image(), content_type='image/x-png')
 
 
@@ -55,10 +53,7 @@ def graph_view(request, pk):
     # View: /{pk}/graph/
     logger.debug('graph_view: %s', pk)
     q = get_object_or_404(SpeedTest, pk=pk)
-    # q = SpeedTest.objects.get(pk=pk)
-    # if not q:
-    #     raise Http404
-
+    pio.templates.default = 'plotly_dark'
     fig = render_graph_fig(q)
     if not fig:
         logger.debug('no fig')
@@ -72,10 +67,7 @@ def map_view(request, pk):
     # View: /{pk}/map/
     logger.debug('map_view: %s', pk)
     q = get_object_or_404(SpeedTest, pk=pk)
-    # q = SpeedTest.objects.get(pk=pk)
-    # if not q:
-    #     raise Http404
-
+    pio.templates.default = 'plotly_dark'
     fig = render_map_fig(q)
     if not fig:
         logger.debug('no fig')
@@ -100,10 +92,9 @@ def save_iperf(request):
 def tdata_view_a(request, pk):
     # View: /ajax/{pk}/tdata/
     logger.debug('tr_view: %s', pk)
-    # q = SpeedTest.objects.get(pk=pk)
     q = get_object_or_404(SpeedTest, pk=pk)
     response = render_to_string('include/table-tr.html', {'data': q})
-    return HttpResponse(response, status=200)
+    return HttpResponse(response)
 
 
 @csrf_exempt
@@ -111,7 +102,6 @@ def tdata_view_a(request, pk):
 def graph_view_a(request, pk):
     # View: /ajax/{pk}/graph/
     logger.debug('graph_view_a: %s', pk)
-    # q = SpeedTest.objects.get(pk=pk)
     q = get_object_or_404(SpeedTest, pk=pk)
     logger.debug(q)
     fig = render_graph_fig(q)
@@ -127,7 +117,6 @@ def graph_view_a(request, pk):
 def map_view_a(request, pk):
     # View: /ajax/{pk}/map/
     logger.debug('map_view_a: %s', pk)
-    # q = SpeedTest.objects.get(pk=pk)
     q = get_object_or_404(SpeedTest, pk=pk)
     logger.debug(q)
     fig = render_map_fig(q)
@@ -143,10 +132,9 @@ def render_graph_fig(query_or_pk):
     if not isinstance(query_or_pk, SpeedTest):
         query_or_pk = SpeedTest.objects.get(pk=int(query_or_pk))
     q = query_or_pk
-    logger.debug(q)
-    data = json.loads(query_or_pk.json)
+    data = json.loads(q.json)
     if 'intervals' not in data or not data['intervals']:
-        logger.debug('intervals NOT IN query')
+        logger.debug('intervals not in query')
         return None
 
     x, y = [], []
@@ -164,7 +152,6 @@ def render_map_fig(query_or_pk):
     if not isinstance(query_or_pk, SpeedTest):
         query_or_pk = SpeedTest.objects.get(pk=int(query_or_pk))
     q = query_or_pk
-    logger.debug(q)
     if not q.ip_lat or not q.ip_lon:
         return None
 

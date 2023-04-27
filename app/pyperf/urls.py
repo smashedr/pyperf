@@ -11,6 +11,7 @@ urlpatterns = [
     path('oauth/', include('oauth.urls')),
     path('admin/', admin.site.urls),
     path('flower/', RedirectView.as_view(url='/flower/'), name='flower'),
+    path('redis/', RedirectView.as_view(url='/redis/'), name='redis'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

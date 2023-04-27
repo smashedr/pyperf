@@ -1,9 +1,8 @@
 {% extends "main.html" %}
-{% load cache %}
 {% load static %}
 {% load home_tags %}
+{% load cache %}
 {% cache 86400 single_result %}
-
 {% block home_active %}active{% endblock %}
 {% block title %}Result - {{ data.bps_human }} - {{ data.name }}{% endblock %}
 
@@ -105,10 +104,10 @@
             <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>
 
 <pre><code id="raw">
-{{ data.json | todict | pprint }}
+{{ data.json | json_to_dict | pprint }}
 </code></pre>
-    </div>
 
+    </div>
 {% endblock %}
 
 {% block tail %}
