@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.shortcuts import HttpResponseRedirect, redirect
 from django.views.decorators.http import require_http_methods
+from home.models import Webhooks
 from .models import CustomUser
 
 logger = logging.getLogger('app')
@@ -16,6 +17,7 @@ def oauth_start(request):
     """
     View  /oauth/
     """
+    logger.debug('oauth_start')
     request.session['login_redirect_url'] = get_next_url(request)
     params = {
         'client_id': settings.OAUTH_CLIENT_ID,
@@ -32,8 +34,9 @@ def oauth_callback(request):
     """
     View  /oauth/callback/
     """
+    logger.debug('oauth_callback')
     if 'code' not in request.GET:
-        messages.warning(request, 'Uer aborted or no code= in request.')
+        messages.warning(request, 'Uer aborted or no code in request.')
         return HttpResponseRedirect(get_login_redirect_url(request))
     try:
         logger.debug('code: %s', request.GET['code'])
@@ -42,7 +45,12 @@ def oauth_callback(request):
         profile = get_user_profile(auth_data)
         logger.debug('profile: %s', profile)
         user = login_user(request, profile)
-        messages.info(request, f'Successfully logged in as {user.first_name}.')
+        if 'webhook' in auth_data:
+            logger.debug('webhook in profile')
+            webhook = add_webhook(user, auth_data)
+            messages.info(request, f'Webhook successfully added: {webhook.hook_id}')
+        else:
+            messages.info(request, f'Successfully logged in, {user.first_name}.')
     except Exception as error:
         logger.exception(error)
         messages.error(request, f'Exception during login: {error}')
@@ -55,6 +63,7 @@ def oauth_logout(request):
     View  /oauth/logout/
     """
     next_url = get_next_url(request)
+    logger.debug('oauth_logout: %s', next_url)
 
     # Hack to prevent login loop when logging out on a secure page
     logger.debug('next_url: %s', next_url.split('/')[1])
@@ -66,6 +75,38 @@ def oauth_logout(request):
     logout(request)
     messages.info(request, f'Successfully logged out.')
     return redirect(next_url)
+
+
+def oauth_webhook(request):
+    """
+    View  /oauth/webhook/
+    """
+    request.session['login_redirect_url'] = get_next_url(request)
+    logger.debug('oauth_webhook: %s', request.session['login_redirect_url'])
+    params = {
+        'client_id': settings.OAUTH_CLIENT_ID,
+        'redirect_uri': settings.OAUTH_REDIRECT_URI,
+        'response_type': 'code',
+        'scope': settings.OAUTH_SCOPE + ' webhook.incoming',
+    }
+    url_params = urllib.parse.urlencode(params)
+    url = f'https://discord.com/api/oauth2/authorize?{url_params}'
+    return HttpResponseRedirect(url)
+
+
+def add_webhook(user, profile):
+    """
+    Add webhook
+    """
+    webhook = Webhooks(
+        hook_id=profile['webhook']['id'],
+        guild_id=profile['webhook']['guild_id'],
+        channel_id=profile['webhook']['channel_id'],
+        webhook_url=profile['webhook']['url'],
+        owner_username=user.username,
+    )
+    webhook.save()
+    return webhook
 
 
 def login_user(request, profile):
@@ -111,18 +152,27 @@ def get_user_profile(data):
         logger.error('content: %s', r.content)
         r.raise_for_status()
     logger.info('r.json(): %s', r.json())
-    p = r.json()
+    profile = r.json()
 
     # CUSTOM USER PROFILE DATA - profile
-    return {
-        'id': p['id'],
-        'username': p['username'],
-        'discriminator': p['discriminator'],
-        'avatar': p['avatar'],
+    data = {
+        'id': profile['id'],
+        'username': profile['username'],
+        'discriminator': profile['discriminator'],
+        'avatar': profile['avatar'],
         'access_token': data['access_token'],
         'refresh_token': data['refresh_token'],
         'expires_in': datetime.now() + timedelta(0, data['expires_in']),
     }
+    if 'webhook' in profile:
+        webhook = {'webhook': {
+            'id': profile['webhook']['id'],
+            'url': profile['webhook']['url'],
+            'guild_id': profile['webhook']['guild_id'],
+            'channel_id': profile['webhook']['channel_id'],
+        }}
+        data.update(webhook)
+    return data
 
 
 def update_profile(user, profile):
@@ -159,7 +209,6 @@ def get_login_redirect_url(request):
     """
     Determine 'login_redirect_url' parameter
     """
-    next_url = '/'
     if 'login_redirect_url' in request.session:
-        next_url = request.session['login_redirect_url']
-    return next_url
+        return request.session['login_redirect_url']
+    return '/'

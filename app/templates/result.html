@@ -11,103 +11,100 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid mt-2">
 
-        <a href="{% url 'home:image' data.id %}" target="_blank">
-            <img class="img-fluid rounded float-end d-none d-md-block" style="max-height: 200px;"
-                 src="{% url 'home:image' data.id %}"
-                 alt="{{ data.get_type }} Results" /></a>
-        <h1>Result - {{ data.id }}</h1>
+    <a href="{% url 'home:image' data.id %}" target="_blank">
+        <img class="img-fluid rounded float-end d-none d-md-block" style="max-height: 200px;"
+             src="{% url 'home:image' data.id %}"
+             alt="{{ data.get_type }} Results" /></a>
 
-        <h4 class="mt-2">{{ data.get_type }} Test - {{ data.name }} ({{ data.ip }})</h4>
-        <div class="mt-2">
-            <a class="btn btn-outline-info" href="{% url 'home:index' %}" role="button">
-                Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
-            <a class="btn btn-outline-light clip" href="javascript:void(0);" role="button"
-               data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
-                Copy URL <i class="fa-solid fa-link ms-2"></i></a>
-        </div>
-        <ul class="mt-2">
-            <li>
-                <a class="text-info" target="_blank"
-                   href="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
-                    {{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png</a>
-                <a class="clip" href="javascript:void(0);"
-                   data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
-                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
-            </li>
-            <li>
-                {% url 'home:graph' data.id as graph_url %}
-                <a class="text-info" target="_blank"
-                   href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
-                    {{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}</a>
-                <a class="clip" href="javascript:void(0);"
-                   data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}">
-                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
-            </li>
-            {% if data.ip_lat and data.ip_lon %}
-            <li>
-                {% url 'home:map' data.id as map_url %}
-                <a class="text-info" target="_blank"
-                   href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:map' data.id %}">
-                    {{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}</a>
-                <a class="clip" href="javascript:void(0);"
-                   data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}">
-                    <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
-            </li>
-            {% endif %}
-        </ul>
+    <h1>Result - {{ data.id }}</h1>
 
-        <table class="table table-hover" id="results">
-            <thead>
-            {% include 'include/table-head.html' %}
-            </thead>
-            <tbody>
-            {% include 'include/table-tr.html' with data=data %}
-            </tbody>
-        </table>
-
-        <div class="p-2 d-none d-sm-block" id="graph-data">
-            <div class="d-flex justify-content-center">
-                <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
-                </div>
-                <div class="spinner-grow text-info graph-loading ms-2 me-2" role="status" style="display:none;">
-                  <span class="visually-hidden">Loading Graph...</span>
-                </div>
-                <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
-                </div>
-            </div>
-        </div>
-
-        <div class="p-1 d-block d-sm-none">
-            <p>Graph Hidden because viewport is too narrow.<br>
-                <a class="text-info" target="_blank"
-                   href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
-                    Click here to view the Graph</a>.</p>
-        </div>
-
-        {% if data.ip_lat and data.ip_lon %}
-            <div class="p-2" id="map-data">
-                <div class="d-flex justify-content-center">
-                    <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
-                    </div>
-                    <div class="spinner-grow text-info map-loading ms-2 me-2" role="status" style="display:none;">
-                      <span class="visually-hidden">Loading Map...</span>
-                    </div>
-                    <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-
-        <h3>Raw Data <a href="javascript:void(0);" class="clip" data-clipboard-target="#raw">
-            <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>
-
-<pre><code id="raw">
-{{ data.json | json_to_dict | pprint }}
-</code></pre>
-
+    <h4 class="mt-2">{{ data.get_type }} Test - {{ data.name }} ({{ data.ip }})</h4>
+    <div class="mt-2">
+        <a class="btn btn-outline-info" href="{% url 'home:index' %}" role="button">
+            Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
+        <a class="btn btn-outline-light clip" href="javascript:void(0);" role="button"
+           data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
+            Copy URL <i class="fa-solid fa-link ms-2"></i></a>
     </div>
+    <ul class="mt-2">
+        <li>
+            <a class="text-info" target="_blank"
+               href="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
+                {{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png</a>
+            <a class="clip" href="javascript:void(0);"
+               data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
+                <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
+        </li>
+        <li>
+            {% url 'home:graph' data.id as graph_url %}
+            <a class="text-info" target="_blank"
+               href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
+                {{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}</a>
+            <a class="clip" href="javascript:void(0);"
+               data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}">
+                <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
+        </li>
+        {% if data.ip_lat and data.ip_lon %}
+        <li>
+            {% url 'home:map' data.id as map_url %}
+            <a class="text-info" target="_blank"
+               href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:map' data.id %}">
+                {{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}</a>
+            <a class="clip" href="javascript:void(0);"
+               data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}">
+                <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
+        </li>
+        {% endif %}
+    </ul>
+
+    <table class="table table-hover" id="results">
+        <thead>
+        {% include 'include/table-head.html' %}
+        </thead>
+        <tbody>
+        {% include 'include/table-tr.html' with data=data %}
+        </tbody>
+    </table>
+
+    <div class="p-2 d-none d-sm-block" id="graph-data">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
+            </div>
+            <div class="spinner-grow text-info graph-loading ms-2 me-2" role="status" style="display:none;">
+              <span class="visually-hidden">Loading Graph...</span>
+            </div>
+            <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
+            </div>
+        </div>
+    </div>
+
+    <div class="p-1 d-block d-sm-none">
+        <p>Graph Hidden because viewport is too narrow.<br>
+            <a class="text-info" target="_blank"
+               href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
+                Click here to view the Graph</a>.</p>
+    </div>
+
+    {% if data.ip_lat and data.ip_lon %}
+        <div class="p-2" id="map-data">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
+                </div>
+                <div class="spinner-grow text-info map-loading ms-2 me-2" role="status" style="display:none;">
+                  <span class="visually-hidden">Loading Map...</span>
+                </div>
+                <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <h3>Raw Data <a href="javascript:void(0);" class="clip" data-clipboard-target="#raw">
+        <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>
+
+    <pre><code id="raw">{{ data.json | json_to_dict | pprint }}</code></pre>
+
 {% endblock %}
 
 {% block tail %}

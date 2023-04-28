@@ -10,6 +10,3 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('username',)
     ordering = ('first_name',)
     readonly_fields = ('username', 'first_name', 'last_name',)
-    # fieldsets = UserAdmin.fieldsets + (
-    #     ('OAuth', {'fields': ('discord_roles',)}),
-    # )

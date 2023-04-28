@@ -42,6 +42,12 @@ def avatar_url(user):
         return static('images/assets/default.png')
 
 
+@register.filter(name='cc_to_flag')
+def cc_to_flag(cc):
+    # returns flag for given country code
+    return flag.flag(cc) if cc else cc
+
+
 @register.filter(name='crstrip')
 def crstrip(value, string=' '):
     # custom rstrip filter for django
@@ -52,9 +58,3 @@ def crstrip(value, string=' '):
 def json_to_dict(value):
     # custom json.loads filter for django
     return json.loads(value)
-
-
-@register.filter(name='cc_to_flag')
-def cc_to_flag(cc):
-    # returns flag for given country code
-    return flag.flag(cc) if cc else cc

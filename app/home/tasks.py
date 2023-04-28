@@ -6,12 +6,11 @@ import socket
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from celery import shared_task
-from django.conf import settings
 from django.core import management
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.template.loader import render_to_string
-from .models import SpeedTest
+from .models import SpeedTest, Webhooks
 
 
 logger = logging.getLogger('celery')
@@ -24,21 +23,6 @@ def clear_sessions():
 
 
 @shared_task()
-def send_discord_message(pk):
-    logger.info('send_discord_message')
-    context = {'data': SpeedTest.objects.get(pk=pk)}
-    message = render_to_string('discord/message.html', context)
-    logger.info(message)
-    data = {'content': message}
-    r = httpx.post(settings.DISCORD_WEBHOOK, json=data, timeout=10)
-    logger.info(r.status_code)
-    if not r.is_success:
-        logger.warning(r.content)
-        r.raise_for_status()
-    return r.status_code
-
-
-@shared_task()
 def delete_empty_results():
     logger.info('delete_empty_results')
     data = SpeedTest.objects.all()
@@ -46,6 +30,59 @@ def delete_empty_results():
         if not q.ip:
             logger.info('Deleted result #%s', q.id)
             q.delete()
+
+
+# @shared_task()
+# def send_discord_message(pk):
+#     logger.info('send_discord_message')
+#     context = {'data': SpeedTest.objects.get(pk=pk)}
+#     message = render_to_string('discord/message.html', context)
+#     logger.info(message)
+#     data = {'content': message}
+#     r = httpx.post(settings.DISCORD_WEBHOOK, json=data, timeout=10)
+#     logger.info(r.status_code)
+#     if not r.is_success:
+#         logger.warning(r.content)
+#         r.raise_for_status()
+#     return r.status_code
+
+
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60}, rate_limit='10/m')
+def send_discord(hook_pk, message):
+    try:
+        hook = Webhooks.objects.get(pk=hook_pk)
+        body = {'content': message}
+        r = httpx.post(hook.webhook_url, json=body, timeout=30)
+        if r.status_code == 404:
+            logger.warning('Hook %s removed by owner %s', hook.hook_id, hook.owner_username)
+            hook.delete()
+            return 404
+
+        if not r.is_success:
+            logger.warning(r.content.decode(r.encoding))
+            r.raise_for_status()
+
+        return r.status_code
+
+    except Exception as error:
+        logger.exception(error)
+        raise
+
+
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
+def process_webhooks(pk):
+    context = {'data': SpeedTest.objects.get(pk=pk)}
+    message = render_to_string('discord/message.html', context)
+    hooks = Webhooks.objects.all()
+    if not hooks:
+        logger.debug('No hooks found, nothing to do.')
+        return
+
+    for hook in hooks:
+        if not hook.active:
+            continue
+        logger.debug('Sending alert to: %s', hook.id)
+        send_discord.delay(hook.id, message)
 
 
 @shared_task()
@@ -60,12 +97,12 @@ def process_data(pk):
         if not ip:
             logger.warning('NO IP IN DATA, DELETING: %s', ip)
             q.delete()
-            return False
+            return
 
     except Exception as error:
         logger.info(error)
         q.delete()
-        return False
+        return
 
     # Get IP hostname, and geolocation
     ip_info = {
@@ -107,7 +144,8 @@ def process_data(pk):
     cache.delete(key)
 
     # Queue discord message task
-    send_discord_message.delay(pk)
+    # send_discord_message.delay(pk)
+    process_webhooks.delay(pk)
 
     # Update websocket with data
     #
@@ -129,7 +167,7 @@ def process_data(pk):
         'text': json.dumps(socket_dict),
     }
     async_to_sync(channel_layer.group_send)(group_name, event)
-    return True
+    return
 
 
 def format_bytes(size):

@@ -45,3 +45,21 @@ class SpeedTest(models.Model):
 
     def get_type(self):
         return 'Download' if self.reverse else 'Upload'
+
+
+class Webhooks(models.Model):
+    id = models.AutoField(primary_key=True)
+    owner_username = models.CharField(max_length=32)
+    webhook_url = models.URLField(unique=True)
+    hook_id = models.CharField(max_length=32, blank=True, null=True)
+    guild_id = models.CharField(max_length=32, blank=True, null=True)
+    channel_id = models.CharField(max_length=32, blank=True, null=True)
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{}: {}'.format(self.owner_username, self.hook_id)
+
+    class Meta:
+        verbose_name = 'Webhooks'
+        verbose_name_plural = 'Webhooks'
