@@ -47,7 +47,7 @@ def image_view(request, pk):
     ))
     if not fig:
         logger.debug('no fig')
-        return Http404
+        raise Http404
 
     return HttpResponse(fig.to_image(), content_type='image/x-png')
 
@@ -60,7 +60,7 @@ def graph_view(request, pk):
     fig = render_graph_fig(q)
     if not fig:
         logger.debug('no fig')
-        return Http404
+        raise Http404
 
     fig.layout.title.text = f'{q.get_type()} Speed'
     return HttpResponse(fig.to_html(config={'displaylogo': False}))
