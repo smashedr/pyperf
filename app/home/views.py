@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.vary import vary_on_headers
 from .models import SpeedTest
 from .tasks import process_data
 
@@ -23,6 +24,8 @@ def home_view(request):
     return render(request, 'home.html', {'data': q})
 
 
+# @vary_on_headers('Cookie')
+# @cache_page(60 * 60 * 8)
 def result_view(request, pk):
     # View: /{pk}/
     logger.debug('result_view: %s', pk)
@@ -89,6 +92,7 @@ def save_iperf(request):
 
 
 @csrf_exempt
+@cache_page(60 * 60 * 8)
 def tdata_view_a(request, pk):
     # View: /ajax/{pk}/tdata/
     logger.debug('tr_view: %s', pk)

@@ -140,7 +140,7 @@ def process_data(pk):
     q.save()
 
     # Invalidate the results cache
-    key = make_template_fragment_key('home_results')
+    key = make_template_fragment_key('home_body')
     cache.delete(key)
 
     # Queue discord message task

@@ -2,7 +2,6 @@
 {% load static %}
 {% load home_tags %}
 {% load cache %}
-{% cache 86400 single_result %}
 {% block home_active %}active{% endblock %}
 {% block title %}Result - {{ data.bps_human }} - {{ data.name }}{% endblock %}
 
@@ -110,5 +109,3 @@
 {% block tail %}
     <script type="text/javascript" src="{% static 'main/js/result.js' %}"></script>
 {% endblock %}
-
-{% endcache %}

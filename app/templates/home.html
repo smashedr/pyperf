@@ -2,13 +2,13 @@
 {% load static %}
 {% load home_tags %}
 {% load cache %}
-{% cache 86400 home_results %}
 {% block home_active %}active{% endblock %}
 {% block title %}Home{% endblock %}
 
 {% block head %}{% endblock %}
 
 {% block body %}
+{% cache 86400 home_body %}
 
     <h1>PyPerf3</h1>
 
@@ -54,10 +54,10 @@
         </tbody>
     </table>
 
+{% endcache %}
 {% endblock %}
 
 {% block tail %}
     <script type="text/javascript" src="{% static 'main/js/home.js' %}"></script>
 {% endblock %}
 
-{% endcache %}
