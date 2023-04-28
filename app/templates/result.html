@@ -7,10 +7,11 @@
 
 {% block head %}
     {{ data.pk|json_script:"pk" }}
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
 {% endblock %}
 
 {% block body %}
-{% cache 86400 result_body pk %}
+{% cache 86400 result_body data.pk %}
 
     <a href="{% url 'home:image' data.id %}" target="_blank">
         <img class="img-fluid rounded float-end d-none d-md-block" style="max-height: 200px;"

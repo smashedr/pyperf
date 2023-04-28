@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import models
+from django.urls import reverse
 
 
 class SpeedTest(models.Model):
@@ -45,6 +47,14 @@ class SpeedTest(models.Model):
 
     def get_type(self):
         return 'Download' if self.reverse else 'Upload'
+
+    def get_graph_url(self):
+        url = reverse('home:graph', kwargs={'pk': self.pk})
+        return f'{settings.SITE_URL}{url}'
+
+    def get_map_url(self):
+        url = reverse('home:map', kwargs={'pk': self.pk})
+        return f'{settings.SITE_URL}{url}'
 
 
 class Webhooks(models.Model):

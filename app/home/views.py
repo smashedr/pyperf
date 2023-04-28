@@ -25,7 +25,7 @@ def home_view(request):
 
 
 # @vary_on_headers('Cookie')
-# @cache_page(60 * 60 * 8)
+# @cache_page(60 * 60 * 24)
 def test_view(request, pk=0):
     # View: /test/{pk}/
     logger.debug('test_view: %s', pk)
@@ -40,7 +40,7 @@ def result_view(request, pk):
     return render(request, 'result.html', {'data': q})
 
 
-@cache_page(60 * 60 * 8)
+@cache_page(60 * 60 * 24)
 def image_view(request, pk):
     # View: /{pk}.png
     logger.debug('image_view: %s', pk)
@@ -99,7 +99,7 @@ def save_iperf(request):
 
 
 @csrf_exempt
-@cache_page(60 * 60 * 8)
+@cache_page(60 * 60 * 24)
 def tdata_view_a(request, pk):
     # View: /ajax/{pk}/tdata/
     logger.debug('tr_view: %s', pk)
@@ -109,7 +109,7 @@ def tdata_view_a(request, pk):
 
 
 @csrf_exempt
-@cache_page(60 * 60 * 8)
+@cache_page(60 * 60 * 24)
 def graph_view_a(request, pk):
     # View: /ajax/{pk}/graph/
     logger.debug('graph_view_a: %s', pk)
@@ -120,11 +120,13 @@ def graph_view_a(request, pk):
         return HttpResponse(status=204)
 
     fig.update_layout(margin=dict(t=10, l=16, b=10, r=10))
-    return HttpResponse(fig.to_html(full_html=False, config={'displaylogo': False}))
+    return HttpResponse(fig.to_html(include_plotlyjs="cdn",
+                                    full_html=False,
+                                    config={'displaylogo': False}))
 
 
 @csrf_exempt
-@cache_page(60 * 60 * 8)
+@cache_page(60 * 60 * 24)
 def map_view_a(request, pk):
     # View: /ajax/{pk}/map/
     logger.debug('map_view_a: %s', pk)
@@ -135,11 +137,13 @@ def map_view_a(request, pk):
         return HttpResponse(status=204)
 
     fig.update_layout(margin=dict(t=10, l=10, b=10, r=10))
-    return HttpResponse(fig.to_html(full_html=False, config={'displaylogo': False}))
+    return HttpResponse(fig.to_html(include_plotlyjs="cdn",
+                                    full_html=False,
+                                    config={'displaylogo': False}))
 
 
 def render_graph_fig(query_or_pk):
-    logger.debug('render_graph_html')
+    logger.debug('render_graph_fig')
     if not isinstance(query_or_pk, SpeedTest):
         query_or_pk = SpeedTest.objects.get(pk=int(query_or_pk))
     q = query_or_pk
@@ -159,7 +163,7 @@ def render_graph_fig(query_or_pk):
 
 
 def render_map_fig(query_or_pk):
-    logger.debug('render_graph_html')
+    logger.debug('render_map_fig')
     if not isinstance(query_or_pk, SpeedTest):
         query_or_pk = SpeedTest.objects.get(pk=int(query_or_pk))
     q = query_or_pk

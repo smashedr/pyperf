@@ -12,13 +12,14 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*').split(',')
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
 # CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', 'https://*').split(',')
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+SITE_URL = config('SITE_URL', 'http://localhost:8000')
+MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
 USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'

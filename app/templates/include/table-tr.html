@@ -1,3 +1,4 @@
+{% load tz %}
 {% load home_tags %}
 <tr>
     <th scope="row"><a href="{% url 'home:result' data.id %}" class="text-white">
@@ -17,9 +18,9 @@
            data-clipboard-text="{{ data.ip_country }}">{{ data.ip_cc|cc_to_flag }}</a></td>
     <td><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.ip }}"
            data-clipboard-text="{{ data.name }}">{{ data.name }}</a></td>
-    <td class="d-none d-lg-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.name }}"
+    <td class="d-none d-lg-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none"title="{{ data.name }}"
            data-clipboard-text="{{ data.ip }}">{{ data.ip }}</a></td>
     <td class="d-none d-md-table-cell" title="{{ data.protocol }}">{{ data.protocol }}</td>
-    <td class="d-none d-xl-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none"
-           data-clipboard-text="{{ data.created_at }}">{{ data.created_at }}</a></td>
+    <td class="d-none d-xl-table-cell"><a href="javascript:void(0);" class="clip text-white text-decoration-none" title="{{ data.created_at }} UTC"
+           data-clipboard-text="{{ data.created_at|localtime }}">{{ data.created_at|localtime }}</a></td>
 </tr>
