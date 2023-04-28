@@ -1,6 +1,7 @@
 import sentry_sdk
 from celery.schedules import crontab
 from decouple import config
+from django.contrib.messages import constants as messages
 from pathlib import Path
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -52,6 +53,14 @@ CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = config('TZ', 'UTC')
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'secondary',
+        messages.INFO: 'primary',
+        messages.SUCCESS: 'success',
+        messages.WARNING: 'warning',
+        messages.ERROR: 'danger',
+}
 
 CELERY_BEAT_SCHEDULE = {
     'daily_cleanup': {

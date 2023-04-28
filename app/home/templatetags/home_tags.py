@@ -21,17 +21,6 @@ def absolute_url(absolute_uri):
     return '{0}//{2}'.format(*absolute_uri.split('/'))
 
 
-@register.filter(name='tag_to_class')
-def tag_to_class(message_tag):
-    # returns bootstrap tag from django message tag
-    return {
-        'info': 'primary',
-        'success': 'success',
-        'warning': 'warning',
-        'error': 'danger',
-    }[message_tag]
-
-
 @register.filter(name='avatar_url')
 def avatar_url(user):
     # return discord avatar url from user model
