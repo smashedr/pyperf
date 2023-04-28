@@ -29,11 +29,8 @@ def home_view(request):
 def test_view(request, pk=0):
     # View: /test/{pk}/
     logger.debug('test_view: %s', pk)
-    context = {'pk': pk}
-    if pk:
-        q = get_object_or_404(SpeedTest, pk=pk)
-        context.update({'data': q})
-    return render(request, 'test.html', context)
+    q = SpeedTest.objects.get(pk=pk) if pk else None
+    return render(request, 'test.html', {'pk': pk, 'data': q})
 
 
 def result_view(request, pk):

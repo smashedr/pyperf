@@ -184,7 +184,7 @@ def update_profile(user, profile):
     user.avatar_hash = profile['avatar']
     user.access_token = profile['access_token']
     if profile['id'] in settings.SUPER_USER_IDS:
-        logger.debug('Super user login: %s', profile['id'])
+        logger.info('Super user login: %s', profile['id'])
         user.is_staff = True
         user.is_admin = True
         user.is_superuser = True
@@ -201,7 +201,10 @@ def get_next_url(request):
     if 'next' in request.POST:
         return request.POST['next']
     if 'next_url' in request.session:
-        return request.session['next_url']
+        url = request.session['next_url']
+        del request.session['next_url']
+        request.session.modified = True
+        return url
     return '/'
 
 
@@ -210,5 +213,8 @@ def get_login_redirect_url(request):
     Determine 'login_redirect_url' parameter
     """
     if 'login_redirect_url' in request.session:
-        return request.session['login_redirect_url']
+        url = request.session['login_redirect_url']
+        del request.session['login_redirect_url']
+        request.session.modified = True
+        return url
     return '/'
