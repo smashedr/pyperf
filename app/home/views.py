@@ -93,7 +93,7 @@ def save_iperf(request):
     logger.debug('save_iperf')
     data = json.loads(request.body.decode('utf-8'))
     q = SpeedTest.objects.create(json=data)
-    logger.debug(f'test.pk: {q.pk}')
+    logger.debug(f'pk: {q.pk}')
     process_data.delay(q.pk)
     return HttpResponse(status=204)
 
@@ -114,7 +114,6 @@ def graph_view_a(request, pk):
     # View: /ajax/{pk}/graph/
     logger.debug('graph_view_a: %s', pk)
     q = get_object_or_404(SpeedTest, pk=pk)
-    logger.debug(q)
     fig = render_graph_fig(q)
     if not fig:
         return HttpResponse(status=204)
@@ -131,7 +130,6 @@ def map_view_a(request, pk):
     # View: /ajax/{pk}/map/
     logger.debug('map_view_a: %s', pk)
     q = get_object_or_404(SpeedTest, pk=pk)
-    logger.debug(q)
     fig = render_map_fig(q)
     if not fig:
         return HttpResponse(status=204)
