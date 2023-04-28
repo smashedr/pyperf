@@ -26,6 +26,16 @@ def home_view(request):
 
 # @vary_on_headers('Cookie')
 # @cache_page(60 * 60 * 8)
+def test_view(request, pk=0):
+    # View: /test/{pk}/
+    logger.debug('test_view: %s', pk)
+    context = {'pk': pk}
+    if pk:
+        q = get_object_or_404(SpeedTest, pk=pk)
+        context.update({'data': q})
+    return render(request, 'test.html', context)
+
+
 def result_view(request, pk):
     # View: /{pk}/
     logger.debug('result_view: %s', pk)

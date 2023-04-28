@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+{% load static %}
+{% load home_tags %}
+{% load cache %}
+{% block home_active %}active{% endblock %}
+{% block title %}Test{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+
+    <h1>Test Page - {{ pk }}</h1>
+
+{% cache 86400 test_body pk %}
+
+    <h4>data.pk: {{ data.pk }}</h4>
+
+    <pre><code>{{ data }}</code></pre>
+
+{% endcache %}
+
+{% endblock %}
+
+{% block tail %}{% endblock %}

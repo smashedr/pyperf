@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body %}
-{% cache 86400 result_body %}
+{% cache 86400 result_body pk %}
 
     <a href="{% url 'home:image' data.id %}" target="_blank">
         <img class="img-fluid rounded float-end d-none d-md-block" style="max-height: 200px;"
