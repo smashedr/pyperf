@@ -2,20 +2,41 @@
 {% load static %}
 {% load home_tags %}
 {% load cache %}
-{% block home_active %}active{% endblock %}
+{% block test_active %}active{% endblock %}
 {% block title %}Test{% endblock %}
 
 {% block head %}{% endblock %}
 
 {% block body %}
 
-    <h1>Test Page - {{ pk }}</h1>
+    <h1>Test Page</h1>
+    <p class="lead">Options:</p>
+
+    <p>
+        <a href="{% url 'home:test_view_pk' 1 %}">1</a> |
+        <a href="{% url 'home:test_view_pk' 2 %}">2</a> |
+        <a href="{% url 'home:test_view_pk' 3 %}">3</a> |
+        <a href="{% url 'home:test_view_pk' 4 %}">4</a> |
+        <a href="{% url 'home:test_view_pk' 5 %}" class="text-danger">5</a>
+    </p>
+
+    <hr>
+    <p class="lead">Non-DB Data:</p>
+
+    <h4>PK: {{ pk }}</h4>
+
+    <hr>
 
 {% cache 86400 test_body pk %}
 
-    <h4>data.pk: {{ data.pk }}</h4>
+    <p class="lead">DB Data (cached):</p>
 
-    <pre><code>{{ data }}</code></pre>
+    {% if data %}
+        <h4>data.pk: {{ data.pk }}</h4>
+        <pre><code>{{ data }}</code></pre>
+    {% else %}
+        <h4>No Data</h4>
+    {% endif %}
 
 {% endcache %}
 
