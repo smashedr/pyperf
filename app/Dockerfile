@@ -7,12 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN groupadd -g 1000 app && \
     useradd -r -d /app -M -u 1000 -g 1000 -G video -s /usr/sbin/nologin app && \
     mkdir -p /app /data && chown app:app /app /data && \
-    apt -y update && apt -y install gcc libmariadb-dev-compat
-
-#RUN addgroup -g 1000 app && \
-#    adduser -S -H -h /app -s /sbin/nologin -u 1000 -G app app && \
-#    mkdir -p /app /data && chown app:app /app /data && \
-#    apk add --update --no-cache alpine-sdk mysql-dev
+    apt-get -y update && apt-get -y install gcc libmariadb-dev-compat && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY --chown=app:app requirements.txt .

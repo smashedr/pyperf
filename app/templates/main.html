@@ -1,5 +1,6 @@
 {% load static %}
 {% load home_tags %}
+{% load cache %}
 
 <!doctype html>
 <html lang="en" class="h-100">
@@ -66,13 +67,8 @@
                                 <img src="{{ user|avatar_url }}"
                                      class="rounded-circle mx-2 d-none d-sm-inline d-md-inline d-lg-inline d-xl-inline" height="26" width="26" alt="P"></a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown2">
-                                {% if request.user.guild_member %}
-                                    <li><a class="dropdown-item" href="{% url 'home:profile' %}">
-                                        <i class="fas fa-tools me-2"></i> Profile</a></li>
-                                {% else %}
-                                    <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#user-info-modal">
-                                        <i class="fas fa-user-circle me-2"></i> Profile</a></li>
-                                {% endif %}
+                                <li><a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#user-info-modal">
+                                    <i class="fas fa-user-circle me-2"></i> Profile</a></li>
                                 {% if request.user.is_staff or request.user.is_superuser %}
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-warning" href="{% url 'admin:index' %}">
