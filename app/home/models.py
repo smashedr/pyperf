@@ -39,7 +39,7 @@ class SpeedTest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{} ({}) - {}'.format(self.ip, self.name, self.bps_human)
+        return '{}: {}'.format(self.pk, self.name)
 
     class Meta:
         verbose_name = 'SpeedTest'
@@ -47,6 +47,10 @@ class SpeedTest(models.Model):
 
     def get_type(self):
         return 'Download' if self.reverse else 'Upload'
+
+    def get_image_url(self):
+        url = reverse('home:image', kwargs={'pk': self.pk})
+        return f'{settings.SITE_URL}{url}'
 
     def get_graph_url(self):
         url = reverse('home:graph', kwargs={'pk': self.pk})

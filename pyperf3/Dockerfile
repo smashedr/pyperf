@@ -12,7 +12,6 @@ WORKDIR /app
 COPY --chown=app:app requirements.txt .
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir -r requirements.txt
-
 COPY --chown=app:app . .
 USER app
 ENTRYPOINT ["python3", "pyperf3.py"]

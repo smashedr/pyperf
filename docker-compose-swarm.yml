@@ -35,7 +35,7 @@ services:
     build: ./app
     image: registry.hosted-domains.com/shane/pyperf-app:${VERSION}
     env_file: ${ENV_FILE}
-    command: "gunicorn pyperf.asgi:application -w 2 -b 0.0.0.0:9000 -k uvicorn.workers.UvicornWorker"
+    command: "uvicorn myapp.asgi:application --host 0.0.0.0 --port 9000 --workers 2"
     deploy:
       mode: global
     volumes:
