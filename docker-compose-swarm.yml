@@ -35,7 +35,7 @@ services:
     build: ./app
     image: registry.hosted-domains.com/shane/pyperf-app:${VERSION}
     env_file: ${ENV_FILE}
-    command: "uvicorn myapp.asgi:application --host 0.0.0.0 --port 9000 --workers 2"
+    command: "uvicorn pyperf.asgi:application --host 0.0.0.0 --port 9000 --workers 2"
     deploy:
       mode: global
     volumes:
@@ -93,7 +93,7 @@ services:
       - redis
 
   flower:
-    image: mher/flower
+    image: mher/flower:latest
     environment:
       - FLOWER_PORT=5555
       - FLOWER_URL_PREFIX=flower

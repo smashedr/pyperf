@@ -33,7 +33,7 @@ services:
     build: ./app
     image: pyperf-app:latest
     env_file: settings.env
-    command: "uvicorn myapp.asgi:application --host 0.0.0.0 --port 9000 --workers 2"
+    command: "uvicorn pyperf.asgi:application --host 0.0.0.0 --port 9000 --workers 2"
     deploy:
       mode: global
     volumes:
@@ -81,7 +81,7 @@ services:
       - redis
 
   flower:
-    image: mher/flower
+    image: mher/flower:latest
     env_file: settings.env
     deploy:
       replicas: 1
