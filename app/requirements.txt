@@ -7,6 +7,7 @@ django-celery-beat
 django-extensions
 django-redis
 emoji-country-flag
+gunicorn
 httpx
 kaleido
 mysqlclient
