@@ -36,7 +36,7 @@ def oauth_callback(request):
     """
     logger.debug('oauth_callback')
     if 'code' not in request.GET:
-        messages.warning(request, 'Uer aborted or no code in request.')
+        messages.warning(request, 'User aborted or no code in response...')
         return HttpResponseRedirect(get_login_redirect_url(request))
     try:
         logger.debug('code: %s', request.GET['code'])
