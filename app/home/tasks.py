@@ -23,6 +23,14 @@ def clear_sessions():
 
 
 @shared_task()
+def clear_home_cache():
+    # Clear Home Results cache on model update
+    logger.info('clear_home_cache')
+    key = make_template_fragment_key('home_body')
+    return cache.delete(key)
+
+
+@shared_task()
 def delete_empty_results():
     logger.info('delete_empty_results')
     data = SpeedTest.objects.all()
@@ -32,22 +40,7 @@ def delete_empty_results():
             q.delete()
 
 
-# @shared_task()
-# def send_discord_message(pk):
-#     logger.info('send_discord_message')
-#     context = {'data': SpeedTest.objects.get(pk=pk)}
-#     message = render_to_string('discord/message.html', context)
-#     logger.info(message)
-#     data = {'content': message}
-#     r = httpx.post(settings.DISCORD_WEBHOOK, json=data, timeout=10)
-#     logger.info(r.status_code)
-#     if not r.is_success:
-#         logger.warning(r.content)
-#         r.raise_for_status()
-#     return r.status_code
-
-
-@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60}, rate_limit='10/m')
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 5, 'countdown': 60}, rate_limit='10/m')
 def send_discord(hook_pk, message):
     try:
         hook = Webhooks.objects.get(pk=hook_pk)
@@ -75,13 +68,13 @@ def process_webhooks(pk):
     message = render_to_string('discord/message.html', context)
     hooks = Webhooks.objects.all()
     if not hooks:
-        logger.debug('No hooks found, nothing to do.')
+        logger.info('No hooks found, nothing to do.')
         return
 
     for hook in hooks:
         if not hook.active:
             continue
-        logger.debug('Sending alert to: %s', hook.id)
+        logger.info('Sending alert to: %s', hook.id)
         send_discord.delay(hook.id, message)
 
 
@@ -139,9 +132,9 @@ def process_data(pk):
     q.version = data['start']['version']
     q.save()
 
-    # Invalidate the results cache
-    key = make_template_fragment_key('home_body')
-    cache.delete(key)
+    # Invalidate the results cache - SEE home/signals.py
+    # key = make_template_fragment_key('home_body')
+    # cache.delete(key)
 
     # Queue discord message task
     # send_discord_message.delay(pk)

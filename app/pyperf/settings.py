@@ -13,6 +13,8 @@ SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
 # CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', 'https://*').split(',')
 SITE_URL = config('SITE_URL', 'http://localhost:8000')
+DISCORD_INVITE = config('DISCORD_INVITE')
+SUPER_USER_IDS = config('SUPER_USER_IDS').split(',')
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
 USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
 SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
@@ -20,6 +22,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'
@@ -46,9 +49,6 @@ OAUTH_CLIENT_SECRET = config('OAUTH_CLIENT_SECRET')
 OAUTH_REDIRECT_URI = config('OAUTH_REDIRECT_URI')
 OAUTH_GRANT_TYPE = config('OAUTH_GRANT_TYPE')
 OAUTH_SCOPE = config('OAUTH_SCOPE')
-
-SUPER_USER_IDS = config('SUPER_USER_IDS').split(',')
-DISCORD_INVITE = config('DISCORD_INVITE')
 
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
@@ -167,9 +167,9 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'standard': {
-            'format': ('%(asctime)s - '
+            'format': ('%(asctime)s '
                        '%(levelname)s - '
-                       '%(filename)s '
+                       '%(filename)s - '
                        '%(module)s.%(funcName)s:%(lineno)d - '
                        '%(message)s'),
         },
@@ -195,18 +195,10 @@ LOGGING = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 if DEBUG:

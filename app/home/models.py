@@ -39,7 +39,7 @@ class SpeedTest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{}: {}'.format(self.pk, self.name)
+        return '{}: {} - {}'.format(self.pk, self.name, self.bps_human)
 
     class Meta:
         verbose_name = 'SpeedTest'
@@ -72,7 +72,7 @@ class Webhooks(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{}: {}'.format(self.owner_username, self.hook_id)
+        return '{}: {} - {}'.format(self.id, self.hook_id, self.owner_username)
 
     class Meta:
         verbose_name = 'Webhooks'

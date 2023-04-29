@@ -1,0 +1,53 @@
+{% extends "main.html" %}
+{% load static %}
+{% load home_tags %}
+{% load cache %}
+{% block test_active %}active{% endblock %}
+{% block title %}Profile{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+{% cache 86400 profile_body request.user %}
+
+    <h1>User Profile</h1>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Key</th>
+          <th scope="col">Value</th>
+          <th scope="col">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <th scope="row">id</th>
+        <td>{{ request.user.id }}</td>
+        <td>Internal User ID</td>
+      </tr>
+      <tr>
+        <th scope="row">username</th>
+          <td>{{ request.user.username }}</td>
+          <td>Discord User ID</td>
+      </tr>
+      <tr>
+        <th scope="row">fist_name</th>
+          <td>{{ request.user.fist_name }}</td>
+          <td>Discord Username</td>
+      </tr>
+      <tr>
+        <th scope="row">last_name</th>
+          <td>{{ request.user.last_name }}</td>
+          <td>Discord Discriminator</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <pre><code>{{ data }}</code></pre>
+
+{% endcache %}
+
+{% endblock %}
+
+{% block tail %}{% endblock %}
