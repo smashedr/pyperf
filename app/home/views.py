@@ -26,11 +26,11 @@ def home_view(request):
 
 # @vary_on_headers('Cookie')
 # @cache_page(60 * 60 * 24)
-def test_view(request, pk=0):
-    # View: /test/{pk}/
-    logger.debug('test_view: %s', pk)
-    q = SpeedTest.objects.get(pk=pk) if pk else None
-    return render(request, 'test.html', {'pk': pk, 'data': q})
+# def test_view(request, pk=0):
+#     # View: /test/{pk}/
+#     logger.debug('test_view: %s', pk)
+#     q = SpeedTest.objects.filter(pk=pk) if pk else None
+#     return render(request, 'test.html', {'pk': pk, 'data': q})
 
 
 def result_view(request, pk):
@@ -116,7 +116,7 @@ def graph_view_a(request, pk):
     q = get_object_or_404(SpeedTest, pk=pk)
     fig = render_graph_fig(q)
     if not fig:
-        return HttpResponse(status=204)
+        return HttpResponse(status=200)
 
     fig.update_layout(margin=dict(t=10, l=16, b=10, r=10))
     return HttpResponse(fig.to_html(include_plotlyjs="cdn",
@@ -132,7 +132,7 @@ def map_view_a(request, pk):
     q = get_object_or_404(SpeedTest, pk=pk)
     fig = render_map_fig(q)
     if not fig:
-        return HttpResponse(status=204)
+        return HttpResponse(status=200)
 
     fig.update_layout(margin=dict(t=10, l=10, b=10, r=10))
     return HttpResponse(fig.to_html(include_plotlyjs="cdn",

@@ -51,8 +51,8 @@
                 <ul class="navbar-nav me-auto mb-2 mb-sm-0">
                     <li class="nav-item"><a class="nav-link {% block home_active %}{% endblock %}" href="{% url 'home:index' %}">
                         Home</a></li>
-                    <li class="nav-item"><a class="nav-link {% block test_active %}{% endblock %}" href="{% url 'home:test_view' %}">
-                        Test</a></li>
+{#                    <li class="nav-item"><a class="nav-link {% block test_active %}{% endblock %}" href="{% url 'home:test_view' %}">#}
+{#                        Test</a></li>#}
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     {% if not request.user.is_authenticated %}
@@ -126,8 +126,8 @@
             <div class="col-12 col-lg-6 col-md-6 col-sm-6 text-lg-end text-md-end text-sm-end">
                 <ul class="list-inline">
                     <li class="list-inline-item"><a href="{% url 'home:index' %}" class="text-info">Home</a></li>
-                    <li class="list-inline-item">|</li>
-                    <li class="list-inline-item"><a href="{% url 'home:test_view' %}" class="text-info">Test</a></li>
+{#                    <li class="list-inline-item">|</li>#}
+{#                    <li class="list-inline-item"><a href="{% url 'home:test_view' %}" class="text-info">Test</a></li>#}
                 </ul>
             </div>
         </div>
@@ -179,11 +179,11 @@
 {% endif %}
 
 {% block js %}
-    <script src="{% static 'jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'font-awesome/js/all.min.js' %}"></script>
-    <script src="{% static 'clipboardjs/clipboard.min.js' %}"></script>
-    <script src="{% static 'main/js/main.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'font-awesome/js/all.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'clipboardjs/clipboard.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'main/js/main.js' %}"></script>
 {% endblock %}
 
 {% block tail %}{% endblock %}

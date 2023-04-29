@@ -10,6 +10,7 @@
 {% block body %}
 
     <h1>Test Page</h1>
+
     <p class="lead">Options:</p>
 
     <p>
@@ -21,6 +22,7 @@
     </p>
 
     <hr>
+
     <p class="lead">Non-DB Data:</p>
 
     <h4>PK: {{ pk }}</h4>
@@ -32,8 +34,8 @@
     <p class="lead">DB Data (cached):</p>
 
     {% if data %}
-        <h4>data.pk: {{ data.pk }}</h4>
-        <pre><code>{{ data }}</code></pre>
+        <h4>data.0.pk: {{ data.0.pk }}</h4>
+        <pre><code>{{ data.0 }}</code></pre>
     {% else %}
         <h4>No Data</h4>
     {% endif %}

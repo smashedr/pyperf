@@ -5,8 +5,8 @@ app_name = 'home'
 
 urlpatterns = [
     path('', views.home_view, name='index'),
-    path('test/', views.test_view, name='test_view'),
-    path('test/<int:pk>/', views.test_view, name='test_view_pk'),
+    # path('test/', views.test_view, name='test_view'),
+    # path('test/<int:pk>/', views.test_view, name='test_view_pk'),
     path('save/', views.save_iperf, name='iperf'),
     path('<int:pk>/', views.result_view, name='result'),
     path('<int:pk>.png', views.image_view, name='image'),
