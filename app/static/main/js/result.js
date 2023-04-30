@@ -9,7 +9,7 @@ $(document).ready(function() {
             $('.graph-loading').toggle();
         },
         success: function(data, textStatus, jqXHR){
-            console.log('Status: '+jqXHR.status+', Data: '+data);
+            // console.log('Status: '+jqXHR.status+', Data: '+data);
             $('#graph-data').prepend(data);
         },
         complete: function(){
@@ -28,7 +28,7 @@ $(document).ready(function() {
             $('.map-loading').toggle();
         },
         success: function(data, textStatus, jqXHR){
-            console.log('Status: '+jqXHR.status+', Data: '+data);
+            // console.log('Status: '+jqXHR.status+', Data: '+data);
             $('#map-data').prepend(data);
         },
         complete: function(){

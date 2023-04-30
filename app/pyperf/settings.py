@@ -1,7 +1,7 @@
 import sentry_sdk
 from celery.schedules import crontab
 from decouple import config
-from django.contrib.messages import constants as messages
+from django.contrib.messages import constants as message_constants
 from pathlib import Path
 from sentry_sdk.integrations.django import DjangoIntegration
 
@@ -11,18 +11,17 @@ DEBUG = config('DEBUG', 'False', bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*').split(',')
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
+# SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
 # CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', 'https://*').split(',')
 SITE_URL = config('SITE_URL', 'http://localhost:8000')
 DISCORD_INVITE = config('DISCORD_INVITE')
 SUPER_USER_IDS = config('SUPER_USER_IDS').split(',')
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
 USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
-SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-
 
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'
@@ -56,11 +55,11 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = config('TZ', 'UTC')
 
 MESSAGE_TAGS = {
-        messages.DEBUG: 'secondary',
-        messages.INFO: 'primary',
-        messages.SUCCESS: 'success',
-        messages.WARNING: 'warning',
-        messages.ERROR: 'danger',
+    message_constants.DEBUG: 'secondary',
+    message_constants.INFO: 'primary',
+    message_constants.SUCCESS: 'success',
+    message_constants.WARNING: 'warning',
+    message_constants.ERROR: 'danger',
 }
 
 CELERY_BEAT_SCHEDULE = {

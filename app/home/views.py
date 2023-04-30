@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import plotly.io as pio
 from django.conf import settings
+from django.contrib import messages
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
@@ -70,7 +71,8 @@ def graph_view(request, pk):
         raise Http404
 
     fig.layout.title.text = f'{q.get_type()} Speed'
-    return HttpResponse(fig.to_html(config={'displaylogo': False}))
+    return HttpResponse(fig.to_html(include_plotlyjs='cdn',
+                                    config={'displaylogo': False}))
 
 
 def map_view(request, pk):
@@ -83,7 +85,8 @@ def map_view(request, pk):
         logger.debug('no fig')
         raise Http404
 
-    return HttpResponse(fig.to_html(config={'displaylogo': False}))
+    return HttpResponse(fig.to_html(include_plotlyjs='cdn',
+                                    config={'displaylogo': False}))
 
 
 @csrf_exempt
@@ -119,7 +122,7 @@ def graph_view_a(request, pk):
         return HttpResponse(status=200)
 
     fig.update_layout(margin=dict(t=10, l=16, b=10, r=10))
-    return HttpResponse(fig.to_html(include_plotlyjs="cdn",
+    return HttpResponse(fig.to_html(include_plotlyjs=False,
                                     full_html=False,
                                     config={'displaylogo': False}))
 
@@ -135,7 +138,7 @@ def map_view_a(request, pk):
         return HttpResponse(status=200)
 
     fig.update_layout(margin=dict(t=10, l=10, b=10, r=10))
-    return HttpResponse(fig.to_html(include_plotlyjs="cdn",
+    return HttpResponse(fig.to_html(include_plotlyjs=False,
                                     full_html=False,
                                     config={'displaylogo': False}))
 
