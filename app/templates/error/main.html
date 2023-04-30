@@ -1,0 +1,16 @@
+{% extends "main.html" %}
+
+{#{% block title %}{% endblock %}#}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+
+    {% block main %}{% endblock %}
+
+    <p>From here you can <a href="javascript:history.back()">Go Back</a> or
+        <a href="{% url 'home:index' %}">Go Home</a>.</p>
+
+{% endblock %}
+
+{% block tail %}{% endblock %}

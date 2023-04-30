@@ -22,6 +22,13 @@ def clear_sessions():
     return management.call_command('clearsessions')
 
 
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 10}, rate_limit='2/m')
+def flush_template_cache():
+    # Flush template cache on request
+    logger.info('flush_template_cache')
+    return cache.delete_many(cache.keys('*.cache.*'))
+
+
 @shared_task()
 def clear_home_cache():
     # Clear Home Results cache on model update
