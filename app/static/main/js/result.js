@@ -3,7 +3,7 @@ $(document).ready(function() {
     const pk = JSON.parse(document.getElementById('pk').textContent);
 
     $.ajax({
-        url: '/ajax/' + pk + '/graph/',
+        url: '/ajax/graph/' + pk,
         type: 'GET',
         beforeSend: function( jqXHR ){
             $('.graph-loading').toggle();
@@ -22,7 +22,7 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: '/ajax/' + pk + '/map/',
+        url: '/ajax/map/' + pk,
         type: 'GET',
         beforeSend: function( jqXHR ){
             $('.map-loading').toggle();

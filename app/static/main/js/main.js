@@ -16,18 +16,4 @@ $(document).ready(function() {
     // Init a ClipboardJS attribute
     new ClipboardJS('.clip');
 
-    // Set the csrf_token and init flush-cache button
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    $("#flush-cache").click(function () {
-        console.log('flush-cache clicked...');
-        $.ajax({
-            type: 'POST',
-            url: '/flush-cache/',
-            headers: {'X-CSRFToken': csrftoken}
-        }).done(function(data) {
-            alert('Cache flush request sent...');
-        });
-        return false;
-    });
-
 });

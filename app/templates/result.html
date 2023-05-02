@@ -24,7 +24,7 @@
     <div class="mt-2">
         <a class="btn btn-outline-info" href="{% url 'home:index' %}" role="button">
             Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
-        <a class="btn btn-outline-light clip" href="javascript:void(0);" role="button"
+        <a class="btn btn-outline-light clip" role="button"
            data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
             Copy URL <i class="fa-solid fa-link ms-2"></i></a>
     </div>
@@ -33,7 +33,7 @@
             <a class="text-info" target="_blank"
                href="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
                 {{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png</a>
-            <a class="clip" href="javascript:void(0);"
+            <a class="clip" role="button"
                data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
                 <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
         </li>
@@ -42,7 +42,7 @@
             <a class="text-info" target="_blank"
                href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
                 {{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}</a>
-            <a class="clip" href="javascript:void(0);"
+            <a class="clip" role="button"
                data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}">
                 <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
         </li>
@@ -52,7 +52,7 @@
             <a class="text-info" target="_blank"
                href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:map' data.id %}">
                 {{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}</a>
-            <a class="clip" href="javascript:void(0);"
+            <a class="clip" role="button"
                data-clipboard-text="{{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}">
                 <i class="fa-regular fa-clipboard text-white ms-2"></i></a>
         </li>
@@ -101,7 +101,7 @@
         </div>
     {% endif %}
 
-    <h3>Raw Data <a href="javascript:void(0);" class="clip" data-clipboard-target="#raw">
+    <h3>Raw Data <a class="clip" role="button" data-clipboard-target="#raw">
         <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>
 
     <pre><code id="raw">{{ data.json | json_to_dict | pprint }}</code></pre>

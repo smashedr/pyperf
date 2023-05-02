@@ -16,10 +16,10 @@ urlpatterns = [
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-handler400 = 'myapp.views.handler400_view'
-handler403 = 'myapp.views.handler403_view'
-handler404 = 'myapp.views.handler404_view'
-handler500 = 'myapp.views.handler500_view'
+handler400 = 'pyperf.views.handler400_view'
+handler403 = 'pyperf.views.handler403_view'
+handler404 = 'pyperf.views.handler404_view'
+handler500 = 'pyperf.views.handler500_view'
 
 
 if settings.DEBUG:

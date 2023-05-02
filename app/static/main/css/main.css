@@ -5,10 +5,17 @@ body {
     margin-right:0px !important;
 }
 
-body {
-    background-image: None !important;
-}
-
 .disabled {
     cursor: not-allowed! important;
 }
+
+/* Recaptcha Fix */
+.g-recaptcha {
+    overflow:hidden;
+    width:298px;
+    height:74px;
+}
+iframe {
+  margin:-1px 0px 6px -2px;
+}
+Minor

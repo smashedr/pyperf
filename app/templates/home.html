@@ -20,13 +20,13 @@
         <tr>
             <td>Download</td>
             <td><kbd>iperf3 -c {{ request.get_host }} -R</kbd>
-                <a href="javascript:void(0);" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }} -R">
+                <a class="clip" role="button" data-clipboard-text="iperf3 -c {{ request.get_host }} -R">
                 <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
         </tr>
         <tr class="ms-3">
             <td>Upload</td>
             <td><kbd>iperf3 -c {{ request.get_host }}</kbd>
-                <a href="javascript:void(0);" class="clip" data-clipboard-text="iperf3 -c {{ request.get_host }}">
+                <a class="clip" role="button" data-clipboard-text="iperf3 -c {{ request.get_host }}">
                 <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
         </tr>
     </table>

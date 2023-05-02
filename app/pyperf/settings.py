@@ -1,6 +1,6 @@
 import sentry_sdk
 from celery.schedules import crontab
-from decouple import config
+from decouple import config, Csv
 from django.contrib.messages import constants as message_constants
 from pathlib import Path
 from sentry_sdk.integrations.django import DjangoIntegration
@@ -8,14 +8,14 @@ from sentry_sdk.integrations.django import DjangoIntegration
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', 'False', bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*', Csv())
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
 # SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
-# CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', 'https://*').split(',')
+# CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', cast=Csv())
 SITE_URL = config('SITE_URL', 'http://localhost:8000')
 DISCORD_INVITE = config('DISCORD_INVITE')
-SUPER_USER_IDS = config('SUPER_USER_IDS').split(',')
+SUPER_USER_IDS = config('SUPER_USER_IDS', cast=Csv())
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
 USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -56,14 +56,14 @@ CELERY_TIMEZONE = config('TZ', 'UTC')
 
 MESSAGE_TAGS = {
     message_constants.DEBUG: 'secondary',
-    message_constants.INFO: 'primary',
+    message_constants.INFO: 'info',
     message_constants.SUCCESS: 'success',
     message_constants.WARNING: 'warning',
     message_constants.ERROR: 'danger',
 }
 
 CELERY_BEAT_SCHEDULE = {
-    'daily_cleanup': {
+    'clear_sessions': {
         'task': 'home.tasks.clear_sessions',
         'schedule': crontab(minute=0, hour=0),
     },

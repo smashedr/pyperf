@@ -48,6 +48,10 @@ class SpeedTest(models.Model):
     def get_type(self):
         return 'Download' if self.reverse else 'Upload'
 
+    def get_result_url(self):
+        url = reverse('home:result', kwargs={'pk': self.pk})
+        return f'{settings.SITE_URL}{url}'
+
     def get_image_url(self):
         url = reverse('home:image', kwargs={'pk': self.pk})
         return f'{settings.SITE_URL}{url}'
