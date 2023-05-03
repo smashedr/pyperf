@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block body %}
-{% cache 86400 result_body data.pk %}
+{#{% cache 86400 result_body data.pk %}#}
 
     <a href="{% url 'home:image' data.id %}" target="_blank">
         <img class="img-fluid rounded float-end d-none d-md-block" style="max-height: 200px;"
@@ -101,12 +101,15 @@
         </div>
     {% endif %}
 
-    <h3>Raw Data <a class="clip" role="button" data-clipboard-target="#raw">
-        <i class="fa-regular fa-clipboard text-white ms-2"></i></a></h3>
+    <div class="d-flex align-items-center">
+        <span class="h2" id="results">Raw Data</span>
+        <span><a class="clip" data-clipboard-target="#raw"
+           role="button"><i class="fa-regular fa-clipboard text-white fs-4 ms-2"></i></a></span>
+    </div>
 
     <pre><code id="raw">{{ data.json | json_to_dict | pprint }}</code></pre>
 
-{% endcache %}
+{#{% endcache %}#}
 {% endblock %}
 
 {% block tail %}

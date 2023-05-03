@@ -58,7 +58,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for data in webhooks %}
+            {% for data in webhooks reversed %}
                 <tr id="webhook-{{ data.id }}">
                     <th scope="row">{{ data.id }}</th>
                     <td><a class="clip text-white text-decoration-none" title="{{ data.guild_id }}" role="button"
@@ -103,7 +103,7 @@
     </div>
     <p class="text-white mb-0"><em>For more details, click on the ID Number.
         Clicking other fields will copy them to the clipboard.</em></p>
-    <p class="d-xl-none text-warning"><em>Some columns hidden due to narrow viewport.</em></p>
+    <p class="d-xl-none text-warning mb-0"><em>Some columns hidden due to narrow viewport.</em></p>
 
     <table class="table table-hover" id="results">
         <thead>

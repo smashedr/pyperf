@@ -61,9 +61,11 @@ $(document).ready(function() {
             success: function (response) {
                 console.log('response: ' + response);
                 deleteHookModal.hide();
-                $('#webhook-' +hookID).remove();
+                console.log('removing #wehook-' + hookID);
                 let count = $('#webhooks-table tr').length;
+                $('#webhook-' +hookID).remove();
                 if (count<=2) {
+                    console.log('removing #webhooks-table@ #webhooks');
                     $('#webhooks-table').remove();
                     $('#webhooks').remove();
                 }
