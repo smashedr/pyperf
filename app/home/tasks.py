@@ -6,6 +6,7 @@ import socket
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from celery import shared_task
+from django.conf import settings
 from django.core import management
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
@@ -48,13 +49,28 @@ def delete_empty_results():
 
 
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 5, 'countdown': 60}, rate_limit='10/m')
+def delete_discord_webhook(hook_url):
+    try:
+        r = httpx.delete(hook_url, timeout=30)
+        if not r.is_success or r.status_code == 404:
+            logger.warning(r.content.decode(r.encoding))
+            r.raise_for_status()
+
+        return r.status_code
+
+    except Exception as error:
+        logger.exception(error)
+        raise
+
+
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 5, 'countdown': 60}, rate_limit='10/m')
 def send_discord(hook_pk, message):
     try:
         hook = Webhooks.objects.get(pk=hook_pk)
         body = {'content': message}
-        r = httpx.post(hook.webhook_url, json=body, timeout=30)
+        r = httpx.post(hook.url, json=body, timeout=30)
         if r.status_code == 404:
-            logger.warning('Hook %s removed by owner %s', hook.hook_id, hook.owner_username)
+            logger.warning('Hook %s removed by owner %s', hook.hook_id, hook.owner.username)
             hook.delete()
             return 404
 
@@ -67,6 +83,15 @@ def send_discord(hook_pk, message):
     except Exception as error:
         logger.exception(error)
         raise
+
+
+@shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 5, 'countdown': 60}, rate_limit='10/m')
+def send_success_message(hook_pk):
+    logger.info('send_success_message: %s', hook_pk)
+    # hook = Webhooks.objects.get(pk=hook_pk)
+    context = {'site_url': settings.SITE_URL}
+    message = render_to_string('discord/welcome.html', context)
+    send_discord.delay(hook_pk, message)
 
 
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})

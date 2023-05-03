@@ -47,7 +47,7 @@ def oauth_callback(request):
         user = login_user(request, profile)
         if 'webhook' in auth_data:
             logger.debug('webhook in profile')
-            webhook = add_webhook(user, auth_data)
+            webhook = add_webhook(request, auth_data)
             messages.info(request, f'Webhook successfully added: {webhook.hook_id}')
         else:
             messages.info(request, f'Successfully logged in, {user.first_name}.')
@@ -94,7 +94,7 @@ def oauth_webhook(request):
     return HttpResponseRedirect(url)
 
 
-def add_webhook(user, profile):
+def add_webhook(request, profile):
     """
     Add webhook
     """
@@ -102,8 +102,8 @@ def add_webhook(user, profile):
         hook_id=profile['webhook']['id'],
         guild_id=profile['webhook']['guild_id'],
         channel_id=profile['webhook']['channel_id'],
-        webhook_url=profile['webhook']['url'],
-        owner_username=user.username,
+        url=profile['webhook']['url'],
+        owner=request.user,
     )
     webhook.save()
     return webhook

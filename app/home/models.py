@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from oauth.models import CustomUser
 
 
 class SpeedTest(models.Model):
@@ -39,11 +40,11 @@ class SpeedTest(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '{}: {} - {}'.format(self.pk, self.name, self.bps_human)
+        return '{}: {} ({})'.format(self.pk, self.name, self.bps_human)
 
     class Meta:
-        verbose_name = 'SpeedTest'
-        verbose_name_plural = 'SpeedTests'
+        verbose_name = 'Speed Test'
+        verbose_name_plural = 'Speed Tests'
 
     def get_type(self):
         return 'Download' if self.reverse else 'Upload'
@@ -67,17 +68,17 @@ class SpeedTest(models.Model):
 
 class Webhooks(models.Model):
     id = models.AutoField(primary_key=True)
-    owner_username = models.CharField(max_length=32)
-    webhook_url = models.URLField(unique=True)
+    url = models.URLField(unique=True, verbose_name='Webhook URL')
     hook_id = models.CharField(max_length=32, blank=True, null=True)
     guild_id = models.CharField(max_length=32, blank=True, null=True)
     channel_id = models.CharField(max_length=32, blank=True, null=True)
     active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '{}: {} - {}'.format(self.id, self.hook_id, self.owner_username)
+        return '{}: {} ({})'.format(self.id, self.hook_id, self.owner.first_name)
 
     class Meta:
-        verbose_name = 'Webhooks'
+        verbose_name = 'Webhook'
         verbose_name_plural = 'Webhooks'

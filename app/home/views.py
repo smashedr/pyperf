@@ -12,7 +12,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.vary import vary_on_headers
-from .models import SpeedTest
+from .models import SpeedTest, Webhooks
 from .tasks import process_data
 
 logger = logging.getLogger('app')
@@ -22,7 +22,12 @@ def home_view(request):
     # View: /
     logger.debug('home_view')
     q = SpeedTest.objects.all()
-    return render(request, 'home.html', {'data': q})
+    context = {'data': q}
+    if request.user.is_authenticated:
+        webhooks = Webhooks.objects.filter(owner=request.user)
+        logger.debug('webhooks: %s', webhooks)
+        context.update({'webhooks': webhooks})
+    return render(request, 'home.html', context)
 
 
 # @vary_on_headers('Cookie')

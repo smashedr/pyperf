@@ -22,7 +22,7 @@
 
     <h4 class="mt-2">{{ data.get_type }} Test - {{ data.name }} ({{ data.ip }})</h4>
     <div class="mt-2">
-        <a class="btn btn-outline-info" href="{% url 'home:index' %}" role="button">
+        <a class="btn btn-outline-info" href="{% url 'home:index' %}#results" role="button">
             Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
         <a class="btn btn-outline-light clip" role="button"
            data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">

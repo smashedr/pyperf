@@ -1,7 +1,7 @@
 {% load tz %}
 {% load home_tags %}
 <tr>
-    <th scope="row"><a href="{% url 'home:result' data.id %}" class="text-white">
+    <th><a href="{% url 'home:result' data.id %}" class="link-info">
         {{ data.id }}</a></th>
     <td>
         {% if data.reverse %}

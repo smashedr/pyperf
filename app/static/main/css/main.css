@@ -1,15 +1,16 @@
+/* Content Shift Fix - Always Show Scrollbar */
 html {overflow-y: scroll;}
-
 body {
     padding-right:0px !important;
     margin-right:0px !important;
 }
 
+/* Visually Show Disabled Elements on Mouseover */
 .disabled {
     cursor: not-allowed! important;
 }
 
-/* Recaptcha Fix */
+/* Recaptcha Border and Load Fix */
 .g-recaptcha {
     overflow:hidden;
     width:298px;
@@ -17,4 +18,12 @@ body {
 }
 iframe {
   margin:-1px 0px 0px -2px;
+}
+
+/* Back to Top Button */
+#btn-back-to-top {
+  position: fixed;
+  bottom: 60px;
+  right: 10px;
+  display: none;
 }

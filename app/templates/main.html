@@ -73,16 +73,15 @@
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item text-success" href="{% url 'admin:index' %}">
                                         <i class="fa-solid fa-rocket me-2"></i> Admin</a></li>
+                                    <li><a class="dropdown-item text-danger" role="button" target="_blank" id="flush-cache">
+                                        <i class="fa-solid fa-toilet me-2"></i> Flush Cache</a></li>
                                 {% endif %}
                                 {% if request.user.is_superuser %}
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-success" href="{% url 'flower' %}" target="_blank">
+                                    <li><a class="dropdown-item text-warning" href="{% url 'flower' %}" target="_blank">
                                         <i class="fas fa-seedling me-2"></i> Flower <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i></a></li>
-                                    <li><a class="dropdown-item text-success" href="{% url 'redis' %}" target="_blank">
+                                    <li><a class="dropdown-item text-warning" href="{% url 'redis' %}" target="_blank">
                                         <i class="fa-solid fa-database me-2"></i> Redis <i class="fa-solid fa-arrow-up-right-from-square ms-1"></i></a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item text-warning" role="button" target="_blank" id="flush-cache">
-                                        <i class="fa-solid fa-toilet me-2"></i> Flush Cache</a></li>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <li><a class="dropdown-item log-out text-danger" role="button">
@@ -105,18 +104,24 @@
     </div>
 </main>
 
+{% block backtotop %}
+<button type="button" class="btn btn-info btn-floating" id="btn-back-to-top">
+    <i class="fas fa-arrow-up"></i>
+</button>
+{% endblock %}
+
 {% block footer %}
 <footer class="footer mt-auto p-2">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-md-6">
                 <p>Join our <i class="fab fa-discord"></i>
-                    <a class="text-info" href="{% get_config 'DISCORD_INVITE' %}" target="_blank">
+                    <a class="link-info" href="{% get_config 'DISCORD_INVITE' %}" target="_blank">
                         Discord</a></p>
             </div>
             <div class="col-12 col-md-6 text-md-end">
                 <ul class="list-inline">
-                    <li class="list-inline-item text-info"><a href="{% url 'home:index' %}">
+                    <li class="list-inline-item"><a href="{% url 'home:index' %}" class="link-info">
                         Home</a></li>
 {#                    <li class="list-inline-item">|</li>#}
 {#                    <li class="list-inline-item text-info"><a href="{% url 'home:test_view' %}">#}
