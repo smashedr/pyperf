@@ -107,6 +107,18 @@ def save_iperf(request):
 
 
 @csrf_exempt
+@require_http_methods(['POST'])
+def del_hook_view_a(request, pk):
+    logger.debug('del_hook_view_a: %s', pk)
+    webhook = Webhooks.objects.get(pk=pk)
+    if webhook.owner != request.user:
+        return HttpResponse(status=401)
+    logger.debug(webhook)
+    webhook.delete()
+    return HttpResponse(status=204)
+
+
+@csrf_exempt
 @cache_page(60 * 60 * 24)
 def tdata_view_a(request, pk):
     # View: /ajax/{pk}/tdata/

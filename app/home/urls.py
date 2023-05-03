@@ -15,4 +15,5 @@ urlpatterns = [
     path('ajax/tdata/<int:pk>/', views.tdata_view_a, name='ajax_tdata'),
     path('ajax/graph/<int:pk>/', views.graph_view_a, name='ajax_graph'),
     path('ajax/map/<int:pk>/', views.map_view_a, name='ajax_map'),
+    path('ajax/delete/hook/<int:pk>/', views.del_hook_view_a, name='ajax_delete_hook'),
 ]

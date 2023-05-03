@@ -65,13 +65,16 @@ def delete_discord_webhook(hook_url):
 
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 5, 'countdown': 60}, rate_limit='10/m')
 def send_discord(hook_pk, message):
+    logger.info('send_discord: %s', hook_pk)
     try:
-        hook = Webhooks.objects.get(pk=hook_pk)
+        webhook = Webhooks.objects.get(pk=hook_pk)
         body = {'content': message}
-        r = httpx.post(hook.url, json=body, timeout=30)
+        logger.info(body)
+        r = httpx.post(webhook.url, json=body, timeout=30)
         if r.status_code == 404:
-            logger.warning('Hook %s removed by owner %s', hook.hook_id, hook.owner.username)
-            hook.delete()
+            logger.warning('Hook %s removed by owner %s',
+                           webhook.hook_id, webhook.owner.username)
+            webhook.delete()
             return 404
 
         if not r.is_success:
@@ -88,7 +91,6 @@ def send_discord(hook_pk, message):
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 5, 'countdown': 60}, rate_limit='10/m')
 def send_success_message(hook_pk):
     logger.info('send_success_message: %s', hook_pk)
-    # hook = Webhooks.objects.get(pk=hook_pk)
     context = {'site_url': settings.SITE_URL}
     message = render_to_string('discord/welcome.html', context)
     send_discord.delay(hook_pk, message)
@@ -96,14 +98,15 @@ def send_success_message(hook_pk):
 
 @shared_task(autoretry_for=(Exception,), retry_kwargs={'max_retries': 3, 'countdown': 60})
 def process_webhooks(pk):
+    logger.info('process_webhooks: %s', pk)
     context = {'data': SpeedTest.objects.get(pk=pk)}
     message = render_to_string('discord/message.html', context)
-    hooks = Webhooks.objects.all()
-    if not hooks:
+    webhooks = Webhooks.objects.all()
+    if not webhooks:
         logger.info('No hooks found, nothing to do.')
         return
 
-    for hook in hooks:
+    for hook in webhooks:
         if not hook.active:
             continue
         logger.info('Sending alert to: %s', hook.id)
@@ -112,7 +115,7 @@ def process_webhooks(pk):
 
 @shared_task()
 def process_data(pk):
-    logger.info('process_data')
+    logger.info('process_data: %s', pk)
     q = SpeedTest.objects.get(pk=pk)
 
     # Make sure we have valid json, and it has an IP address

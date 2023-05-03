@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    // Reload page on browser back/forward
+    // Reload page on browser back/forward if new results
     let perfEntries = performance.getEntriesByType('navigation');
     if (perfEntries[0].type === 'back_forward') {
         let reloadSession = localStorage.getItem('reloadSession');
@@ -10,7 +10,7 @@ $(document).ready(function() {
         }
     }
 
-    // Monitor websockets for new data
+    // Monitor websockets for new data and update results
     const socket = new WebSocket('wss://' + window.location.host + '/ws/home_group/');
     console.log('Websockets Connected.');
     socket.onmessage = function(event) {
@@ -18,7 +18,9 @@ $(document).ready(function() {
         $.get('/ajax/tdata/' + data.pk, function(response) {
             $('#results tbody').prepend(response);
             localStorage.setItem('reloadSession', 'true');
-            console.log('Table Updated.');
+            let message = 'New Test Result: ' + data.pk;
+            show_toast(message,'success', '10000');
+            console.log('Table Updated: ' + data.pk);
         });
     };
 

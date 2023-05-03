@@ -46,24 +46,20 @@
     </div>
 
     {% if request.user.is_authenticated %}{% if webhooks %}
-        <div class="d-flex align-items-center">
-            <span class="h2" id="webhooks">Webhooks</span>
-            <span><a class="clip" data-clipboard-text="{{ request.build_absolute_uri }}#webhooks"
-               role="button" ><i class="fa-regular fa-clipboard text-white fs-4 ms-2"></i></a></span>
-        </div>
-        <table class="table">
+        <h2 id="webhooks">Webhooks</h2>
+        <table class="table" id="webhooks-table">
             <thead>
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col" class="d-none d-sm-table-cell">Guild ID</th>
                 <th scope="col">Channel ID</th>
                 <th scope="col" class="d-none d-md-table-cell">Date</th>
-                <th scope="col">Delete</th>
+                <th scope="col">Trash</th>
             </tr>
             </thead>
             <tbody>
             {% for data in webhooks %}
-                <tr class="align-middle">
+                <tr id="webhook-{{ data.id }}">
                     <th scope="row">{{ data.id }}</th>
                     <td><a class="clip text-white text-decoration-none" title="{{ data.guild_id }}" role="button"
                            data-clipboard-text="{{ data.guild_id }}">{{ data.guild_id }}</a></td>
@@ -73,14 +69,32 @@
                     <td class="d-none d-md-table-cell">
                         <a class="clip text-white text-decoration-none" title="{{ data.created_at }}" role="button"
                            data-clipboard-text="{{ data.created_at }}">{{ data.created_at|date:"j M, o" }}</a></td>
-                    <td><a class="btn btn-danger btn-xs" role="button"
-                           style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                        <i class="fa-regular fa-trash-can"></i></a></td>
+                    <td><a role="button" class="delete-webhook-btn" data-hook-id="{{ data.id }}"><i class="fa-solid fa-trash-can link-danger"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+
+        <!-- Modal -->
+        <div class="modal fade" id="delete-hook-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">Are you sure you want to delete this webhook?</div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" id="confirm-delete-btn">Delete <i class="fa-regular fa-trash-can ms-1"></i></button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
     {% endif %}{% endif %}
+
+    {% cache 86400 home_body %}
 
     <div class="d-flex align-items-center">
         <span class="h2" id="results">Results</span>
@@ -90,8 +104,6 @@
     <p class="text-white mb-0"><em>For more details, click on the ID Number.
         Clicking other fields will copy them to the clipboard.</em></p>
     <p class="d-xl-none text-warning"><em>Some columns hidden due to narrow viewport.</em></p>
-
-    {% cache 86400 home_body %}
 
     <table class="table table-hover" id="results">
         <thead>

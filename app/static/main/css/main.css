@@ -5,6 +5,13 @@ body {
     margin-right:0px !important;
 }
 
+/* Modal Scroll Fix !! BREAKS Back to Top Button */
+body {
+    overflow-x: hidden;
+    overflow-y: scroll !important;
+}
+
+
 /* Visually Show Disabled Elements on Mouseover */
 .disabled {
     cursor: not-allowed! important;
