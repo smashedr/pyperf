@@ -48,9 +48,9 @@ def oauth_callback(request):
         if 'webhook' in auth_data:
             logger.debug('webhook in profile')
             webhook = add_webhook(request, auth_data)
-            messages.info(request, f'Webhook successfully added: {webhook.hook_id}')
+            messages.info(request, f'Webhook successfully added: {webhook.id}')
         else:
-            messages.info(request, f'Successfully logged in, {user.first_name}.')
+            messages.info(request, f'Successfully logged in. {user.first_name}.')
     except Exception as error:
         logger.exception(error)
         messages.error(request, f'Exception during login: {error}')
@@ -68,7 +68,7 @@ def oauth_logout(request):
     # Hack to prevent login loop when logging out on a secure page
     logger.debug('next_url: %s', next_url.split('/')[1])
     secure_views_list = ['profile']
-    if next_url.split('/')[1] in secure_views_list:
+    if '/' in next_url and next_url.split('/')[1] in secure_views_list:
         next_url = '/'
 
     request.session['login_next_url'] = next_url

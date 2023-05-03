@@ -1,4 +1,5 @@
 import logging
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -13,6 +14,7 @@ logger = logging.getLogger('app')
 def flush_cache_view(request):
     logger.debug('flush_cache_view')
     flush_template_cache.delay()
+    messages.success(request, f'Cache flush success.')
     return HttpResponse(status=204)
 
 

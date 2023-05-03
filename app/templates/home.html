@@ -18,10 +18,10 @@
         <i class="fa-brands fa-linux"></i>
         <i class="fa-brands fa-app-store-ios"></i>
         <i class="fa-brands fa-android me-2"></i>
-        <a href="https://iperf.fr/iperf-download.php" class="link-info" target="_blank">
+        <a href="https://iperf.fr/iperf-download.php" target="_blank">
                 https://iperf.fr <i class="fa-solid fa-up-right-from-square ms-1"></i></a>
     </p>
-    <p><a href="{% url 'oauth:webhook' %}" class="btn btn-info btn-lg my-2" role="button">
+    <p><a href="{% url 'oauth:webhook' %}" class="btn btn-primary btn-lg my-2" role="button">
         Add Notifications to Discord <i class="fab fa-discord ms-2"></i></a></p>
 
     <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
@@ -77,10 +77,10 @@
 
         <!-- Modal -->
         <div class="modal fade" id="delete-hook-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
+          <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Webhook</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">Are you sure you want to delete this webhook?</div>

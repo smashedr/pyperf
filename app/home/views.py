@@ -207,6 +207,6 @@ def render_map_fig(query_or_pk):
             ),
             pitch=0,
             zoom=5,
-        )
+        ),
     )
     return fig

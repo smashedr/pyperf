@@ -57,7 +57,7 @@
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     {% if not request.user.is_authenticated %}
-                        <a href="{% url 'oauth:login' %}?next={{ request.path }}" class="btn btn-outline-info" role="button">
+                        <a href="{% url 'oauth:login' %}?next={{ request.path }}" class="btn btn-outline-primary" role="button">
                             Log in with Discord <i class="fas fa-sign-in-alt ms-2"></i></a>
                     {% else %}
                         <li class="nav-item dropdown">
@@ -97,7 +97,7 @@
 {% endblock %}
 
 <main class="flex-shrink-0">
-    <div class="container-fluid">
+    <div class="container-fluid p-3">
 
         {% block body %}{% endblock %}
 
@@ -105,26 +105,26 @@
 </main>
 
 {% block backtotop %}
-<button type="button" class="btn btn-info btn-floating" id="btn-back-to-top">
+<button type="button" class="btn btn-primary btn-floating" id="btn-back-to-top">
     <i class="fas fa-arrow-up"></i>
 </button>
 {% endblock %}
 
 {% block footer %}
-<footer class="footer mt-auto p-2">
-    <div class="container-fluid">
+<footer class="footer mt-auto">
+    <div class="container-fluid p-3">
         <div class="row">
             <div class="col-12 col-md-6">
-                <p>Join our <i class="fab fa-discord"></i>
-                    <a class="link-info" href="{% get_config 'DISCORD_INVITE' %}" target="_blank">
+                <p class="mb-0">Join our <i class="fab fa-discord"></i>
+                    <a href="{% get_config 'DISCORD_INVITE' %}" target="_blank">
                         Discord</a></p>
             </div>
             <div class="col-12 col-md-6 text-md-end">
-                <ul class="list-inline">
-                    <li class="list-inline-item"><a href="{% url 'home:index' %}" class="link-info">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><a href="{% url 'home:index' %}">
                         Home</a></li>
 {#                    <li class="list-inline-item">|</li>#}
-{#                    <li class="list-inline-item text-info"><a href="{% url 'home:test_view' %}">#}
+{#                    <li class="list-inline-item"><a href="{% url 'home:test_view' %}">#}
 {#                        Test</a></li>#}
                 </ul>
             </div>
@@ -139,7 +139,7 @@
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
     </form>
     <div class="modal fade" id="user-info-modal" tabindex="-1" aria-labelledby="user-info-modal-label" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="user-info-modal-label">
@@ -176,7 +176,7 @@
     </div>
 {% endif %}
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
+<div class="toast-container position-fixed top-0 end-0 p-3" style="margin-top: 50px;">
     {% block messages %}{% if messages %}
         {% for message in messages %}
             <div class="toast toast-alert align-items-center text-bg-{{ message.tags }} border-0"

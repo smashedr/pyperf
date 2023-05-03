@@ -1,17 +1,3 @@
-/* Content Shift Fix - Always Show Scrollbar */
-html {overflow-y: scroll;}
-body {
-    padding-right:0px !important;
-    margin-right:0px !important;
-}
-
-/* Modal Scroll Fix !! BREAKS Back to Top Button */
-body {
-    overflow-x: hidden;
-    overflow-y: scroll !important;
-}
-
-
 /* Visually Show Disabled Elements on Mouseover */
 .disabled {
     cursor: not-allowed! important;
@@ -30,7 +16,7 @@ iframe {
 /* Back to Top Button */
 #btn-back-to-top {
   position: fixed;
-  bottom: 60px;
-  right: 10px;
+  bottom: 64px;
+  right: 19px;
   display: none;
 }

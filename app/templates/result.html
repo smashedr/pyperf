@@ -22,7 +22,7 @@
 
     <h4 class="mt-2">{{ data.get_type }} Test - {{ data.name }} ({{ data.ip }})</h4>
     <div class="mt-2">
-        <a class="btn btn-outline-info" href="{% url 'home:index' %}#results" role="button">
+        <a class="btn btn-outline-primary" href="{% url 'home:index' %}#results" role="button">
             Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
         <a class="btn btn-outline-light clip" role="button"
            data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
@@ -30,7 +30,7 @@
     </div>
     <ul class="mt-2">
         <li>
-            <a class="text-info" target="_blank"
+            <a target="_blank"
                href="{{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png">
                 {{ request.build_absolute_uri|absolute_url }}/{{ data.id }}.png</a>
             <a class="clip" role="button"
@@ -39,7 +39,7 @@
         </li>
         <li>
             {% url 'home:graph' data.id as graph_url %}
-            <a class="text-info" target="_blank"
+            <a target="_blank"
                href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
                 {{ request.build_absolute_uri|absolute_url }}{{ graph_url|crstrip:"/" }}</a>
             <a class="clip" role="button"
@@ -49,7 +49,7 @@
         {% if data.ip_lat and data.ip_lon %}
         <li>
             {% url 'home:map' data.id as map_url %}
-            <a class="text-info" target="_blank"
+            <a target="_blank"
                href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:map' data.id %}">
                 {{ request.build_absolute_uri|absolute_url }}{{ map_url|crstrip:"/" }}</a>
             <a class="clip" role="button"
@@ -68,34 +68,34 @@
         </tbody>
     </table>
 
-    <div class="p-2 d-none d-sm-block" id="graph-data">
+    <div class="d-none d-sm-block" id="graph-data">
         <div class="d-flex justify-content-center">
-            <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
+            <div class="spinner-grow text-primary graph-loading" role="status" style="display:none;">
             </div>
-            <div class="spinner-grow text-info graph-loading ms-2 me-2" role="status" style="display:none;">
+            <div class="spinner-grow text-primary graph-loading mx-2" role="status" style="display:none;">
               <span class="visually-hidden">Loading Graph...</span>
             </div>
-            <div class="spinner-grow text-info graph-loading" role="status" style="display:none;">
+            <div class="spinner-grow text-primary graph-loading" role="status" style="display:none;">
             </div>
         </div>
     </div>
 
-    <div class="p-1 d-block d-sm-none">
+    <div class="d-block d-sm-none">
         <p>Graph Hidden because viewport is too narrow.<br>
-            <a class="text-info" target="_blank"
+            <a target="_blank"
                href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
                 Click here to view the Graph</a>.</p>
     </div>
 
     {% if data.ip_lat and data.ip_lon %}
-        <div class="p-2" id="map-data">
+        <div class="" id="map-data">
             <div class="d-flex justify-content-center">
-                <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
+                <div class="spinner-grow text-primary map-loading" role="status" style="display:none;">
                 </div>
-                <div class="spinner-grow text-info map-loading ms-2 me-2" role="status" style="display:none;">
+                <div class="spinner-grow text-primary map-loading mx-2" role="status" style="display:none;">
                   <span class="visually-hidden">Loading Map...</span>
                 </div>
-                <div class="spinner-grow text-info map-loading" role="status" style="display:none;">
+                <div class="spinner-grow text-primary map-loading" role="status" style="display:none;">
                 </div>
             </div>
         </div>
