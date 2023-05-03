@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block body %}
-{#{% cache 86400 result_body data.pk %}#}
+{% cache 86400 result_body data.pk %}
 
     <a href="{% url 'home:image' data.id %}" target="_blank">
         <img class="img-fluid rounded float-end d-none d-md-block" style="max-height: 200px;"
@@ -81,10 +81,7 @@
     </div>
 
     <div class="d-block d-sm-none">
-        <p>Graph Hidden because viewport is too narrow.<br>
-            <a target="_blank"
-               href="{{ request.build_absolute_uri|absolute_url }}{% url 'home:graph' data.id %}">
-                Click here to view the Graph</a>.</p>
+        <p>Graph Hidden because viewport is too narrow.</p>
     </div>
 
     {% if data.ip_lat and data.ip_lon %}
@@ -109,7 +106,7 @@
 
     <pre><code id="raw">{{ data.json | json_to_dict | pprint }}</code></pre>
 
-{#{% endcache %}#}
+{% endcache %}
 {% endblock %}
 
 {% block tail %}

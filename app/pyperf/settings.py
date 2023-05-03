@@ -7,7 +7,7 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', 'False', bool)
+DEBUG = config('DEBUG', False, bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*', Csv())
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
@@ -17,11 +17,12 @@ SITE_URL = config('SITE_URL', 'http://localhost:8000')
 DISCORD_INVITE = config('DISCORD_INVITE')
 SUPER_USER_IDS = config('SUPER_USER_IDS', cast=Csv())
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
-USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', 'False', bool)
+USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', False, bool)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+DJANGO_REDIS_IGNORE_EXCEPTIONS = config('REDIS_IGNORE_EXCEPTIONS', True, bool)
 
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'
@@ -37,7 +38,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 TEMPLATES_DIRS = [BASE_DIR / 'templates']
 
 LANGUAGE_CODE = config('LANGUAGE_CODE', 'en-us')
-USE_TZ = config('USE_TZ', 'True', bool)
+USE_TZ = config('USE_TZ', True, bool)
 TIME_ZONE = config('TZ', 'UTC')
 USE_I18N = True
 USE_L10N = True
@@ -79,7 +80,7 @@ if config('SENTRY_URL', False):
         integrations=[DjangoIntegration()],
         traces_sample_rate=config('SENTRY_SAMPLE_RATE', 0.25, float),
         send_default_pii=True,
-        debug=config('SENTRY_DEBUG', config('DEBUG', 'False'), bool),
+        debug=config('SENTRY_DEBUG', config('DEBUG', False), bool),
         environment=config('SENTRY_ENVIRONMENT'),
     )
 
@@ -94,7 +95,8 @@ CHANNEL_LAYERS = {
 
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
+        'BACKEND': config('CACHE_BACKEND',
+                          'django.core.cache.backends.dummy.DummyCache'),
         'LOCATION': config('CACHE_LOCATION'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',

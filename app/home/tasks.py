@@ -27,7 +27,7 @@ def clear_sessions():
 def flush_template_cache():
     # Flush template cache on request
     logger.info('flush_template_cache')
-    return cache.delete_many(cache.keys('*.cache.*'))
+    return cache.delete_pattern('*.cache.*')
 
 
 @shared_task()

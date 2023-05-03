@@ -10,7 +10,7 @@
 {% block body %}
 
     <h1>PyPerf3</h1>
-    <p class="lead">Iperf3 Server with Discord Alerts and Plotly Graphs powered by Django ORM running in Docker.</p>
+    <p class="lead text-white">Iperf3 Server with Discord Alerts and Plotly Graphs powered by Django ORM running in Docker.</p>
     <p>
         Download Iperf3
         <i class="fa-brands fa-windows ms-2"></i>
@@ -101,9 +101,9 @@
         <span><a class="clip" data-clipboard-text="{{ request.build_absolute_uri }}#results"
            role="button"><i class="fa-regular fa-clipboard text-white fs-4 ms-2"></i></a></span>
     </div>
-    <p class="text-white mb-0"><em>For more details, click on the ID Number.
+    <p class="mb-0"><em>For more details, click on the ID Number.
         Clicking other fields will copy them to the clipboard.</em></p>
-    <p class="d-xl-none text-warning mb-0"><em>Some columns hidden due to narrow viewport.</em></p>
+    <p class="d-xl-none text-muted mb-0"><em>Some columns hidden due to narrow viewport.</em></p>
 
     <table class="table table-hover" id="results">
         <thead>
