@@ -13,10 +13,10 @@
 
         <meta property="og:author" content="Shane">
         <meta property="og:title" content="{{ data.get_type }} Result {{ data.id }}: {{ data.name }}">
-        <meta property="og:description" content="{{ data.bps_human }} Average {{ data.get_type }} Speed for
-            {{ data.name }} ({{ data.ip }}){% if data.ip_org %} {{ data.ip_org }}{% endif %}{% if data.ip_city %} in
-            {{ data.ip_city }}, {{ data.ip_region }}, {{ data.ip_country }}{% endif %} on
-            {{ data.created_at|date:"l, N j \a\t G:i" }} {% get_config 'TIME_ZONE' %}">
+        <meta property="og:description" content="{{ data.bps_human }} Average {{ data.get_type }} Speed for {% spaceless %}
+            {% endspaceless %}{{ data.name }} ({{ data.ip }}){% if data.ip_org %} {{ data.ip_org }}{% endif %} {% spaceless %}
+            {% endspaceless %}{% if data.ip_city %}in {{ data.ip_city }}, {{ data.ip_region }}, {{ data.ip_country }}{% endif %} {% spaceless %}
+            {% endspaceless %}on {{ data.created_at|date:"l, N j \a\t G:i" }} {% get_config 'TIME_ZONE' %}">
         <meta property="og:type" content="website">
         <meta property="og:url" content="{% get_config 'SITE_URL' %}{% url 'home:result' data.id %}">
         <meta property="og:image" content="{% get_config 'SITE_URL' %}{% url 'home:image' data.id %}">
