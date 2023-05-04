@@ -145,4 +145,7 @@
 
 {% block tail %}
     <script type="text/javascript" src="{% static 'main/js/home.js' %}"></script>
+    {% if request.user.is_authenticated %}
+        <script type="text/javascript" src="{% static 'main/js/home-user.js' %}"></script>
+    {% endif %}
 {% endblock %}
