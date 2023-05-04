@@ -3,10 +3,28 @@
 {% load home_tags %}
 {% load cache %}
 {% block results_active %}active{% endblock %}
-{% block title %}Result - {{ data.bps_human }} - {{ data.name }}{% endblock %}
+{% block title %}{{ data.get_type }} Result {{ data.id }}: {{ data.name }} - {{ data.bps_human }}{% endblock %}
 
 {% block head %}
+    {% block meta %}
+        <meta name="author" content="Shane"/>
+        <meta name="title" content="{{ data.get_type }} Result {{ data.id }}: {{ data.name }}"/>
+        <meta name="description" content="Django Iperf3 - A Django Iperf3 Site."/>
+
+        <meta property="og:author" content="Shane">
+        <meta property="og:title" content="{{ data.get_type }} Result {{ data.id }}: {{ data.name }}">
+        <meta property="og:description" content="{{ data.bps_human }} Average {{ data.get_type }} Speed for
+            {{ data.name }} ({{ data.ip }}){% if data.ip_org %} {{ data.ip_org }}{% endif %}{% if data.ip_city %} in
+            {{ data.ip_city }}, {{ data.ip_region }}, {{ data.ip_country }}{% endif %} on
+            {{ data.created_at|date:"l, N j \a\t G:i" }} {% get_config 'TZ' %}">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{% get_config 'SITE_URL' %}{% url 'home:result' data.id %}">
+        <meta property="og:image" content="{% get_config 'SITE_URL' %}{% url 'home:image' data.id %}">
+        <meta name="twitter:card" content="summary_large_image">
+    {% endblock %}
+
     {{ data.pk|json_script:"pk" }}
+
     <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
 {% endblock %}
 
@@ -18,13 +36,13 @@
              src="{% url 'home:image' data.id %}"
              alt="{{ data.get_type }} Results" /></a>
 
-    <h1>Result - {{ data.id }}</h1>
+    <h2>Result - {{ data.id }}</h2>
 
     <h4 class="mt-2">{{ data.get_type }} Test - {{ data.name }} ({{ data.ip }})</h4>
     <div class="mt-2">
         <a class="btn btn-outline-primary" href="{% url 'home:index' %}#results" role="button">
             Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
-        <a class="btn btn-outline-light clip" role="button"
+        <a class="btn btn-outline-dark clip" role="button"
            data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
             Copy URL <i class="fa-solid fa-link ms-2"></i></a>
     </div>
@@ -59,6 +77,11 @@
         {% endif %}
     </ul>
 
+    <a href="{% url 'home:image' data.id %}" target="_blank">
+        <img class="img-fluid rounded d-md-none mb-2" style="max-height: 260px;"
+             src="{% url 'home:image' data.id %}"
+             alt="{{ data.get_type }} Results" /></a>
+
     <table class="table table-hover" id="results">
         <thead>
         {% include 'include/table-head.html' %}
@@ -70,30 +93,26 @@
 
     <div class="d-none d-sm-block" id="graph-data">
         <div class="d-flex justify-content-center">
-            <div class="spinner-grow text-primary graph-loading" role="status" style="display:none;">
-            </div>
-            <div class="spinner-grow text-primary graph-loading mx-2" role="status" style="display:none;">
+            <div class="spinner-grow text-primary graph-loading m-2" role="status"></div>
+            <div class="spinner-grow text-primary graph-loading m-2" role="status">
               <span class="visually-hidden">Loading Graph...</span>
             </div>
-            <div class="spinner-grow text-primary graph-loading" role="status" style="display:none;">
-            </div>
+            <div class="spinner-grow text-primary graph-loading m-2" role="status"></div>
         </div>
     </div>
 
     <div class="d-block d-sm-none">
-        <p>Graph Hidden because viewport is too narrow.</p>
+        <p class="text-muted">Graph Hidden because viewport is too narrow.</p>
     </div>
 
     {% if data.ip_lat and data.ip_lon %}
         <div class="" id="map-data">
             <div class="d-flex justify-content-center">
-                <div class="spinner-grow text-primary map-loading" role="status" style="display:none;">
-                </div>
-                <div class="spinner-grow text-primary map-loading mx-2" role="status" style="display:none;">
+                <div class="spinner-grow text-primary map-loading m-2" role="status"></div>
+                <div class="spinner-grow text-primary map-loading m-2" role="status">
                   <span class="visually-hidden">Loading Map...</span>
                 </div>
-                <div class="spinner-grow text-primary map-loading" role="status" style="display:none;">
-                </div>
+                <div class="spinner-grow text-primary map-loading m-2" role="status"></div>
             </div>
         </div>
     {% endif %}

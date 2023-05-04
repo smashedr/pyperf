@@ -6,7 +6,7 @@ $(document).ready(function() {
         url: '/ajax/graph/' + pk,
         type: 'GET',
         beforeSend: function( jqXHR ){
-            $('.graph-loading').toggle();
+            // $('.graph-loading').toggle();
         },
         success: function(data, textStatus, jqXHR){
             // console.log('Status: '+jqXHR.status+', Data: '+data);
@@ -14,7 +14,7 @@ $(document).ready(function() {
         },
         complete: function(){
             console.log('graph loaded');
-            $('.graph-loading').toggle();
+            $('.graph-loading').hide();
         },
         error: function(data, textStatus) {
             console.log('Status: '+data.status+', Response: '+data.responseText);
@@ -25,7 +25,7 @@ $(document).ready(function() {
         url: '/ajax/map/' + pk,
         type: 'GET',
         beforeSend: function( jqXHR ){
-            $('.map-loading').toggle();
+            // $('.map-loading').toggle();
         },
         success: function(data, textStatus, jqXHR){
             // console.log('Status: '+jqXHR.status+', Data: '+data);
@@ -33,7 +33,7 @@ $(document).ready(function() {
         },
         complete: function(){
             console.log('map loaded');
-            $('.map-loading').toggle();
+            $('.map-loading').hide();
         },
         error: function(data, textStatus) {
             console.log('Status: '+data.status+', Response: '+data.responseText);

@@ -47,8 +47,8 @@ $(document).ready(function() {
         deleteHookModal.show();
     });
 
-    $('#confirm-delete-btn').click(function () {
-        if ($('#confirm-delete-btn').hasClass('disabled')) { return; }
+    $('#confirm-delete-hook-btn').click(function () {
+        if ($('#confirm-delete-hook-btn').hasClass('disabled')) { return; }
         console.log(hookID);
         $.ajax({
             type: 'POST',
@@ -56,7 +56,7 @@ $(document).ready(function() {
             headers: {'X-CSRFToken': csrftoken},
             beforeSend: function () {
                 console.log('beforeSend');
-                $('#confirm-delete-btn').addClass('disabled');
+                $('#confirm-delete-hook-btn').addClass('disabled');
             },
             success: function (response) {
                 console.log('response: ' + response);
@@ -82,9 +82,54 @@ $(document).ready(function() {
             },
             complete: function () {
                 console.log('complete');
-                $('#confirm-delete-btn').removeClass('disabled');
+                $('#confirm-delete-hook-btn').removeClass('disabled');
             }
         });
     });
+
+    // // Define Hook Modal and Delete handlers
+    // const deleteResultModal = new bootstrap.Modal('#delete-result-modal', {});
+    // let resultID;
+    //
+    // $('.delete-result-btn').click(function () {
+    //     resultID = $(this).data('result-id');
+    //     console.log(resultID);
+    //     deleteResultModal.show();
+    // });
+    //
+    // $('#confirm-delete-result-btn').click(function () {
+    //     if ($('#confirm-delete-result-btn').hasClass('disabled')) { return; }
+    //     console.log(resultID);
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: `/ajax/delete/result/${resultID}/`,
+    //         headers: {'X-CSRFToken': csrftoken},
+    //         beforeSend: function () {
+    //             console.log('beforeSend');
+    //             $('#confirm-delete-result-btn').addClass('disabled');
+    //         },
+    //         success: function (response) {
+    //             console.log('response: ' + response);
+    //             deleteResultModal.hide();
+    //             console.log('removing #result-' + resultID);
+    //             let count = $('#results-table tr').length;
+    //             $('#result-' +resultID).remove();
+    //             let message = 'Result ' + resultID + ' Successfully Removed.';
+    //             show_toast(message,'success');
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.log('xhr status: ' + xhr.status);
+    //             console.log('status: ' + status);
+    //             console.log('error: ' + error);
+    //             deleteResultModal.hide();
+    //             let message = xhr.status + ': ' + error
+    //             show_toast(message,'danger', '15000');
+    //         },
+    //         complete: function () {
+    //             console.log('complete');
+    //             $('#confirm-delete-result-btn').removeClass('disabled');
+    //         }
+    //     });
+    // });
 
 });

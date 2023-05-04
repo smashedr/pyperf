@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.io as pio
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
@@ -25,7 +26,6 @@ def home_view(request):
     context = {'data': q}
     if request.user.is_authenticated:
         webhooks = Webhooks.objects.filter(owner=request.user)
-        logger.debug('webhooks: %s', webhooks)
         context.update({'webhooks': webhooks})
     return render(request, 'home.html', context)
 
@@ -46,22 +46,53 @@ def result_view(request, pk):
     return render(request, 'result.html', {'data': q})
 
 
-@cache_page(60 * 60 * 24)
+# @cache_page(60 * 60 * 24)
 def image_view(request, pk):
     # View: /{pk}.png
     logger.debug('image_view: %s', pk)
     q = get_object_or_404(SpeedTest, pk=pk)
+
+    data = json.loads(q.json)
+    if 'intervals' not in data or not data['intervals']:
+        logger.debug('intervals not in query')
+        raise Http404
+
+    x = []
+    for d in data['intervals']:
+        x.append(d['sum']['bits_per_second'])
+
     pio.templates.default = 'plotly_dark'
     fig = go.Figure(go.Indicator(
         mode='gauge+number',
         value=q.bps,
-        domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': f'{q.get_type()} Speed'},
+        # domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': f'{q.get_type()} Speed', 'font': {'size': 48}},
+        gauge={'axis': {'range': [None, max(x) * 1.1]},
+               'steps': [
+                   {'range': [min(x), max(x)], 'color': 'gray'},
+               ]}
     ))
     if not fig:
         logger.debug('no fig')
         raise Http404
 
+    fig.update_layout(
+        annotations=[
+            dict(x=0, y=0.07, text=q.ip_city,
+                 showarrow=False, xref='paper', yref='paper',
+                 font=dict(family='sans serif', size=22, color='white')),
+            dict(x=0, y=0, text=q.name,
+                 showarrow=False, xref='paper', yref='paper',
+                 font=dict(family='sans serif', size=22, color='white')),
+            dict(x=1, y=0.07, text=q.ip_org,
+                 showarrow=False, xref='paper', yref='paper',
+                 font=dict(family='sans serif', size=22, color='white')),
+            dict(x=1, y=0, text=q.ip,
+                 showarrow=False, xref='paper', yref='paper',
+                 font=dict(family='sans serif', size=22, color='white')),
+        ],
+        margin=dict(t=10, l=50, b=10, r=50),
+    )
     return HttpResponse(fig.to_image(), content_type='image/x-png')
 
 
@@ -106,6 +137,7 @@ def save_iperf(request):
     return HttpResponse(status=204)
 
 
+@login_required
 @csrf_exempt
 @require_http_methods(['POST'])
 def del_hook_view_a(request, pk):
@@ -116,6 +148,17 @@ def del_hook_view_a(request, pk):
     logger.debug(webhook)
     webhook.delete()
     return HttpResponse(status=204)
+
+
+# @user_passes_test(lambda u: u.is_superuser)
+# @csrf_exempt
+# @require_http_methods(['POST'])
+# def del_result_view_a(request, pk):
+#     logger.debug('del_result_view_a: %s', pk)
+#     speedtest = SpeedTest.objects.filter(pk=pk)
+#     if speedtest:
+#         speedtest[0].delete()
+#     return HttpResponse(status=204)
 
 
 @csrf_exempt
@@ -141,7 +184,7 @@ def graph_view_a(request, pk):
     fig.update_layout(margin=dict(t=10, l=16, b=10, r=10))
     return HttpResponse(fig.to_html(include_plotlyjs=False,
                                     full_html=False,
-                                    config={'displaylogo': False}))
+                                    config={'displaylogo': False},))
 
 
 @csrf_exempt
@@ -157,7 +200,7 @@ def map_view_a(request, pk):
     fig.update_layout(margin=dict(t=10, l=10, b=10, r=10))
     return HttpResponse(fig.to_html(include_plotlyjs=False,
                                     full_html=False,
-                                    config={'displaylogo': False}))
+                                    config={'displaylogo': False, 'scrollZoom': False},))
 
 
 def render_graph_fig(query_or_pk):
