@@ -1,15 +1,16 @@
 $(document).ready(function() {
 
+    // Get and set the csrf_token
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
     // Define Hook Modal and Delete handlers
     const deleteHookModal = new bootstrap.Modal('#delete-hook-modal', {});
     let hookID;
-
     $('.delete-webhook-btn').click(function () {
         hookID = $(this).data('hook-id');
         console.log(hookID);
         deleteHookModal.show();
     });
-
     $('#confirm-delete-hook-btn').click(function () {
         if ($('#confirm-delete-hook-btn').hasClass('disabled')) { return; }
         console.log(hookID);
@@ -53,13 +54,11 @@ $(document).ready(function() {
     // // Define Hook Modal and Delete handlers
     // const deleteResultModal = new bootstrap.Modal('#delete-result-modal', {});
     // let resultID;
-    //
     // $('.delete-result-btn').click(function () {
     //     resultID = $(this).data('result-id');
     //     console.log(resultID);
     //     deleteResultModal.show();
     // });
-    //
     // $('#confirm-delete-result-btn').click(function () {
     //     if ($('#confirm-delete-result-btn').hasClass('disabled')) { return; }
     //     console.log(resultID);

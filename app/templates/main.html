@@ -199,6 +199,9 @@
     {% if request.user.is_authenticated %}
         <script type="text/javascript" src="{% static 'main/js/user.js' %}"></script>
     {% endif %}
+    {% if request.user.is_superuser %}
+        <script type="text/javascript" src="{% static 'main/js/admin.js' %}"></script>
+    {% endif %}
 {% endblock %}
 
 {% block tail %}{% endblock %}
