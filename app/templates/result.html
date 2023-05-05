@@ -36,7 +36,7 @@
              src="{% url 'home:image' data.id %}"
              alt="{{ data.get_type }} Results" /></a>
 
-    <h2>{{ data.get_type }} Result - {{ data.id }}</h2>
+    <h2>{{ data.get_type }} Result {{ data.id }}</h2>
 
     <h4 class="mt-2">{{ data.name }} ({{ data.ip }})</h4>
     <div class="mt-2">

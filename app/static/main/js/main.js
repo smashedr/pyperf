@@ -35,7 +35,7 @@ $(document).ready(function() {
             clipElement.popover({
                 content: 'Copied',
                 placement: 'bottom',
-                trigger: 'focus'
+                trigger: 'manual'
             });
             clipElement.popover('show');
             setTimeout(function () {
