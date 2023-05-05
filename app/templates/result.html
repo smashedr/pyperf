@@ -36,9 +36,9 @@
              src="{% url 'home:image' data.id %}"
              alt="{{ data.get_type }} Results" /></a>
 
-    <h2>Result - {{ data.id }}</h2>
+    <h2>{{ data.get_type }} Result - {{ data.id }}</h2>
 
-    <h4 class="mt-2">{{ data.get_type }} Test - {{ data.name }} ({{ data.ip }})</h4>
+    <h4 class="mt-2">{{ data.name }} ({{ data.ip }})</h4>
     <div class="mt-2">
         <a class="btn btn-outline-primary" href="{% url 'home:index' %}#results" role="button">
             Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
@@ -82,7 +82,7 @@
              src="{% url 'home:image' data.id %}"
              alt="{{ data.get_type }} Results" /></a>
 
-    <table class="table table-hover" id="results">
+    <table class="table table-hover table-responsive" id="results">
         <thead>
         {% include 'include/table-head.html' %}
         </thead>

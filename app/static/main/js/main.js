@@ -28,6 +28,27 @@ $(document).ready(function() {
     // Init a ClipboardJS attribute
     new ClipboardJS('.clip');
 
+    // Onclick listener for clip
+    $(document).ready(function () {
+        $('.clip').click(function () {
+            var clipElement = $(this);
+            clipElement.popover({
+                content: 'Copied',
+                placement: 'bottom',
+                trigger: 'focus'
+            });
+            clipElement.popover('show');
+            setTimeout(function () {
+                clipElement.popover('hide');
+            }, 2000);
+            $(document).on('click', function (e) {
+                if (!clipElement.is(e.target) && clipElement.has(e.target).length === 0) {
+                    clipElement.popover('hide');
+                }
+            });
+        });
+    });
+
 });
 
 // Generate a BS toast and show it

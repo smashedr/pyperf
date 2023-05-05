@@ -10,18 +10,18 @@
             <i class="fa-solid fa-cloud-arrow-up text-warning" title="Upload"></i>
         {% endif %}
     </td>
-    <td><a class="clip text-white text-decoration-none" role="button" title="{{ data.bps }}"
+    <td><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.bps_human }}">{{ data.bps_human }}</a></td>
-    <td class="d-none d-sm-table-cell"><a class="clip text-white text-decoration-none" role="button" title="{{ data.duration }} seconds"
+    <td class="d-none d-sm-table-cell"><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.duration }}">{{ data.duration }} s</a></td>
-    <td class="d-none d-sm-table-cell"><a class="clip text-white text-decoration-none" role="button" title="{{ data.ip_cc }}"
+    <td class="d-none d-sm-table-cell"><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.ip_country }}">{{ data.ip_cc|cc_to_flag }}</a></td>
-    <td><a class="clip text-white text-decoration-none" role="button" title="{{ data.ip }}"
+    <td><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.name }}">{{ data.name }}</a></td>
-    <td class="d-none d-lg-table-cell"><a class="clip text-white text-decoration-none" role="button" title="{{ data.name }}"
+    <td class="d-none d-lg-table-cell"><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.ip }}">{{ data.ip }}</a></td>
-    <td class="d-none d-md-table-cell" title="{{ data.protocol }}">{{ data.protocol }}</td>
-    <td class="d-none d-xl-table-cell"><a class="clip text-white text-decoration-none" role="button" title="{{ data.created_at }} UTC"
+    <td class="d-none d-md-table-cell">{{ data.protocol }}</td>
+    <td class="d-none d-xl-table-cell"><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.created_at|localtime }}">{{ data.created_at|localtime }}</a></td>
 {#    {% if request.user.is_superuser %}#}
 {#        <td><a role="button" class="delete-result-btn" data-hook-id="{{ data.id }}">#}
