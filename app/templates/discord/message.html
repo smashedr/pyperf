@@ -1,12 +1,11 @@
-{{ data.get_type }} Result **{{ data.id }}**{% if data.name %} for **{{ data.name }}**{% endif %}
+**{{ data.id }}:** {{ data.get_type }} Result{% if data.name %} for **{{ data.name }}**{% endif %}
 URL: {{ data.get_result_url }}
 ```plaintext
 {{ data.get_type }} Speed: {{ data.bps_human }}
 IP: {{ data.ip }}{% if data.name %}
 Host: {{ data.name }}{% endif %}{% if data.ip_country %}
 Country: {{ data.ip_country }}{% endif %}{% if data.ip_org %}
-ISP: {{ data.ip_org }}{% endif %}
-Protocol: {{ data.protocol }}{% if data.duration %}
+ISP: {{ data.ip_org }}{% endif %}{% if data.duration %}
 Duration: {{ data.duration }}{% endif %}{% if data.bytes %}
 Bytes: {{ data.bytes_human }}{% endif %}{% if data.jitter %}
 Jitter: {{ data.jitter }} ms{% endif %}{% if data.packets %}

@@ -66,7 +66,7 @@ def image_view(request, pk):
         mode='gauge+number',
         value=q.bps,
         # domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': f'{q.get_type()} Speed', 'font': {'size': 48}},
+        title={'text': f'{q.get_type()} Speed', 'font': {'size': 36}},
         gauge={'axis': {'range': [None, max(x) * 1.1]},
                'steps': [
                    {'range': [min(x), max(x)], 'color': 'gray'},
