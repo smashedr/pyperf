@@ -11,17 +11,8 @@
 
     <h1>PyPerf3</h1>
     <p class="lead text-white">Iperf3 server with Discord alerts and Plotly graphs powered by Django ORM running in Docker.</p>
-    <p>
-        Download Iperf3
-        <i class="fa-brands fa-windows ms-2"></i>
-        <i class="fa-brands fa-apple"></i>
-        <i class="fa-brands fa-linux"></i>
-        <i class="fa-brands fa-app-store-ios"></i>
-        <i class="fa-brands fa-android me-2"></i>
-        <a href="https://iperf.fr/iperf-download.php" target="_blank">
-                https://iperf.fr <i class="fa-solid fa-up-right-from-square ms-1"></i></a>
-    </p>
-    <p><a href="{% url 'oauth:webhook' %}" class="btn btn-primary btn-lg my-2" role="button">
+
+    <p><a href="{% url 'oauth:webhook' %}" class="btn btn-primary btn-lg" role="button">
         Add Results to Discord <i class="fab fa-discord ms-2"></i></a></p>
 
     <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
@@ -40,14 +31,26 @@
             </tr>
             <tr>
                 <td>Options</td>
-                <td><kbd>-P 1</kbd> Threads <kbd class="ms-3">-t 10</kbd> Seconds</td>
+                <td><kbd>-P 1</kbd> Threads <span class="d-inline-block"><kbd>-t 10</kbd> Seconds</span></td>
             </tr>
         </table>
     </div>
 
+    <p>
+        Download Iperf3
+        <i class="fa-brands fa-windows ms-2"></i>
+        <i class="fa-brands fa-apple"></i>
+        <i class="fa-brands fa-linux"></i>
+        <i class="fa-brands fa-app-store-ios"></i>
+        <i class="fa-brands fa-android me-2"></i>
+        <a href="https://iperf.fr/iperf-download.php" class="d-inline-block" target="_blank">
+                https://iperf.fr <i class="fa-solid fa-up-right-from-square ms-1"></i></a>
+    </p>
+
     {% if request.user.is_authenticated %}{% if webhooks %}
 
         <h2 id="webhooks">Webhooks</h2>
+
         <table class="table table-responsive" id="webhooks-table">
             <thead>
             <tr>
@@ -55,7 +58,7 @@
                 <th scope="col" class="d-none d-sm-table-cell">Guild ID</th>
                 <th scope="col">Channel ID</th>
                 <th scope="col" class="d-none d-md-table-cell">Date</th>
-                <th scope="col">Trash</th>
+                <th scope="col" class="text-center">Trash</th>
             </tr>
             </thead>
             <tbody>
@@ -70,14 +73,13 @@
                     <td class="d-none d-md-table-cell">
                         <a class="clip text-white text-decoration-none" role="button"
                            data-clipboard-text="{{ data.created_at }}">{{ data.created_at|date:"j M, o" }}</a></td>
-                    <td><a role="button" class="delete-webhook-btn" data-hook-id="{{ data.id }}" title="Delete">
+                    <td class="text-center"><a role="button" class="delete-webhook-btn" data-hook-id="{{ data.id }}" title="Delete">
                         <i class="fa-solid fa-trash-can link-danger"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
 
-        <!-- Modal -->
         <div class="modal fade" id="delete-hook-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -126,7 +128,7 @@
            role="button"><i class="fa-regular fa-clipboard text-white fs-4 ms-2"></i></a></span>
     </div>
     <p class="mb-0"><em>For more details, click on the ID Number.
-        Clicking other fields will copy them to the clipboard.</em></p>
+        <span class="d-inline-block">Clicking other fields will copy them to the clipboard.</span></em></p>
     <p class="d-xl-none text-muted mb-0"><em>Some columns hidden due to narrow viewport.</em></p>
 
     <table class="table table-hover table-responsive" id="results">
@@ -134,8 +136,8 @@
         {% include 'include/table-head.html' %}
         </thead>
         <tbody>
-            {% for st in data reversed %}
-                {% include 'include/table-tr.html' with data=st %}
+            {% for speedtest in data reversed %}
+                {% include 'include/table-tr.html' with data=speedtest %}
             {% endfor %}
         </tbody>
     </table>

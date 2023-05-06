@@ -11,8 +11,10 @@ DEBUG = config('DEBUG', False, bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*', Csv())
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
+
 # SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
 # CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', cast=Csv())
+SPEEDTEST_URL = config('SPEEDTEST_URL')
 SITE_URL = config('SITE_URL', 'http://localhost:8000')
 DISCORD_INVITE = config('DISCORD_INVITE')
 SUPER_USER_IDS = config('SUPER_USER_IDS', cast=Csv())
@@ -23,6 +25,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 DJANGO_REDIS_IGNORE_EXCEPTIONS = config('REDIS_IGNORE_EXCEPTIONS', True, bool)
+
 
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'

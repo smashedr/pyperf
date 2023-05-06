@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+{% load static %}
+{% load home_tags %}
+{% load cache %}
+{% block test_active %}active{% endblock %}
+{% block title %}Test{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block body %}
+
+    <h2>Speed Test</h2>
+
+{#    <script type="text/javascript" src="{% static 'js/iframeResizer.min.js' %}"></script>#}
+
+    <iframe class="w-100" id="speedtest_iframe" style="min-height: 520px;"
+            src="{% get_config 'SPEEDTEST_URL' %}"
+            allowTransparency="true" allowfullscreen>
+    </iframe>
+
+{#    <script>#}
+{#        iFrameResize({ log: true }, '#speedtest_iframe')#}
+{#    </script>#}
+
+{% endblock %}
+
+{% block tail %}
+{#    <script type="text/javascript">#}
+{#        $('html').addClass('h-100');#}
+{#        $('body').addClass('h-100');#}
+{#        $('.container-fluid').addClass('h-100');#}
+{#    </script>#}
+{% endblock %}

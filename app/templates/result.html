@@ -41,7 +41,7 @@
     <h4 class="mt-2">{{ data.name }} ({{ data.ip }})</h4>
     <div class="mt-2">
         <a class="btn btn-outline-primary" href="{% url 'home:index' %}#results" role="button">
-            Go Home <i class="fa-solid fa-table-list ms-2"></i></a>
+            All Results <i class="fa-solid fa-table-list ms-2"></i></a>
         <a class="btn btn-outline-dark clip" role="button"
            data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
             Copy URL <i class="fa-solid fa-link ms-2"></i></a>
@@ -82,6 +82,7 @@
              src="{% url 'home:image' data.id %}"
              alt="{{ data.get_type }} Results" /></a>
 
+    <p class="d-xl-none text-muted mb-0"><em>Some columns hidden due to narrow viewport.</em></p>
     <table class="table table-hover table-responsive" id="results">
         <thead>
         {% include 'include/table-head.html' %}

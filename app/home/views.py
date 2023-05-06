@@ -30,13 +30,10 @@ def home_view(request):
     return render(request, 'home.html', context)
 
 
-# @vary_on_headers('Cookie')
-# @cache_page(60 * 60 * 24)
-# def test_view(request, pk=0):
-#     # View: /test/{pk}/
-#     logger.debug('test_view: %s', pk)
-#     q = SpeedTest.objects.filter(pk=pk) if pk else None
-#     return render(request, 'test.html', {'pk': pk, 'data': q})
+def speedtest_view(request):
+    # View: /speedtest/
+    logger.debug('speedtest_view')
+    return render(request, 'speedtest.html')
 
 
 def result_view(request, pk):
@@ -46,7 +43,7 @@ def result_view(request, pk):
     return render(request, 'result.html', {'data': q})
 
 
-# @cache_page(60 * 60 * 24)
+@cache_page(60 * 60 * 24)
 def image_view(request, pk):
     # View: /{pk}.png
     logger.debug('image_view: %s', pk)
