@@ -41,7 +41,7 @@
     <h4 class="mt-2">{{ data.name }} ({{ data.ip }})</h4>
     <div class="mt-2">
         <a class="btn btn-outline-primary" href="{% url 'home:index' %}#results" role="button">
-            All Results <i class="fa-solid fa-table-list ms-2"></i></a>
+            <i class="fa-solid fa-arrow-left"></i> All Results <i class="fa-solid fa-table-list ms-2"></i></a>
         <a class="btn btn-outline-dark clip" role="button"
            data-clipboard-text="{{ request.build_absolute_uri|crstrip:"/" }}">
             Copy URL <i class="fa-solid fa-link ms-2"></i></a>

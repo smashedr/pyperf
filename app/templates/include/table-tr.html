@@ -12,15 +12,19 @@
     </td>
     <td><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.bps_human }}">{{ data.bps_human }}</a></td>
-    <td class="d-none d-sm-table-cell text-center"><a class="clip text-white text-decoration-none" role="button"
+    <td class="d-none d-sm-table-cell text-center">
+        <a href="{% url 'home:image' data.id %}" class="text-white" target="_blank" title="Image"><i class="fa-regular fa-image"></i></a>
+        <a href="{% url 'home:graph' data.id %}" class="text-white" target="_blank" title="Graph"><i class="fa-solid fa-chart-line"></i></a></td>
+    <td class="d-none d-md-table-cell text-center"><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.duration }}">{{ data.duration }} s</a></td>
-    <td class="d-none d-sm-table-cell text-center"><a class="clip text-white text-decoration-none" role="button"
-           data-clipboard-text="{{ data.ip_country|default:data.ip_cc }}" data-test-country="{{ data.ip_country }}" data-test-cc="{{ data.ip_cc }}">{{ data.ip_cc|cc_to_flag }}</a></td>
     <td><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.name }}">{{ data.name }}</a></td>
+    <td class="d-none d-md-table-cell text-center">{% if data.ip_cc %}
+        <a class="clip text-white text-decoration-none" role="button"
+           data-clipboard-text="{{ data.ip_country|default:data.ip_cc }}">{{ data.ip_cc|cc_to_flag }}</a>{% else %}
+        <i class="fa-solid fa-network-wired text-white"></i>{% endif %}</td>
     <td class="d-none d-lg-table-cell"><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.ip }}">{{ data.ip }}</a></td>
-    <td class="d-none d-md-table-cell text-center">{{ data.protocol }}</td>
     <td class="d-none d-xl-table-cell"><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.created_at|localtime }}">{{ data.created_at|localtime }}</a></td>
 {#    {% if request.user.is_superuser %}#}
