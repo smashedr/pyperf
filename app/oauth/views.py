@@ -177,11 +177,11 @@ def update_profile(user, profile):
     user.last_name = profile['discriminator']
     user.avatar_hash = profile['avatar']
     user.access_token = profile['access_token']
+    user.refresh_token = profile['refresh_token']
+    user.expires_in = profile['expires_in']
     if profile['id'] in config('SUPER_USERS', '', Csv()):
         logger.info('Super user login: %s', profile['id'])
-        user.is_staff = True
-        user.is_admin = True
-        user.is_superuser = True
+        user.is_staff, user.is_admin, user.is_superuser = True, True, True
     user.save()
     return
 
