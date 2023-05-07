@@ -2,6 +2,7 @@ import httpx
 import logging
 import urllib.parse
 from datetime import datetime, timedelta
+from decouple import config, Csv
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
@@ -20,10 +21,11 @@ def oauth_start(request):
     logger.debug('oauth_start')
     request.session['login_redirect_url'] = get_next_url(request)
     params = {
-        'client_id': settings.OAUTH_CLIENT_ID,
-        'redirect_uri': settings.OAUTH_REDIRECT_URI,
-        'response_type': 'code',
-        'scope': settings.OAUTH_SCOPE,
+        'redirect_uri': config('OAUTH_REDIRECT_URL'),
+        'client_id': config('OAUTH_CLIENT_ID'),
+        'response_type': config('OAUTH_RESPONSE_TYPE', 'code'),
+        'scope': config('OAUTH_SCOPE', 'identify'),
+        'prompt': config('OAUTH_PROMPT', 'none'),
     }
     url_params = urllib.parse.urlencode(params)
     url = f'https://discord.com/api/oauth2/authorize?{url_params}'
@@ -44,7 +46,9 @@ def oauth_callback(request):
         logger.debug('auth_data: %s', auth_data)
         profile = get_user_profile(auth_data)
         logger.debug('profile: %s', profile)
-        user = login_user(request, profile)
+        user, _ = CustomUser.objects.get_or_create(username=profile['id'])
+        update_profile(user, profile)
+        login(request, user)
         if 'webhook' in auth_data:
             logger.debug('webhook in profile')
             webhook = add_webhook(request, auth_data)
@@ -84,10 +88,10 @@ def oauth_webhook(request):
     request.session['login_redirect_url'] = get_next_url(request)
     logger.debug('oauth_webhook: %s', request.session['login_redirect_url'])
     params = {
-        'client_id': settings.OAUTH_CLIENT_ID,
-        'redirect_uri': settings.OAUTH_REDIRECT_URI,
-        'response_type': 'code',
-        'scope': settings.OAUTH_SCOPE + ' webhook.incoming',
+        'redirect_uri': config('OAUTH_REDIRECT_URL'),
+        'client_id': config('OAUTH_CLIENT_ID'),
+        'response_type': config('OAUTH_RESPONSE_TYPE', 'code'),
+        'scope': config('OAUTH_SCOPE', 'identify'),
     }
     url_params = urllib.parse.urlencode(params)
     url = f'https://discord.com/api/oauth2/authorize?{url_params}'
@@ -109,26 +113,16 @@ def add_webhook(request, profile):
     return webhook
 
 
-def login_user(request, profile):
-    """
-    Login or create user
-    """
-    user, _ = CustomUser.objects.get_or_create(username=profile['id'])
-    update_profile(user, profile)
-    login(request, user)
-    return user
-
-
 def get_access_token(code):
     """
     Post OAuth code and Return access_token
     """
-    url = f'{settings.DISCORD_API_URL}/oauth2/token'
+    url = 'https://discord.com/api/v8/oauth2/token'
     data = {
-        'client_id': settings.OAUTH_CLIENT_ID,
-        'client_secret': settings.OAUTH_CLIENT_SECRET,
-        'grant_type': settings.OAUTH_GRANT_TYPE,
-        'redirect_uri': settings.OAUTH_REDIRECT_URI,
+        'redirect_uri': config('OAUTH_REDIRECT_URL'),
+        'client_id': config('OAUTH_CLIENT_ID'),
+        'client_secret': config('OAUTH_CLIENT_SECRET'),
+        'grant_type': config('OAUTH_GRANT_TYPE', 'authorization_code'),
         'code': code,
     }
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
@@ -144,7 +138,7 @@ def get_user_profile(data):
     """
     Get Profile for Authenticated User
     """
-    url = f'{settings.DISCORD_API_URL}/users/@me'
+    url = 'https://discord.com/api/v8/users/@me'
     headers = {'Authorization': f"Bearer {data['access_token']}"}
     r = httpx.get(url, headers=headers, timeout=10)
     if not r.is_success:
@@ -183,7 +177,7 @@ def update_profile(user, profile):
     user.last_name = profile['discriminator']
     user.avatar_hash = profile['avatar']
     user.access_token = profile['access_token']
-    if profile['id'] in settings.SUPER_USER_IDS:
+    if profile['id'] in config('SUPER_USERS', '', Csv()):
         logger.info('Super user login: %s', profile['id'])
         user.is_staff = True
         user.is_admin = True

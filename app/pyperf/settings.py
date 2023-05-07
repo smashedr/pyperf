@@ -11,22 +11,6 @@ DEBUG = config('DEBUG', False, bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', '*', Csv())
 SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 
-
-# SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
-# CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', cast=Csv())
-SPEEDTEST_URL = config('SPEEDTEST_URL')
-SITE_URL = config('SITE_URL', 'http://localhost:8000')
-DISCORD_INVITE = config('DISCORD_INVITE')
-SUPER_USER_IDS = config('SUPER_USER_IDS', cast=Csv())
-MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
-USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', False, bool)
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-X_FRAME_OPTIONS = 'SAMEORIGIN'
-DJANGO_REDIS_IGNORE_EXCEPTIONS = config('REDIS_IGNORE_EXCEPTIONS', True, bool)
-
-
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'
 AUTH_USER_MODEL = 'oauth.CustomUser'
@@ -46,17 +30,25 @@ TIME_ZONE = config('TZ', 'UTC')
 USE_I18N = True
 USE_L10N = True
 
-DISCORD_API_URL = config('DISCORD_API_URL')
-OAUTH_CLIENT_ID = config('OAUTH_CLIENT_ID')
-OAUTH_CLIENT_SECRET = config('OAUTH_CLIENT_SECRET')
-OAUTH_REDIRECT_URI = config('OAUTH_REDIRECT_URI')
-OAUTH_GRANT_TYPE = config('OAUTH_GRANT_TYPE')
-OAUTH_SCOPE = config('OAUTH_SCOPE')
-
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = config('TZ', 'UTC')
+
+DJANGO_REDIS_IGNORE_EXCEPTIONS = config('REDIS_IGNORE_EXCEPTIONS', True, bool)
+USE_X_FORWARDED_HOST = config('USE_X_FORWARDED_HOST', False, bool)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# SECURE_REFERRER_POLICY = config('SECURE_REFERRER_POLICY', 'no-referrer')
+# CSRF_TRUSTED_ORIGINS = config('CSRF_ORIGINS', cast=Csv())
+
+SPEEDTEST_URL = config('SPEEDTEST_URL')
+SITE_URL = config('SITE_URL', 'http://localhost:8000')
+DISCORD_INVITE = config('DISCORD_INVITE')
+MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
 
 MESSAGE_TAGS = {
     message_constants.DEBUG: 'secondary',
