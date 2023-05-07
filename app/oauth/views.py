@@ -91,7 +91,7 @@ def oauth_webhook(request):
         'redirect_uri': config('OAUTH_REDIRECT_URL'),
         'client_id': config('OAUTH_CLIENT_ID'),
         'response_type': config('OAUTH_RESPONSE_TYPE', 'code'),
-        'scope': config('OAUTH_SCOPE', 'identify'),
+        'scope': config('OAUTH_SCOPE', 'identify') + ' webhook.incoming',
     }
     url_params = urllib.parse.urlencode(params)
     url = f'https://discord.com/api/oauth2/authorize?{url_params}'
