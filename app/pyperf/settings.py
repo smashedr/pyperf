@@ -14,7 +14,6 @@ SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', 3600 * 24 * 14, int)
 ASGI_APPLICATION = 'pyperf.asgi.application'
 ROOT_URLCONF = 'pyperf.urls'
 AUTH_USER_MODEL = 'oauth.CustomUser'
-
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/oauth/'
 STATIC_URL = '/static/'
