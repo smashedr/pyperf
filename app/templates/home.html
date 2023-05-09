@@ -58,7 +58,7 @@
                 <th scope="col" class="d-none d-sm-table-cell">Guild ID</th>
                 <th scope="col">Channel ID</th>
                 <th scope="col" class="d-none d-md-table-cell">Date</th>
-                <th scope="col" class="text-center">Trash</th>
+                <th scope="col" class="text-center"><i class="fa-solid fa-trash" title="Delete Video"></i></th>
             </tr>
             </thead>
             <tbody>
@@ -74,7 +74,7 @@
                         <a class="clip text-white text-decoration-none" role="button"
                            data-clipboard-text="{{ data.created_at }}">{{ data.created_at|date:"j M, o" }}</a></td>
                     <td class="text-center"><a role="button" class="delete-webhook-btn" data-hook-id="{{ data.id }}" title="Delete">
-                        <i class="fa-solid fa-trash-can link-danger"></i></a></td>
+                        <i class="fa-regular fa-trash-can link-danger"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>

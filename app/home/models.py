@@ -45,6 +45,7 @@ class SpeedTest(models.Model):
     class Meta:
         verbose_name = 'Speed Test'
         verbose_name_plural = 'Speed Tests'
+        get_latest_by = 'pk'
 
     def get_type(self):
         return 'Download' if self.reverse else 'Upload'
