@@ -93,7 +93,7 @@ services:
       - redis
 
   flower:
-    image: mher/flower:latest
+    image: mher/flower:1.2
     env_file: ${ENV_FILE}
     deploy:
       replicas: 1
@@ -111,11 +111,6 @@ secrets:
 
 volumes:
   data_dir:
-    driver: local
-    driver_opts:
-      type: nfs
-      o: "addr=${NFS_HOST},rw"
-      device: ":/data/docker/${NFS_DIRECTORY}"
   flower_data:
   redis_data:
 

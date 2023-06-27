@@ -82,7 +82,7 @@ services:
       - redis
 
   flower:
-    image: mher/flower:latest
+    image: mher/flower:1.2
     env_file: settings.env
     deploy:
       replicas: 1
