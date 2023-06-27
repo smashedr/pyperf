@@ -2,7 +2,7 @@
 
 set -x
 
-if echo "${*}" | grep -q "gun";then
+if echo "${*}" | grep -q "gunicorn";then
     if [ -n "${DJANGO_SUPERUSER_PASSWORD}" ] &&
     [ -n "${DJANGO_SUPERUSER_USERNAME}" ] &&
     [ -n "${DJANGO_SUPERUSER_EMAIL}" ];then
