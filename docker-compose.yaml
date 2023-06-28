@@ -17,7 +17,7 @@ services:
       - app
       - flower
       - redis-commander
-      - phpmyadmin
+#      - phpmyadmin
 
   pyperf3:
     build: ./pyperf3
@@ -93,18 +93,18 @@ services:
       - redis
       - worker
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    env_file: settings.env
-    environment:
-      APACHE_PORT: 8082
-      PMA_ABSOLUTE_URI: /phpmyadmin/
-      PMA_HOST: ${DATABASE_HOST}
-      PMA_PORT: ${DATABASE_PORT}
-      PMA_USER: ${DATABASE_USER}
-      PMA_PASSWORD: ${DATABASE_PASS}
-    deploy:
-      replicas: 1
+#  phpmyadmin:
+#    image: phpmyadmin:latest
+#    env_file: settings.env
+#    environment:
+#      APACHE_PORT: 8082
+#      PMA_ABSOLUTE_URI: /phpmyadmin/
+#      PMA_HOST: ${DATABASE_HOST}
+#      PMA_PORT: ${DATABASE_PORT}
+#      PMA_USER: ${DATABASE_USER}
+#      PMA_PASSWORD: ${DATABASE_PASS}
+#    deploy:
+#      replicas: 1
 
 secrets:
   cssnr_basic_http_auth:
