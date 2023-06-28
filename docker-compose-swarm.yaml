@@ -49,7 +49,7 @@ services:
         - "traefik.constraint-label=traefik-public"
         - "traefik.tcp.routers.STACK_NAME-tcp.entrypoints=tcp"
         - "traefik.tcp.services.STACK_NAME-tcp.loadbalancer.server.port=5201"
-        - "traefik.tcp.routers.STACK_NAME-udp.entrypoints=tcp"
+        - "traefik.tcp.routers.STACK_NAME-udp.entrypoints=udp"
         - "traefik.tcp.services.STACK_NAME-udp.loadbalancer.server.port=5201"
     networks:
       - traefik-public
