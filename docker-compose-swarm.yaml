@@ -39,7 +39,7 @@ services:
       context: ./pyperf3
       network: host
     image: ${REGISTRY_HOST}/pyperf3:${VERSION}
-    env_file: settings.env
+    env_file: ${ENV_FILE}
     command: "python3 pyperf3.py"
     deploy:
       replicas: 1
@@ -73,7 +73,7 @@ services:
 
   worker:
     image: ${REGISTRY_HOST}/pyperf-app:${VERSION}
-    env_file: settings.env
+    env_file: ${ENV_FILE}
     command: "celery -A pyperf worker -l INFO -c 2"
     deploy:
       replicas: 1
@@ -85,7 +85,7 @@ services:
 
   beat:
     image: ${REGISTRY_HOST}/pyperf-app:${VERSION}
-    env_file: settings.env
+    env_file: ${ENV_FILE}
     command: "celery -A pyperf beat -l INFO -S django"
     deploy:
       replicas: 1
@@ -120,7 +120,7 @@ services:
 
   flower:
     image: mher/flower:1.2
-    env_file: settings.env
+    env_file: ${ENV_FILE}
     deploy:
       replicas: 1
     volumes:

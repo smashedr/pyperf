@@ -47,7 +47,7 @@ pipeline {
             }
             environment {
                 STACK_NAME = "dev-${SERVICE_NAME}"
-                TRAEFIK_HOST = "`dev.example.com`"
+                TRAEFIK_HOST = "`pyperf-dev.cssnr.com`"
                 ENV_FILE = "service-configs/services/${CONFIG_NAME}/dev.env"
             }
             steps {
@@ -71,7 +71,7 @@ pipeline {
             }
             environment {
                 STACK_NAME = "prod-${SERVICE_NAME}"
-                TRAEFIK_HOST = "`example.com`"
+                TRAEFIK_HOST = "`pyperf.cssnr.com`"
                 ENV_FILE = "service-configs/services/${CONFIG_NAME}/prod.env"
             }
             steps {
