@@ -21,6 +21,7 @@ pipeline {
         GIT_REPO = getGitRepo("${GIT_URL}")
         BASE_NAME = "${GIT_ORG}-${GIT_REPO}"
         SERVICE_NAME = "${BASE_NAME}"
+        CONFIG_NAME = "cssnr-pyperf"
     }
     stages {
         stage('Init') {
@@ -47,7 +48,7 @@ pipeline {
             environment {
                 STACK_NAME = "dev-${SERVICE_NAME}"
                 TRAEFIK_HOST = "`dev.example.com`"
-                ENV_FILE = "service-configs/services/${SERVICE_NAME}/dev.env"
+                ENV_FILE = "service-configs/services/${CONFIG_NAME}/dev.env"
             }
             steps {
                 echo "\n--- Starting Dev Deploy ---\n" +
@@ -71,7 +72,7 @@ pipeline {
             environment {
                 STACK_NAME = "prod-${SERVICE_NAME}"
                 TRAEFIK_HOST = "`example.com`"
-                ENV_FILE = "service-configs/services/${SERVICE_NAME}/prod.env"
+                ENV_FILE = "service-configs/services/${CONFIG_NAME}/prod.env"
             }
             steps {
                 echo "\n--- Starting Prod Deploy ---\n" +
