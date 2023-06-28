@@ -60,7 +60,7 @@ services:
       context: ./app
       network: host
     image: ${REGISTRY_HOST}/pyperf-app:${VERSION}
-    env_file: settings.env
+    env_file: ${ENV_FILE}
     command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
     deploy:
       mode: global
@@ -134,7 +134,7 @@ services:
 
 #  phpmyadmin:
 #    image: phpmyadmin:latest
-#    env_file: settings.env
+#    env_file: ${ENV_FILE}
 #    environment:
 #      APACHE_PORT: 8082
 #      PMA_ABSOLUTE_URI: /phpmyadmin/
