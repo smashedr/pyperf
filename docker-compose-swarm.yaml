@@ -48,8 +48,10 @@ services:
         - "traefik.docker.network=traefik-public"
         - "traefik.constraint-label=traefik-public"
         - "traefik.tcp.routers.STACK_NAME-tcp.entrypoints=tcp"
+        - "traefik.tcp.routers.STACK_NAME-tcp.service=STACK_NAME-tcp"
         - "traefik.tcp.services.STACK_NAME-tcp.loadbalancer.server.port=5201"
         - "traefik.udp.routers.STACK_NAME-udp.entrypoints=udp"
+        - "traefik.udp.routers.STACK_NAME-udp.service=STACK_NAME-udp"
         - "traefik.udp.services.STACK_NAME-udp.loadbalancer.server.port=5201"
     networks:
       - traefik-public
