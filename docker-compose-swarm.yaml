@@ -2,7 +2,9 @@ version: '3.9'
 
 services:
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      network: host
     image: ${REGISTRY_HOST}/pyperf-nginx:${VERSION}
     deploy:
       mode: global
@@ -30,10 +32,12 @@ services:
       - app
       - flower
       - redis-commander
-      - phpmyadmin
+#      - phpmyadmin
 
   pyperf3:
-    build: ./pyperf3
+    build:
+      context: ./pyperf3
+      network: host
     image: ${REGISTRY_HOST}/pyperf3:${VERSION}
     env_file: settings.env
     command: "python3 pyperf3.py"
@@ -52,7 +56,9 @@ services:
       - net-internal
 
   app:
-    build: ./app
+    build:
+      context: ./app
+      network: host
     image: ${REGISTRY_HOST}/pyperf-app:${VERSION}
     env_file: settings.env
     command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
@@ -126,20 +132,20 @@ services:
       - redis
       - worker
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    env_file: settings.env
-    environment:
-      APACHE_PORT: 8082
-      PMA_ABSOLUTE_URI: /phpmyadmin/
-      PMA_HOST: ${DATABASE_HOST}
-      PMA_PORT: ${DATABASE_PORT}
-      PMA_USER: ${DATABASE_USER}
-      PMA_PASSWORD: ${DATABASE_PASS}
-    deploy:
-      replicas: 1
-    networks:
-      - net-internal
+#  phpmyadmin:
+#    image: phpmyadmin:latest
+#    env_file: settings.env
+#    environment:
+#      APACHE_PORT: 8082
+#      PMA_ABSOLUTE_URI: /phpmyadmin/
+#      PMA_HOST: ${DATABASE_HOST}
+#      PMA_PORT: ${DATABASE_PORT}
+#      PMA_USER: ${DATABASE_USER}
+#      PMA_PASSWORD: ${DATABASE_PASS}
+#    deploy:
+#      replicas: 1
+#    networks:
+#      - net-internal
 
 secrets:
   cssnr_basic_http_auth:
