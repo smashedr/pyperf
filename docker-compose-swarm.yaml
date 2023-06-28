@@ -5,7 +5,7 @@ services:
     build:
       context: ./nginx
       network: host
-    image: ${REGISTRY_HOST}/pyperf-nginx:${VERSION}
+    image: ${REGISTRY_HOST}/shane/pyperf-nginx:${VERSION}
     deploy:
       mode: global
       labels:
@@ -38,7 +38,7 @@ services:
     build:
       context: ./pyperf3
       network: host
-    image: ${REGISTRY_HOST}/pyperf3:${VERSION}
+    image: ${REGISTRY_HOST}/shane/pyperf3:${VERSION}
     env_file: ${ENV_FILE}
     command: "python3 pyperf3.py"
     deploy:
@@ -59,7 +59,7 @@ services:
     build:
       context: ./app
       network: host
-    image: ${REGISTRY_HOST}/pyperf-app:${VERSION}
+    image: ${REGISTRY_HOST}/shane/pyperf-app:${VERSION}
     env_file: ${ENV_FILE}
     command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
     deploy:
@@ -72,7 +72,7 @@ services:
       - redis
 
   worker:
-    image: ${REGISTRY_HOST}/pyperf-app:${VERSION}
+    image: ${REGISTRY_HOST}/shane/pyperf-app:${VERSION}
     env_file: ${ENV_FILE}
     command: "celery -A pyperf worker -l INFO -c 2"
     deploy:
@@ -84,7 +84,7 @@ services:
       - redis
 
   beat:
-    image: ${REGISTRY_HOST}/pyperf-app:${VERSION}
+    image: ${REGISTRY_HOST}/shane/pyperf-app:${VERSION}
     env_file: ${ENV_FILE}
     command: "celery -A pyperf beat -l INFO -S django"
     deploy:
