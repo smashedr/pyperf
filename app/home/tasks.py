@@ -150,6 +150,7 @@ def process_data(pk):
     q.bytes_human = format_bytes(data['start']['test_start']['bytes'])
     q.reverse = data['start']['test_start']['reverse']
     q.duration = data['start']['test_start']['duration']
+    q.num_streams = data['start']['test_start']['num_streams']
     q.protocol = data['start']['test_start']['protocol']
     if data['start']['test_start']['protocol'] == 'UDP':
         q.jitter = data['end']['sum']['jitter_ms']
