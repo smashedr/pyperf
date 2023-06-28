@@ -159,7 +159,7 @@ def del_hook_view_a(request, pk):
 
 
 @csrf_exempt
-@cache_page(60 * 60 * 24)
+# @cache_page(60 * 60 * 24)
 def tdata_view_a(request, pk):
     # View: /ajax/{pk}/tdata/
     logger.debug('tr_view: %s', pk)
