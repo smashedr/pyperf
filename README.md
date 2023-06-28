@@ -1,5 +1,4 @@
 [![Discord](https://img.shields.io/discord/111645911091814400?color=7289da&label=discord&logo=discord&logoColor=white&style=plastic)](https://discord.gg/ZrRbfdE6kz)
-[![](https://repository-images.githubusercontent.com/437745958/8ea4efc6-eec2-4f5d-9ea0-76ce25347dde)](https://zerowow.games/)
 # My App
 
 My App is Good.

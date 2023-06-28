@@ -3,7 +3,6 @@ import logging
 import urllib.parse
 from datetime import datetime, timedelta
 from decouple import config, Csv
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.shortcuts import HttpResponseRedirect, redirect
