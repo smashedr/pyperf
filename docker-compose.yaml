@@ -2,10 +2,29 @@ version: '3.7'
 
 services:
   nginx:
-    build: ./nginx
+    build:
+      context: ./nginx
+      network: host
     image: pyperf-nginx:latest
     deploy:
       mode: global
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 50M
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-public"
+        - "traefik.constraint-label=traefik-public"
+        - "traefik.http.routers.STACK_NAME-http.rule=Host(${TRAEFIK_HOST})"
+        - "traefik.http.routers.STACK_NAME-http.entrypoints=http"
+        - "traefik.http.routers.STACK_NAME-http.middlewares=https-redirect"
+        - "traefik.http.routers.STACK_NAME-https.rule=Host(${TRAEFIK_HOST})"
+        - "traefik.http.routers.STACK_NAME-https.entrypoints=https"
+        - "traefik.http.routers.STACK_NAME-https.tls=true"
+        - "traefik.http.routers.STACK_NAME-https.tls.certresolver=le"
+        - "traefik.http.services.STACK_NAME.loadbalancer.server.port=80"
+        - "traefik.http.services.STACK_NAME.loadbalancer.server.scheme=http"
     volumes:
       - app_data:/data
     secrets:
@@ -26,17 +45,37 @@ services:
     command: "python3 pyperf3.py"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 100M
+    #      labels:
+    #        - "traefik.enable=true"
+    #        - "traefik.docker.network=traefik-public"
+    #        - "traefik.constraint-label=traefik-public"
+    #        - "traefik.tcp.routers.STACK_NAME-tcp.entrypoints=tcp"
+    #        - "traefik.tcp.routers.STACK_NAME-tcp.service=STACK_NAME-tcp"
+    #        - "traefik.tcp.services.STACK_NAME-tcp.loadbalancer.server.port=5201"
+    #        - "traefik.udp.routers.STACK_NAME-udp.entrypoints=udp"
+    #        - "traefik.udp.routers.STACK_NAME-udp.service=STACK_NAME-udp"
+    #        - "traefik.udp.services.STACK_NAME-udp.loadbalancer.server.port=5201"
     ports:
       - "5201:5201/udp"
       - "5201:5201/tcp"
 
   app:
-    build: ./app
+    build:
+      context: ./app
+      network: host
     image: pyperf-app:latest
     env_file: settings.env
     command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
     deploy:
       mode: global
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 700M
     volumes:
       - app_data:/data
     depends_on:
@@ -48,6 +87,10 @@ services:
     command: "celery -A pyperf worker -l INFO -c 2"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 300M
     depends_on:
       - app
       - redis
@@ -58,6 +101,10 @@ services:
     command: "celery -A pyperf beat -l INFO -S django"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 200M
     depends_on:
       - app
       - redis
@@ -67,6 +114,10 @@ services:
     command: "redis-server --appendonly yes"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 50M
     volumes:
       - redis_data:/data
 
@@ -78,6 +129,10 @@ services:
       - TRUST_PROXY=true
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 100M
     depends_on:
       - redis
 
@@ -86,6 +141,10 @@ services:
     env_file: settings.env
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 100M
     volumes:
       - flower_data:/data
     depends_on:

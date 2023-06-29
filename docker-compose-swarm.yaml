@@ -8,6 +8,10 @@ services:
     image: ${REGISTRY_HOST}/shane/pyperf-nginx:${VERSION}
     deploy:
       mode: global
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 50M
       labels:
         - "traefik.enable=true"
         - "traefik.docker.network=traefik-public"
@@ -44,6 +48,10 @@ services:
     command: "python3 pyperf3.py"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 100M
 #      labels:
 #        - "traefik.enable=true"
 #        - "traefik.docker.network=traefik-public"
@@ -70,6 +78,10 @@ services:
     command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
     deploy:
       mode: global
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 700M
     volumes:
       - app_data:/data
     networks:
@@ -83,6 +95,10 @@ services:
     command: "celery -A pyperf worker -l INFO -c 2"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 300M
     networks:
       - net-internal
     depends_on:
@@ -95,6 +111,10 @@ services:
     command: "celery -A pyperf beat -l INFO -S django"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 200M
     networks:
       - net-internal
     depends_on:
@@ -106,6 +126,10 @@ services:
     command: "redis-server --appendonly yes"
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 50M
     networks:
       - net-internal
     volumes:
@@ -119,6 +143,10 @@ services:
       - TRUST_PROXY=true
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 100M
     networks:
       - net-internal
     depends_on:
@@ -129,6 +157,10 @@ services:
     env_file: ${ENV_FILE}
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 100M
     volumes:
       - flower_data:/data
     networks:
