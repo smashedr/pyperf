@@ -30,13 +30,13 @@ services:
     secrets:
       - source: cssnr_basic_http_auth
         target: /etc/nginx/auth.users
-    ports:
-      - "80:80"
     depends_on:
       - app
       - flower
       - redis-commander
-#      - phpmyadmin
+      # - phpmyadmin
+    ports:
+      - "80:80"
 
   pyperf3:
     build: ./pyperf3

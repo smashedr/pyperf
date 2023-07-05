@@ -30,14 +30,14 @@ services:
     secrets:
       - source: cssnr_basic_http_auth
         target: /etc/nginx/auth.users
-    networks:
-      - traefik-public
-      - net-internal
     depends_on:
       - app
       - flower
       - redis-commander
-#      - phpmyadmin
+      # - phpmyadmin
+    networks:
+      - traefik-public
+      - net-internal
 
   pyperf3:
     build:
@@ -62,12 +62,12 @@ services:
 #        - "traefik.udp.routers.STACK_NAME-udp.entrypoints=udp"
 #        - "traefik.udp.routers.STACK_NAME-udp.service=STACK_NAME-udp"
 #        - "traefik.udp.services.STACK_NAME-udp.loadbalancer.server.port=5201"
-    networks:
-      - traefik-public
-      - net-internal
     ports:
       - "5201:5201/udp"
       - "5201:5201/tcp"
+    networks:
+      - traefik-public
+      - net-internal
 
   app:
     build:
@@ -84,10 +84,10 @@ services:
           memory: 700M
     volumes:
       - app_data:/data
-    networks:
-      - net-internal
     depends_on:
       - redis
+    networks:
+      - net-internal
 
   worker:
     image: ${REGISTRY_HOST}/shane/pyperf-app:${VERSION}
@@ -99,11 +99,11 @@ services:
         limits:
           cpus: '2.0'
           memory: 300M
-    networks:
-      - net-internal
     depends_on:
       - app
       - redis
+    networks:
+      - net-internal
 
   beat:
     image: ${REGISTRY_HOST}/shane/pyperf-app:${VERSION}
@@ -115,11 +115,11 @@ services:
         limits:
           cpus: '2.0'
           memory: 200M
-    networks:
-      - net-internal
     depends_on:
       - app
       - redis
+    networks:
+      - net-internal
 
   redis:
     image: redis:6-alpine
@@ -130,10 +130,10 @@ services:
         limits:
           cpus: '2.0'
           memory: 50M
-    networks:
-      - net-internal
     volumes:
       - redis_data:/data
+    networks:
+      - net-internal
 
   redis-commander:
     image: ghcr.io/joeferner/redis-commander:latest
@@ -147,10 +147,10 @@ services:
         limits:
           cpus: '2.0'
           memory: 100M
-    networks:
-      - net-internal
     depends_on:
       - redis
+    networks:
+      - net-internal
 
   flower:
     image: mher/flower:1.2
@@ -163,12 +163,12 @@ services:
           memory: 100M
     volumes:
       - flower_data:/data
-    networks:
-      - net-internal
     depends_on:
       - app
       - redis
       - worker
+    networks:
+      - net-internal
 
 #  phpmyadmin:
 #    image: phpmyadmin:latest
