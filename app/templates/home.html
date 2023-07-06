@@ -20,14 +20,14 @@
         <table class="table">
             <tr>
                 <td>Download</td>
-                <td><kbd>iperf3 -c {{ request.get_host }} -R</kbd>
+                <td><kbd>iperf3 {% if iperf_port != 5201 %}-p {{ iperf_port }} {% endif %}-c {{ request.get_host }} -R</kbd>
                     <a class="clip" role="button"
                        data-clipboard-text="iperf3 {% if iperf_port != 5201 %}-p {{ iperf_port }} {% endif %}-c {{ request.get_host }} -R">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
             </tr>
             <tr>
                 <td>Upload</td>
-                <td><kbd>iperf3 -c {{ request.get_host }}</kbd>
+                <td><kbd>iperf3 {% if iperf_port != 5201 %}-p {{ iperf_port }} {% endif %}-c {{ request.get_host }}</kbd>
                     <a class="clip" role="button"
                        data-clipboard-text="iperf3 {% if iperf_port != 5201 %}-p {{ iperf_port }} {% endif %}-c {{ request.get_host }}">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>

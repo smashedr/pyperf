@@ -75,7 +75,7 @@ services:
       network: host
     image: ${REGISTRY_HOST}/shane/pyperf-app:${VERSION}
     env_file: ${ENV_FILE}
-    command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
+    command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 2 -k uvicorn.workers.UvicornWorker"
 #    healthcheck:
 #      test: ["CMD", "curl", "-sf", "http://localhost:9000/app-health-check/"]
 #      interval: 1m
