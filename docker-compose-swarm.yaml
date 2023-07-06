@@ -50,8 +50,8 @@ services:
       replicas: 1
       resources:
         limits:
-          cpus: '2.0'
-          memory: 100M
+          cpus: '3.0'
+          memory: 200M
 #      labels:
 #        - "traefik.enable=true"
 #        - "traefik.docker.network=traefik-public"
@@ -76,12 +76,18 @@ services:
     image: ${REGISTRY_HOST}/shane/pyperf-app:${VERSION}
     env_file: ${ENV_FILE}
     command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
+#    healthcheck:
+#      test: ["CMD", "curl", "-sf", "http://localhost:9000/app-health-check/"]
+#      interval: 1m
+#      timeout: 10s
+#      retries: 3
+#      start_period: 10s
     deploy:
       mode: global
       resources:
         limits:
           cpus: '2.0'
-          memory: 700M
+          memory: 1G
     volumes:
       - app_data:/data
     depends_on:
