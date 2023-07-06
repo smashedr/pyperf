@@ -15,18 +15,21 @@
     <p><a href="{% url 'oauth:webhook' %}" class="btn btn-primary btn-lg" role="button">
         Add Results to Discord <i class="fab fa-discord ms-2"></i></a></p>
 
+    {% get_config 'IPERF_PORT' as iperf_port %}
     <div class="col-sm-12 col-md-10 col-lg-8 col-xl-6">
         <table class="table">
             <tr>
                 <td>Download</td>
                 <td><kbd>iperf3 -c {{ request.get_host }} -R</kbd>
-                    <a class="clip" role="button" data-clipboard-text="iperf3 -c {{ request.get_host }} -R">
+                    <a class="clip" role="button"
+                       data-clipboard-text="iperf3 {% if iperf_port != 5201 %}-p {{ iperf_port }} {% endif %}-c {{ request.get_host }} -R">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
             </tr>
             <tr>
                 <td>Upload</td>
                 <td><kbd>iperf3 -c {{ request.get_host }}</kbd>
-                    <a class="clip" role="button" data-clipboard-text="iperf3 -c {{ request.get_host }}">
+                    <a class="clip" role="button"
+                       data-clipboard-text="iperf3 {% if iperf_port != 5201 %}-p {{ iperf_port }} {% endif %}-c {{ request.get_host }}">
                     <i class="fa-regular fa-clipboard text-white ms-2"></i></a></td>
             </tr>
             <tr>

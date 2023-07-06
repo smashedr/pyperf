@@ -6,7 +6,8 @@ IP: {{ data.ip }}{% if data.name %}
 Host: {{ data.name }}{% endif %}{% if data.ip_country %}
 Country: {{ data.ip_country }}{% endif %}{% if data.ip_org %}
 ISP: {{ data.ip_org }}{% endif %}{% if data.duration %}
-Duration: {{ data.duration }}{% endif %}{% if data.bytes %}
+Duration: {{ data.duration }}{% endif %}{% if data.num_streams %}
+Streams: {{ data.num_streams }}{% endif %}{% if data.bytes %}
 Bytes: {{ data.bytes_human }}{% endif %}{% if data.jitter %}
 Jitter: {{ data.jitter }} ms{% endif %}{% if data.packets %}
 Lost/Packets: {{ data.lost }}/{{ data.packets }}{% endif %}

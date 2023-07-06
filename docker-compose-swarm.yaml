@@ -63,8 +63,8 @@ services:
 #        - "traefik.udp.routers.STACK_NAME-udp.service=STACK_NAME-udp"
 #        - "traefik.udp.services.STACK_NAME-udp.loadbalancer.server.port=5201"
     ports:
-      - "5201:5201/udp"
-      - "5201:5201/tcp"
+      - "${IPERF_PORT}:${IPERF_PORT}/udp"
+      - "${IPERF_PORT}:${IPERF_PORT}/tcp"
     networks:
       - traefik-public
       - net-internal
