@@ -18,6 +18,7 @@ class SpeedTest(models.Model):
     bytes = models.IntegerField(null=True, verbose_name='Bytes')
     bytes_human = models.CharField(blank=True, max_length=32, verbose_name='Bytes Human')
     duration = models.IntegerField(null=True, verbose_name='Duration')
+    num_streams = models.IntegerField(null=True, verbose_name='Streams', default=1)
     protocol = models.CharField(
         blank=True,
         max_length=3,

@@ -1,5 +1,5 @@
 [![Discord](https://img.shields.io/discord/111645911091814400?color=7289da&label=discord&logo=discord&logoColor=white&style=plastic)](https://discord.gg/ZrRbfdE6kz)
-# My App
+# PyPerf
 
 My App is Good.
 

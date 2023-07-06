@@ -10,10 +10,14 @@
             <i class="fa-solid fa-cloud-arrow-up text-warning" title="Upload"></i>
         {% endif %}
     </td>
+    <td class="d-none d-md-table-cell text-center">
+        <a class="clip text-white text-decoration-none" role="button"
+           data-clipboard-text="{{ data.duration }}">{{ data.duration }} s</a></td>
     <td><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.bps_human }}">{{ data.bps_human }}</a></td>
-    <td class="d-none d-md-table-cell text-center"><a class="clip text-white text-decoration-none" role="button"
-           data-clipboard-text="{{ data.duration }}">{{ data.duration }} s</a></td>
+    <td class="d-none d-sm-table-cell text-center">
+        <a class="clip text-white text-decoration-none text-center" role="button"
+           data-clipboard-text="{{ data.num_streams }}">x{{ data.num_streams }}</a></td>
     <td><a class="clip text-white text-decoration-none" role="button"
            data-clipboard-text="{{ data.name }}">{{ data.name }}</a></td>
     <td class="d-none d-md-table-cell text-center">{% if data.ip_cc %}
