@@ -81,7 +81,7 @@ services:
       resources:
         limits:
           cpus: '2.0'
-          memory: 750M
+          memory: 500M
     volumes:
       - app_data:/data
     depends_on:
