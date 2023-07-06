@@ -48,6 +48,7 @@ SPEEDTEST_URL = config('SPEEDTEST_URL')
 SITE_URL = config('SITE_URL', 'http://localhost:8000')
 DISCORD_INVITE = config('DISCORD_INVITE')
 MAPBOX_TOKEN = config('MAPBOX_TOKEN', '')
+IPERF_PORT = config('IPERF_PORT', 5201, int)
 
 MESSAGE_TAGS = {
     message_constants.DEBUG: 'secondary',

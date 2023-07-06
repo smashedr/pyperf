@@ -60,8 +60,8 @@ services:
     #        - "traefik.udp.routers.STACK_NAME-udp.service=STACK_NAME-udp"
     #        - "traefik.udp.services.STACK_NAME-udp.loadbalancer.server.port=5201"
     ports:
-      - "5201:5201/udp"
-      - "5201:5201/tcp"
+      - "${IPERF_PORT}:${IPERF_PORT}/udp"
+      - "${IPERF_PORT}:${IPERF_PORT}/tcp"
 
   app:
     build:
@@ -69,7 +69,7 @@ services:
       network: host
     image: pyperf-app:latest
     env_file: settings.env
-    command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 4 -k uvicorn.workers.UvicornWorker"
+    command: "gunicorn pyperf.asgi:application -b 0.0.0.0:9000 -w 2 -k uvicorn.workers.UvicornWorker"
 #    healthcheck:
 #      test: ["CMD", "curl", "-sf", "http://localhost:9000/app-health-check/"]
 #      interval: 1m
@@ -81,7 +81,7 @@ services:
       resources:
         limits:
           cpus: '2.0'
-          memory: 1G
+          memory: 500M
     volumes:
       - app_data:/data
     depends_on:

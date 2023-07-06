@@ -53,11 +53,13 @@ pipeline {
                 ENV_FILE = "service-configs/services/${CONFIG_NAME}/${ENV_NAME}.env"
                 STACK_NAME = "${ENV_NAME}_${SERVICE_NAME}"
                 TRAEFIK_HOST = "`pyperf-dev.cssnr.com`"
+                IPERF_PORT = "5202"
             }
             steps {
                 echo "\n--- Starting ${ENV_NAME} Deploy ---\n" +
                         "STACK_NAME:        ${STACK_NAME}\n" +
                         "TRAEFIK_HOST:      ${TRAEFIK_HOST}\n" +
+                        "IPERF_PORT:        ${IPERF_PORT}\n" +
                         "ENV_FILE:          ${ENV_FILE}\n"
                 sendDiscord("${DISCORD_ID}", "${ENV_NAME} Deploy Started")
                 updateCompose("${COMPOSE_FILE}", "STACK_NAME", "${STACK_NAME}")
@@ -78,11 +80,13 @@ pipeline {
                 ENV_FILE = "service-configs/services/${CONFIG_NAME}/${ENV_NAME}.env"
                 STACK_NAME = "${ENV_NAME}_${SERVICE_NAME}"
                 TRAEFIK_HOST = "`pyperf.cssnr.com`"
+                IPERF_PORT = "5201"
             }
             steps {
                 echo "\n--- Starting ${ENV_NAME} Deploy ---\n" +
                         "STACK_NAME:        ${STACK_NAME}\n" +
                         "TRAEFIK_HOST:      ${TRAEFIK_HOST}\n" +
+                        "IPERF_PORT:        ${IPERF_PORT}\n" +
                         "ENV_FILE:          ${ENV_FILE}\n"
                 sendDiscord("${DISCORD_ID}", "${ENV_NAME} Deploy Started")
                 updateCompose("${COMPOSE_FILE}", "STACK_NAME", "${STACK_NAME}")
